@@ -11,10 +11,11 @@ namespace CalcCal.Domain.Users
         public PhoneNumber PhoneNumber { get; private set; }
         public FirstName FirstName { get; private set; }
         public LastName LastName { get; private set; }
+        public Username Username { get; private set; }
         public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood.AsReadOnly();
         private readonly List<EatenFood> _eatenFood;
         public string PasswordHash { get; private set; }
-        public bool IsEmailVerified { get; private set; }
+        public bool IsPhoneNumberVerified { get; private set; }
         public DateTime CreatedAt { get; init; }
         public DateTime LastLoggedInAt { get; private set; }
 
@@ -22,13 +23,15 @@ namespace CalcCal.Domain.Users
             PhoneNumber phoneNumber,
             FirstName firstName,
             LastName lastName,
+            Username username,
             string passwordHash)
         {
             PhoneNumber = phoneNumber;
             FirstName = firstName;
             LastName = lastName;
+            Username = username;
             PasswordHash = passwordHash;
-            IsEmailVerified = true; // TODO temporary solution
+            IsPhoneNumberVerified = true; // TODO temporary solution
             CreatedAt = DateTime.UtcNow;
             LastLoggedInAt = DateTime.UtcNow;
             _eatenFood = new List<EatenFood>();
@@ -41,9 +44,9 @@ namespace CalcCal.Domain.Users
         }
 
 
-        public static Result<User> Create(string phoneNumber, string firstName, string lastName, string passwordHash)
+        public static Result<User> Create(string countryCode, string phoneNumber, string firstName, string lastName, string username, string passwordHash)
         {
-            var phoneNumberResult = PhoneNumber.Create(phoneNumber);
+            var phoneNumberResult = PhoneNumber.Create(countryCode, phoneNumber);
 
             if (phoneNumberResult.IsFailure)
             {
@@ -64,12 +67,19 @@ namespace CalcCal.Domain.Users
                 return Result.Failure<User>(lastNameResult.Error);
             }
 
-            return new User(phoneNumberResult.Value, firstNameResult.Value, lastNameResult.Value, passwordHash);
+            var usernameResult = Username.Create(username);
+
+            if (usernameResult.IsFailure)
+            {
+                return Result.Failure<User>(usernameResult.Error);
+            }
+
+            return new User(phoneNumberResult.Value, firstNameResult.Value, lastNameResult.Value, usernameResult.Value, passwordHash);
         }
 
         public void LogIn() => LastLoggedInAt = DateTime.UtcNow;
 
-        public void VerifyEmail() => IsEmailVerified = true;
+        public void VerifyPhoneNumber() => IsPhoneNumberVerified = true;
 
         public Result Eat(Food food, decimal gramsQuantity)
         {

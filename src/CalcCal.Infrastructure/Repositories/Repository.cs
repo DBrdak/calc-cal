@@ -37,7 +37,11 @@ namespace CalcCal.Infrastructure.Repositories
         }
         public async Task<Result<TEntity>> Update(TEntity entity, CancellationToken cancellationToken)
         {
-            var result = await Context.Set<TEntity>().ReplaceOneAsync(e => e.Id == entity.Id, entity, null, cancellationToken);
+            var result = await Context.Set<TEntity>().ReplaceOneAsync(
+                    e => e.Id == entity.Id,
+                    entity,
+                    new ReplaceOptions(),
+                    cancellationToken);
 
             return result.IsAcknowledged && result.ModifiedCount > 0 ?
                 Result.Success(entity) :

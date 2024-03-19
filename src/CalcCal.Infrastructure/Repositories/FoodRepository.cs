@@ -24,7 +24,7 @@ namespace CalcCal.Infrastructure.Repositories
 
             if (food is null)
             {
-                Result.Failure<User>(Error.NotFound("User not found"));
+                Result.Failure<Food>(Error.NotFound("Food not found"));
             }
 
             return food;

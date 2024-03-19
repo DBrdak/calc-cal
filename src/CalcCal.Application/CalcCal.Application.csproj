@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="CommonAbstractions.DB" Version="1.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CalcCal.Domain\CalcCal.Domain.csproj" />
   </ItemGroup>
 
