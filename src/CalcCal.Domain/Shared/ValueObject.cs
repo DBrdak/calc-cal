@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CalcCal.Domain.Shared
 {
-    public abstract record ValueObject<T>
+    public abstract record ValueObject<T> : ValueObject
     {
         public T Value { get; init; }
 
@@ -15,5 +15,8 @@ namespace CalcCal.Domain.Shared
         {
             Value = value;
         }
+    }
+    public abstract record ValueObject
+    {
     }
 }

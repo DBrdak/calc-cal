@@ -11,8 +11,8 @@ namespace CalcCal.Domain.Users
         public PhoneNumber PhoneNumber { get; private set; }
         public FirstName FirstName { get; private set; }
         public LastName LastName { get; private set; }
-        public IReadOnlyCollection<Food> EatenFood => _eatenFood.AsReadOnly();
-        private readonly List<Food> _eatenFood;
+        public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood.AsReadOnly();
+        private readonly List<EatenFood> _eatenFood;
         public string PasswordHash { get; private set; }
         public bool IsEmailVerified { get; private set; }
         public DateTime CreatedAt { get; init; }
@@ -31,7 +31,7 @@ namespace CalcCal.Domain.Users
             IsEmailVerified = true; // TODO temporary solution
             CreatedAt = DateTime.UtcNow;
             LastLoggedInAt = DateTime.UtcNow;
-            _eatenFood = new List<Food>();
+            _eatenFood = new List<EatenFood>();
         }
 
         [JsonConstructor]
@@ -70,5 +70,19 @@ namespace CalcCal.Domain.Users
         public void LogIn() => LastLoggedInAt = DateTime.UtcNow;
 
         public void VerifyEmail() => IsEmailVerified = true;
+
+        public Result Eat(Food food, decimal gramsQuantity)
+        {
+            var eatenFoodResult = Users.EatenFood.Create(food, gramsQuantity);
+
+            if (eatenFoodResult.IsFailure)
+            {
+                Result.Failure(UserErrors.InvalidFood);
+            }
+
+            _eatenFood.Add(eatenFoodResult.Value);
+
+            return Result.Success();
+        }
     }
 }

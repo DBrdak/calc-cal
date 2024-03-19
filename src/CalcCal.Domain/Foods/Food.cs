@@ -42,7 +42,7 @@ namespace CalcCal.Domain.Foods
             return new Food(nameResult.Value, caloriesResult.Value);
         }
 
-        public void View()
+        public void Eat()
         {
             LastEatenOn = DateTime.UtcNow;
             EatCount++;

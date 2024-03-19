@@ -21,5 +21,10 @@ namespace CalcCal.Domain.Users
             new Error(
                 "Users.InvalidPhoneNumber",
                 "Invalid last name");
+
+        public static Error InvalidFood =>
+            new Error(
+                "Users.InvalidFood",
+                "Invalid eaten food data");
     }
 }
