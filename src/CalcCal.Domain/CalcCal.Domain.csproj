@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Exceptions.DB" Version="1.0.1" />
+    <PackageReference Include="MongoDB.Bson" Version="2.24.0" />
+    <PackageReference Include="Responses.DB" Version="1.1.0" />
+  </ItemGroup>
+
 </Project>
