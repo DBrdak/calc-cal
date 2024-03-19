@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  calccal.db:
+    image: mongo:latest
+    container_name: calccal.db
+    restart: always
+    environment:
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - default
+
+  calccal.api:
+    image: ${DOCKER_REGISTRY-}calccalapi
+    container_name: calccal.api
+    build:
+      context: .
+      dockerfile: src/CalcCal.API/Dockerfile
+    depends_on:
+      - calccal.db
+
+volumes:
+    mongo_data:

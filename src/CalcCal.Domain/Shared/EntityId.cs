@@ -8,6 +8,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace CalcCal.Domain.Shared
 {
+    // TODO Fix strong typed ID in mongo
     public abstract record EntityId
     {
         [BsonRepresentation(BsonType.ObjectId)]
