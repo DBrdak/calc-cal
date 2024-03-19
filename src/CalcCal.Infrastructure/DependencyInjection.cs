@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Users;
+using CalcCal.Infrastructure.Repositories;
+using CalcCal.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcCal.Infrastructure

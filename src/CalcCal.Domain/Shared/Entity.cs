@@ -7,7 +7,9 @@ using Exceptions.DB;
 
 namespace CalcCal.Domain.Shared
 {
-    public abstract class Entity<TId> 
+    public abstract class Entity{}
+
+    public abstract class Entity<TId> : Entity 
         where TId : EntityId, new()
     {
         public TId Id { get; set;}
