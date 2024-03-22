@@ -1,6 +1,8 @@
 ﻿using CalcCal.Domain.Foods;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Responses.DB;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace CalcCal.Infrastructure.Repositories;
 
@@ -10,9 +12,18 @@ public sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
     {
     }
 
-    public async Task<Result<List<Food>>> GetAllFood(CancellationToken cancellationToken)
+    public async Task<Result<List<Food>>> GetFood(string foodName, CancellationToken cancellationToken)
     {
-        var cursor = await Context.Set<Food>().FindAsync(FilterDefinition<Food>.Empty, null, cancellationToken);
+        if (string.IsNullOrWhiteSpace(foodName) || foodName.Length < 3)
+        {
+            return new List<Food>();
+        }
+
+        var searchEngine = new SearchEngine(foodName);
+
+        searchEngine.ApplySearch();
+
+        var cursor = await Context.Set<Food>().FindAsync(searchEngine.Filter, searchEngine.Options, cancellationToken);
 
         var food = await cursor.ToListAsync(cancellationToken);
 
@@ -22,5 +33,20 @@ public sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
         }
 
         return food;
+    }
+
+    private sealed class SearchEngine(string searchPhrase)
+    {
+        public FilterDefinition<Food> Filter { get; private set; } = FilterDefinition<Food>.Empty;
+        public FindOptions<Food> Options { get; private set; } = new();
+
+        public void ApplySearch()
+        {
+            Filter = Builders<Food>.Filter.Regex(food => food.Name.Value, new BsonRegularExpression(searchPhrase, "i"));
+            Options = new FindOptions<Food>
+            {
+                Sort = Builders<Food>.Sort.Ascending(food => food.Name.Value)
+            };
+        }
     }
 }

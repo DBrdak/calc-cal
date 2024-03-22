@@ -5,7 +5,7 @@
 
 # dotenv files
 .env
-appsettings.Development.json
+appsettings.development.json
 logs*
 
 # User-specific files

@@ -16,6 +16,7 @@ internal sealed class GetFoodQueryHandler : IQueryHandler<GetFoodQuery, List<Dom
 
     public async Task<Result<List<Domain.Foods.Food>>> Handle(GetFoodQuery request, CancellationToken cancellationToken)
     {
-        return await _foodRepository.GetAllFood(cancellationToken);
+        return await _foodRepository.GetFood(request.FoodName, cancellationToken);
     }
+
 }
