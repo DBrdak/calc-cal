@@ -1,4 +1,3 @@
-﻿namespace CalcCal.Application.Users.LogIn
-{
-    public sealed record AccessToken(string Value);
-}
+﻿namespace CalcCal.Application.Users.LogIn;
+
+public sealed record AccessToken(string Value);

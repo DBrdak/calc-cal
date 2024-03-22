@@ -1,54 +1,53 @@
 ﻿using System.Diagnostics;
 using Serilog.Context;
 
-namespace CalcCal.API.Middlewares
+namespace CalcCal.API.Middlewares;
+
+public sealed class MonitoringMiddleware
 {
-    public sealed class MonitoringMiddleware
+    private readonly RequestDelegate _next;
+    private readonly ILogger<MonitoringMiddleware> _logger;
+    private const int longRunningRequestThreshold = 750;
+
+    public MonitoringMiddleware(RequestDelegate next, ILogger<MonitoringMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<MonitoringMiddleware> _logger;
-        private const int longRunningRequestThreshold = 750;
+        _next = next;
+        _logger = logger;
+    }
 
-        public MonitoringMiddleware(RequestDelegate next, ILogger<MonitoringMiddleware> logger)
+    public async Task InvokeAsync(HttpContext context)
+    {
+
+        using (LogContext.PushProperty("RequestId", context.TraceIdentifier))
         {
-            _next = next;
-            _logger = logger;
+            var request = context.Request;
+            var stopwatch = Stopwatch.StartNew();
+
+            await _next(context);
+
+            stopwatch.Stop();
+
+            var elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+            LogRequestExecutionTime(request, elapsedMilliseconds);
         }
+    }
 
-        public async Task InvokeAsync(HttpContext context)
+    private void LogRequestExecutionTime(HttpRequest request, long elapsedMilliseconds)
+    {
+        using (LogContext.PushProperty("RequestExecutionTime", elapsedMilliseconds))
         {
-
-            using (LogContext.PushProperty("RequestId", context.TraceIdentifier))
+            switch (elapsedMilliseconds > longRunningRequestThreshold)
             {
-                var request = context.Request;
-                var stopwatch = Stopwatch.StartNew();
-
-                await _next(context);
-
-                stopwatch.Stop();
-
-                var elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-
-                LogRequestExecutionTime(request, elapsedMilliseconds);
-            }
-        }
-
-        private void LogRequestExecutionTime(HttpRequest request, long elapsedMilliseconds)
-        {
-            using (LogContext.PushProperty("RequestExecutionTime", elapsedMilliseconds))
-            {
-                switch (elapsedMilliseconds > longRunningRequestThreshold)
-                {
-                    case true:
-                        var warningMessage =
-                            $"Long running request: {request.Method} {request.Path} ({elapsedMilliseconds} milliseconds)";
-                        _logger.LogWarning(warningMessage);
-                        break;
-                    case false:
-                        var infoMessage = $"Request: {request.Method} {request.Path} ({elapsedMilliseconds} milliseconds)";
-                        _logger.LogInformation(infoMessage);
-                        break;
-                }
+                case true:
+                    var warningMessage =
+                        $"Long running request: {request.Method} {request.Path} ({elapsedMilliseconds} milliseconds)";
+                    _logger.LogWarning(warningMessage);
+                    break;
+                case false:
+                    var infoMessage = $"Request: {request.Method} {request.Path} ({elapsedMilliseconds} milliseconds)";
+                    _logger.LogInformation(infoMessage);
+                    break;
             }
         }
     }

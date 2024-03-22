@@ -4,11 +4,17 @@ services:
   calccal.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5000
-      - ASPNETCORE_HTTPS_PORTS=8000
+      - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - 5000:80
       - 8000:80
+      - 5001:443
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  calccal.seq:
+    restart: always
+    environment:
+    - ACCEPT_EULA=Y
+    ports:
+    - 5341:5341

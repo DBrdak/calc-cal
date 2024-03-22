@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CalcCal.Domain.Users;
 
-namespace CalcCal.Domain.Users
+public interface IPasswordService
 {
-    public interface IPasswordService
-    {
-        string HashPassword(string password);
-        bool VerifyPassword(string passwordInput, string passwordHash);
-    }
+    string HashPassword(string password);
+    bool VerifyPassword(string passwordInput, string passwordHash);
 }

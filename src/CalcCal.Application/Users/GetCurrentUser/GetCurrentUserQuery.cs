@@ -1,8 +1,7 @@
 ﻿using CommonAbstractions.DB.Messaging;
 
-namespace CalcCal.Application.Users.GetCurrentUser
+namespace CalcCal.Application.Users.GetCurrentUser;
+
+public sealed record GetCurrentUserQuery() : IQuery<UserModel>
 {
-    public sealed record GetCurrentUserQuery() : IQuery<UserModel>
-    {
-    }
 }

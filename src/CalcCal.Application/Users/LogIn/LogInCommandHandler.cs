@@ -1,49 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalcCal.Application.Abstractions.Authentication;
+﻿using CalcCal.Application.Abstractions.Authentication;
 using CalcCal.Domain.Users;
 using CommonAbstractions.DB.Messaging;
 using Responses.DB;
 
-namespace CalcCal.Application.Users.LogIn
+namespace CalcCal.Application.Users.LogIn;
+
+internal sealed class LogInCommandHandler : ICommandHandler<LogInCommand, AccessToken>
 {
-    internal sealed class LogInCommandHandler : ICommandHandler<LogInCommand, AccessToken>
+    private readonly IJwtService _jwtService;
+    private readonly IUserRepository _userRepository;
+
+    public LogInCommandHandler(IJwtService jwtService, IUserRepository userRepository)
     {
-        private readonly IJwtService _jwtService;
-        private readonly IUserRepository _userRepository;
+        _jwtService = jwtService;
+        _userRepository = userRepository;
+    }
+    public async Task<Result<AccessToken>> Handle(LogInCommand request, CancellationToken cancellationToken)
+    {
+        var usernameResult = Username.Create(request.Username);
 
-        public LogInCommandHandler(IJwtService jwtService, IUserRepository userRepository)
+        if (usernameResult.IsFailure)
         {
-            _jwtService = jwtService;
-            _userRepository = userRepository;
+            return Result.Failure<AccessToken>(usernameResult.Error);
         }
-        public async Task<Result<AccessToken>> Handle(LogInCommand request, CancellationToken cancellationToken)
+
+        var user = await _userRepository.GetUserByUsername(usernameResult.Value, cancellationToken);
+
+        if (user.IsFailure)
         {
-            var usernameResult = Username.Create(request.Username);
-
-            if (usernameResult.IsFailure)
-            {
-                return Result.Failure<AccessToken>(usernameResult.Error);
-            }
-
-            var user = await _userRepository.GetUserByUsername(usernameResult.Value, cancellationToken);
-
-            if (user.IsFailure)
-            {
-                return Result.Failure<AccessToken>(Error.InvalidRequest($"User with username: {request.Username} does not exist"));
-            }
-
-            var result = await _jwtService.GetAccessTokenAsync(
-                user.Value,
-                request.Password,
-                cancellationToken);
-
-            return result.IsFailure
-                ? Result.Failure<AccessToken>(UserErrors.InvalidCredentials)
-                : new AccessToken(result.Value);
+            return Result.Failure<AccessToken>(Error.InvalidRequest($"User with username: {request.Username} does not exist"));
         }
+
+        var result = await _jwtService.GetAccessTokenAsync(
+            user.Value,
+            request.Password,
+            cancellationToken);
+
+        return result.IsFailure
+            ? Result.Failure<AccessToken>(UserErrors.InvalidCredentials)
+            : new AccessToken(result.Value);
     }
 }

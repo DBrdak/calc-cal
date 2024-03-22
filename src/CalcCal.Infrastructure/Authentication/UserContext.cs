@@ -1,43 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using CalcCal.Application.Abstractions.Authentication;
 using Microsoft.AspNetCore.Http;
 using Responses.DB;
 
-namespace CalcCal.Infrastructure.Authentication
+namespace CalcCal.Infrastructure.Authentication;
+
+internal class UserContext : IUserContext
 {
-    internal class UserContext : IUserContext
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserContext(IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public UserContext(IHttpContextAccessor httpContextAccessor)
+    public string UserId =>
+        _httpContextAccessor
+            .HttpContext?
+            .User
+            .Claims
+            .SingleOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?
+            .Value ??
+        throw new ApplicationException("User context is unavailable");
+
+    public Result<string> TryGetUserId()
+    {
+        try
         {
-            _httpContextAccessor = httpContextAccessor;
+            return UserId;
         }
-
-        public string UserId =>
-            _httpContextAccessor
-                .HttpContext?
-                .User
-                .Claims
-                .SingleOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?
-                .Value ??
-            throw new ApplicationException("User context is unavailable");
-
-        public Result<string> TryGetUserId()
+        catch (ApplicationException)
         {
-            try
-            {
-                return UserId;
-            }
-            catch (ApplicationException)
-            {
-                return Result.Failure<string>(AuthenticationErrors.UserCannotBeAccessed);
-            }
+            return Result.Failure<string>(AuthenticationErrors.UserCannotBeAccessed);
         }
     }
 }

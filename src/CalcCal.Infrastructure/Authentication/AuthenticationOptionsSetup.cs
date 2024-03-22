@@ -1,21 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace CalcCal.Infrastructure.Authentication
+namespace CalcCal.Infrastructure.Authentication;
+
+public sealed class AuthenticationOptionsSetup : IConfigureOptions<AuthenticationOptions>
 {
-    public sealed class AuthenticationOptionsSetup : IConfigureOptions<AuthenticationOptions>
+    private const string sectionName = "Authentication";
+    private readonly IConfiguration _configuration;
+
+    public AuthenticationOptionsSetup(IConfiguration configuration)
     {
-        private const string sectionName = "Authentication";
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public AuthenticationOptionsSetup(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        public void Configure(AuthenticationOptions options)
-        {
-            _configuration.GetSection(sectionName).Bind(options);
-        }
+    public void Configure(AuthenticationOptions options)
+    {
+        _configuration.GetSection(sectionName).Bind(options);
     }
 }

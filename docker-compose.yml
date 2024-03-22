@@ -12,8 +12,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    networks:
-      - default
 
   calccal.api:
     image: ${DOCKER_REGISTRY-}calccalapi
@@ -23,6 +21,10 @@ services:
       dockerfile: src/CalcCal.API/Dockerfile
     depends_on:
       - calccal.db
+      
+  calccal.seq:
+    image: datalust/seq:latest
+    container_name: calccal.seq
 
 volumes:
     mongo_data:

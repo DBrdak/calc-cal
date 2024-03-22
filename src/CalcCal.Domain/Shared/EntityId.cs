@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CalcCal.Domain.Shared
+namespace CalcCal.Domain.Shared;
+
+// TODO Fix strong typed ID in mongo
+public abstract record EntityId
 {
-    // TODO Fix strong typed ID in mongo
-    public abstract record EntityId
-    {
-        [BsonRepresentation(BsonType.ObjectId)]
-        public Guid Id { get; init; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; init; }
 
-        protected EntityId(){}
+    protected EntityId(){}
 
-        protected EntityId(Guid id) => Id = id;
+    protected EntityId(Guid id) => Id = id.ToString();
 
-        protected EntityId(string id) : this(Guid.Parse(id)){}
-    }
+    protected EntityId(string id) : this(Guid.Parse(id)){}
 }

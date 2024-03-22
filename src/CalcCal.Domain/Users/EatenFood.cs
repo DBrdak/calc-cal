@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalcCal.Domain.Foods;
+﻿using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
 using Responses.DB;
 
-namespace CalcCal.Domain.Users
+namespace CalcCal.Domain.Users;
+
+public sealed record EatenFood : ValueObject
 {
-    public sealed record EatenFood : ValueObject
+    public Food Food { get; init; }
+    public Quantity Quantity { get; init; }
+
+    private EatenFood(Food food, Quantity quantity)
     {
-        public Food Food { get; init; }
-        public Quantity Quantity { get; init; }
+        Food = food;
+        Quantity = quantity;
+    }
 
-        private EatenFood(Food food, Quantity quantity)
+    public static Result<EatenFood> Create(Food food, decimal quantity)
+    {
+        var quantityResult = Quantity.Create(quantity);
+
+        if (quantityResult.IsFailure)
         {
-            Food = food;
-            Quantity = quantity;
+            return Result.Failure<EatenFood>(quantityResult.Error);
         }
 
-        public static Result<EatenFood> Create(Food food, decimal quantity)
-        {
-            var quantityResult = Quantity.Create(quantity);
+        food.Eat();
 
-            if (quantityResult.IsFailure)
-            {
-                return Result.Failure<EatenFood>(quantityResult.Error);
-            }
-
-            food.Eat();
-
-            return new EatenFood(food, quantityResult.Value);
-        }
+        return new EatenFood(food, quantityResult.Value);
     }
 }

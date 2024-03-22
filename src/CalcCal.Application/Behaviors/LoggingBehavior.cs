@@ -1,60 +1,54 @@
 ﻿using MediatR;
 using Responses.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 
-namespace CalcCal.Application.Behaviors
+namespace CalcCal.Application.Behaviors;
+
+public sealed class LoggingBehavior<TRequest, TResponse>
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IBaseRequest
+    where TResponse : Result
 {
-    public sealed class LoggingBehavior<TRequest, TResponse>
-        : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IBaseRequest
-        where TResponse : Result
+    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
+
+    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     {
-        private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
+        _logger = logger;
+    }
 
-        public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    {
+        using (LogContext.PushProperty("RequestHandler", typeof(TRequest).FullName))
         {
-            _logger = logger;
-        }
+            LogHandleStart();
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-        {
-            using (LogContext.PushProperty("RequestHandler", typeof(TRequest).FullName))
+            var response = await next();
+
+            if (response.IsSuccess)
             {
-                LogHandleStart();
-
-                var response = await next();
-
-                if (response.IsSuccess)
-                {
-                    LogHandleSuccess();
-                    return response;
-                }
-
-                LogHandleFailure(response);
-
+                LogHandleSuccess();
                 return response;
             }
-        }
 
-        private void LogHandleFailure(TResponse response)
-        {
-            _logger.LogWarning("Failed to handle {request}: {error}", typeof(TRequest).Name, response.Error);
-        }
+            LogHandleFailure(response);
 
-        private void LogHandleSuccess()
-        {
-            _logger.LogInformation($"Successfully handled {typeof(TRequest).Name}");
+            return response;
         }
+    }
 
-        private void LogHandleStart()
-        {
-            _logger.LogInformation($"Handling {typeof(TRequest).Name}");
-        }
+    private void LogHandleFailure(TResponse response)
+    {
+        _logger.LogWarning("Failed to handle {request}: {error}", typeof(TRequest).Name, response.Error);
+    }
+
+    private void LogHandleSuccess()
+    {
+        _logger.LogInformation($"Successfully handled {typeof(TRequest).Name}");
+    }
+
+    private void LogHandleStart()
+    {
+        _logger.LogInformation($"Handling {typeof(TRequest).Name}");
     }
 }
