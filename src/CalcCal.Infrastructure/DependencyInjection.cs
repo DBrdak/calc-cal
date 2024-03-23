@@ -5,8 +5,11 @@ using CalcCal.Infrastructure.Repositories;
 using CalcCal.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using CalcCal.Application.Abstractions.Authentication;
+using CalcCal.Application.Abstractions.Chat;
 using CalcCal.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CalcCal.Infrastructure.Chat;
+using Microsoft.Extensions.Options;
 
 namespace CalcCal.Infrastructure;
 
@@ -17,6 +20,8 @@ public static class DependencyInjection
         services.AddPersistence(configuration);
 
         services.AddAuthentication(configuration);
+
+        services.AddChat(configuration);
 
         return services;
     }
@@ -46,5 +51,20 @@ public static class DependencyInjection
         services.AddTransient<IPasswordService, PasswordService>();
 
         services.AddScoped<IJwtService, JwtService>();
+    }
+
+    private static void AddChat(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<ChatOptions>(configuration.GetSection("Chat"));
+
+        services.AddTransient<ChatCompletionDelegatingHandler>();
+
+        services.AddHttpClient<IChatService, ChatService>(
+            (serviceProvider, httpClient) =>
+            {
+                var chatOptions = serviceProvider.GetRequiredService<IOptions<ChatOptions>>().Value;
+
+                httpClient.BaseAddress = new Uri(chatOptions.BaseUrl);
+            });
     }
 }
