@@ -5,11 +5,12 @@ using CalcCal.Infrastructure.Repositories;
 using CalcCal.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using CalcCal.Application.Abstractions.Authentication;
-using CalcCal.Application.Abstractions.Chat;
+using CalcCal.Application.Abstractions.LLM;
 using CalcCal.Infrastructure.Authentication;
+using CalcCal.Infrastructure.LLM;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using CalcCal.Infrastructure.Chat;
 using Microsoft.Extensions.Options;
+using CalcCal.Infrastructure.LLM.Gemini;
 
 namespace CalcCal.Infrastructure;
 
@@ -55,16 +56,18 @@ public static class DependencyInjection
 
     private static void AddChat(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<ChatOptions>(configuration.GetSection("Chat"));
+        services.Configure<GeminiOptions>(configuration.GetSection("Gemini"));
 
-        services.AddTransient<ChatCompletionDelegatingHandler>();
+        services.AddTransient<GeminiDelegatingHandler>();
 
-        services.AddHttpClient<IChatService, ChatService>(
+        services.AddHttpClient<GeminiService>(
             (serviceProvider, httpClient) =>
             {
-                var chatOptions = serviceProvider.GetRequiredService<IOptions<ChatOptions>>().Value;
+                var geminiOptions = serviceProvider.GetRequiredService<IOptions<GeminiOptions>>().Value;
 
-                httpClient.BaseAddress = new Uri(chatOptions.BaseUrl);
+                httpClient.BaseAddress = new Uri(geminiOptions.Url);
             });
+
+        services.AddScoped<ILLMService, LLMService>();
     }
 }

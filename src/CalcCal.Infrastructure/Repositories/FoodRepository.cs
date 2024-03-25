@@ -6,7 +6,7 @@ using Responses.DB;
 
 namespace CalcCal.Infrastructure.Repositories;
 
-public sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
+internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
 {
     public FoodRepository(DbContext context) : base(context)
     {

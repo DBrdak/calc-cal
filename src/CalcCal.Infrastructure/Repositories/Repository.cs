@@ -4,7 +4,7 @@ using Responses.DB;
 
 namespace CalcCal.Infrastructure.Repositories;
 
-public abstract class Repository<TEntity, TEntityId>
+internal abstract class Repository<TEntity, TEntityId>
     where TEntity : Entity<TEntityId>
     where TEntityId : EntityId, new()
 {

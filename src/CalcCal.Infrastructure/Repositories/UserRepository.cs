@@ -4,7 +4,7 @@ using Responses.DB;
 
 namespace CalcCal.Infrastructure.Repositories;
 
-public sealed class  UserRepository : Repository<User, UserId>, IUserRepository
+internal sealed class  UserRepository : Repository<User, UserId>, IUserRepository
 {
     public UserRepository(DbContext context) : base(context)
     {

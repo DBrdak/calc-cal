@@ -4,7 +4,7 @@ using CalcCal.Domain.Users;
 
 namespace CalcCal.Infrastructure.Services;
 
-public sealed class PasswordService : IPasswordService
+internal sealed class PasswordService : IPasswordService
 {
     private const byte keySize = 32;
     private const byte saltSize = 16;
