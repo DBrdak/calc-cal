@@ -16,7 +16,9 @@ internal sealed class GetFoodQueryHandler : IQueryHandler<GetFoodQuery, IEnumera
 
     public async Task<Result<IEnumerable<FoodModel>>> Handle(GetFoodQuery request, CancellationToken cancellationToken)
     {
-        var foodResult = await _foodRepository.GetFood(request.FoodName, cancellationToken);
+        var foodResult = request.FoodName is null
+                ? await _foodRepository.GetFood(cancellationToken)
+                : await _foodRepository.GetFood(request.FoodName, cancellationToken);
 
         return foodResult.IsFailure ?
             Result.Failure<IEnumerable<FoodModel>>(foodResult.Error) :

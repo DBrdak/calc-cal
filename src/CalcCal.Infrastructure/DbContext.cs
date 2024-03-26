@@ -10,25 +10,25 @@ namespace CalcCal.Infrastructure;
 
 public sealed class DbContext
 {
-    private IMongoCollection<Food> Food { get; }
-    private IMongoCollection<User> Users { get; }
+    private readonly IMongoCollection<Food> _food;
+    private readonly IMongoCollection<User> _users;
 
     public DbContext(IConfiguration configuration, IWebHostEnvironment env)
     {
         var client = env.IsDevelopment() ?
-            LocalConnection(configuration) :
+            DevConnection(configuration) :
             ProductionConnection(configuration);
 
         var database = client.GetDatabase(
             configuration["DatabaseSettings:DatabaseName"]);
 
-        Food = database.GetCollection<Food>(
+        _food = database.GetCollection<Food>(
             configuration["DatabaseSettings:Collections:Food"]);
-        Users = database.GetCollection<User>(
+        _users = database.GetCollection<User>(
             configuration["DatabaseSettings:Collections:Users"]);
     }
 
-    private MongoClient LocalConnection(IConfiguration configuration) => new MongoClient(
+    private MongoClient DevConnection(IConfiguration configuration) => new MongoClient(
         configuration["DatabaseSettings:ConnectionString"]);
 
     private MongoClient ProductionConnection(IConfiguration configuration)
@@ -43,8 +43,8 @@ public sealed class DbContext
     {
         return typeof(T) switch
         {
-            var type when type == typeof(Food) => (IMongoCollection<T>)Food,
-            var type when type == typeof(User) => (IMongoCollection<T>)Users,
+            var type when type == typeof(Food) => (IMongoCollection<T>)_food,
+            var type when type == typeof(User) => (IMongoCollection<T>)_users,
             _ => throw new InvalidOperationException($"No such a collection: {typeof(T)}")
         };
     }

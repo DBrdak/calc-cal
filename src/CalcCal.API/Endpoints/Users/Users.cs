@@ -1,11 +1,12 @@
-﻿using CalcCal.API.Extensions;
+﻿using CalcCal.API.Endpoints.Users.Requests;
+using CalcCal.API.Extensions;
 using CalcCal.Application.Users.GetCurrentUser;
 using CalcCal.Application.Users.LogIn;
 using CalcCal.Application.Users.RegisterUser;
 using Carter;
 using MediatR;
 
-namespace CalcCal.API.Endpoints;
+namespace CalcCal.API.Endpoints.Users;
 
 public class Users : ICarterModule
 {
@@ -26,8 +27,10 @@ public class Users : ICarterModule
 
         app.MapPost(
             "api/users/login",
-            async (ISender sender, LogInCommand command, CancellationToken cancellationToken) =>
+            async (ISender sender, LogInRequest request, CancellationToken cancellationToken) =>
             {
+                var command = new LogInCommand(request.Username, request.Password);
+
                 var result = await sender.Send(command, cancellationToken);
 
                 return result.IsSuccess
@@ -37,8 +40,16 @@ public class Users : ICarterModule
 
         app.MapPost(
             "api/users/register",
-            async (ISender sender, RegisterUserCommand command, CancellationToken cancellationToken) =>
+            async (ISender sender, RegisterRequest request, CancellationToken cancellationToken) =>
             {
+                var command = new RegisterUserCommand(
+                    request.Username,
+                    request.FirstName,
+                    request.LastName,
+                    request.CountryCode,
+                    request.PhoneNumber,
+                    request.Password);
+                
                 var result = await sender.Send(command, cancellationToken);
 
                 return result.IsSuccess

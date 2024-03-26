@@ -47,6 +47,23 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
         return food;
     }
 
+    public async Task<Result<List<Food>>> GetFood(CancellationToken cancellationToken)
+    {
+        var cursor = await Context.Set<Food>()
+            .FindAsync(
+                FilterDefinition<Food>.Empty,
+                new FindOptions<Food>{Sort = Builders<Food>.Sort.Ascending(f => f.Name.Value) },
+                cancellationToken);
+        var food = await cursor.ToListAsync(cancellationToken);
+
+        if (food is null)
+        {
+            return Result.Failure<List<Food>>(Error.NotFound("Food not found"));
+        }
+
+        return Result.Success(food);
+    }
+
     private sealed class SearchEngine(string searchPhrase)
     {
         public FilterDefinition<Food> Filter { get; private set; } = FilterDefinition<Food>.Empty;
@@ -58,13 +75,15 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
                 food => food.Name.Value,
                 new BsonRegularExpression(searchPhrase, "i"));
 
-            var textScoreProjection = Builders<Food>.Projection.MetaTextScore("score");
+            //var textScoreProjection = Builders<Food>.Projection.MetaTextScore("score");
 
-            Filter = regexFilter & Builders<Food>.Filter.Text(searchPhrase, new TextSearchOptions { CaseSensitive = false });
+            Filter = regexFilter;
+                     //& Builders<Food>.Filter.Text(searchPhrase, new TextSearchOptions { CaseSensitive = false });
             Options = new FindOptions<Food>
             {
-                Sort = Builders<Food>.Sort.MetaTextScore("score"),
-                Projection = textScoreProjection
+                //Sort = Builders<Food>.Sort.MetaTextScore("score"),
+                //Projection = textScoreProjection
+                Sort = Builders<Food>.Sort.Descending(f => f.EatCount)
             };
         }
     }

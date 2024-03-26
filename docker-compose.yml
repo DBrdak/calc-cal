@@ -1,9 +1,9 @@
 version: '3.4'
 
 services:
-  calccal.db:
+  mongodb:
     image: mongo:latest
-    container_name: calccal.db
+    container_name: mongodb
     restart: always
     environment:
       - LC_ALL=C.UTF-8
@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: src/CalcCal.API/Dockerfile
     depends_on:
-      - calccal.db
+      - mongodb
       
   calccal.seq:
     image: datalust/seq:latest
