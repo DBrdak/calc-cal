@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace CalcCal.Application.Food;
+﻿namespace CalcCal.Application.Food;
 
 public sealed record FoodModel
 {

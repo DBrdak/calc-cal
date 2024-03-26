@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalcCal.Application.Abstractions.Authentication;
+﻿using CalcCal.Application.Abstractions.Authentication;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Users;
 using CommonAbstractions.DB.Messaging;
@@ -35,7 +30,14 @@ namespace CalcCal.Application.Food.EatFood
 
             var food = getFoodResult.Value;
 
-            var userId = new UserId(_userContext.UserId);
+            var getUserIdResult = _userContext.TryGetUserId();
+
+            if (getUserIdResult.IsFailure)
+            {
+                return FoodModel.FromDomainObject(food);
+            }
+
+            var userId = new UserId(getUserIdResult.Value);
             var getUserResult = await _userRepository.GetUserById(userId, cancellationToken);
 
             if (getUserResult.IsFailure)

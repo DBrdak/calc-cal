@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using CalcCal.Domain.Foods;
+﻿using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
 using Responses.DB;
 

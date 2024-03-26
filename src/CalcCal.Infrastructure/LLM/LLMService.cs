@@ -1,9 +1,6 @@
-﻿using System.Text;
-using CalcCal.Application.Abstractions.LLM;
+﻿using CalcCal.Application.Abstractions.LLM;
 using CalcCal.Application.Food.AddFood;
 using CalcCal.Infrastructure.LLM.Gemini;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Responses.DB;
 // ReSharper disable InconsistentNaming
 

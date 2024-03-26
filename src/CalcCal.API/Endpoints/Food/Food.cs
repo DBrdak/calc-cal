@@ -3,7 +3,6 @@ using CalcCal.API.Extensions;
 using CalcCal.Application.Food.AddFood;
 using CalcCal.Application.Food.EatFood;
 using CalcCal.Application.Food.GetFood;
-using CalcCal.Domain.Foods;
 using Carter;
 using MediatR;
 
