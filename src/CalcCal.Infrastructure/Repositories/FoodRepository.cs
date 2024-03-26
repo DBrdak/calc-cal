@@ -20,19 +20,17 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
         }
 
         var searchEngine = new SearchEngine(foodName);
-
         searchEngine.ApplySearch();
 
         var cursor = await Context.Set<Food>().FindAsync(searchEngine.Filter, searchEngine.Options, cancellationToken);
-
         var food = await cursor.ToListAsync(cancellationToken);
 
-        if (food is null)
+        if (food == null || !food.Any())
         {
-            Result.Failure<Food>(Error.NotFound("Food not found"));
+            return Result.Failure<List<Food>>(Error.NotFound("Food not found"));
         }
 
-        return food;
+        return Result.Success(food);
     }
 
     private sealed class SearchEngine(string searchPhrase)
@@ -42,10 +40,17 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
 
         public void ApplySearch()
         {
-            Filter = Builders<Food>.Filter.Regex(food => food.Name.Value, new BsonRegularExpression(searchPhrase, "i"));
+            var regexFilter = Builders<Food>.Filter.Regex(
+                food => food.Name.Value,
+                new BsonRegularExpression(searchPhrase, "i"));
+
+            var textScoreProjection = Builders<Food>.Projection.MetaTextScore("score");
+
+            Filter = regexFilter & Builders<Food>.Filter.Text(searchPhrase, new TextSearchOptions { CaseSensitive = false });
             Options = new FindOptions<Food>
             {
-                Sort = Builders<Food>.Sort.Ascending(food => food.Name.Value)
+                Sort = Builders<Food>.Sort.MetaTextScore("score"),
+                Projection = textScoreProjection
             };
         }
     }

@@ -18,12 +18,12 @@ namespace CalcCal.Infrastructure.LLM.Gemini
             _httpClient = httpClient;
         }
 
-        public async Task<string?> GenerateContent(string prompt)
+        public async Task<string?> GenerateContentAsync(string prompt, CancellationToken cancellationToken)
         {
             var requestBody = GeminiRequestFactory.CreateRequest(prompt);
             var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PostAsync("", content);
+            var response = await _httpClient.PostAsync("", content, cancellationToken);
 
             if (response.IsSuccessStatusCode)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using CalcCal.Application.Abstractions.LLM;
+using CalcCal.Application.Food.AddFood;
 using CalcCal.Infrastructure.LLM.Gemini;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -17,9 +18,9 @@ namespace CalcCal.Infrastructure.LLM
             _geminiService = geminiService;
         }
 
-        public async Task<Result<string>> SendPromptAsync(string prompt)
+        public async Task<Result<string>> SendPromptAsync(Prompt prompt, CancellationToken cancellationToken)
         {
-            var response = await _geminiService.GenerateContent(prompt);
+            var response = await _geminiService.GenerateContentAsync(prompt.Value, cancellationToken);
 
             return response ?? 
                    Result.Failure<string>(Error.TaskFailed("Problem while reading response from Gemini"));

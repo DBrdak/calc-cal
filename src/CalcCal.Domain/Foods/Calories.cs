@@ -21,4 +21,6 @@ public sealed record Calories : ValueObject<decimal>
 
         return new Calories(value);
     }
+
+    public override string ToString() => $"{Value:####} kcal";
 }

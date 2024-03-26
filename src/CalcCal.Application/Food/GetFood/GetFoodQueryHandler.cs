@@ -4,7 +4,7 @@ using Responses.DB;
 
 namespace CalcCal.Application.Food.GetFood;
 
-internal sealed class GetFoodQueryHandler : IQueryHandler<GetFoodQuery, List<Domain.Foods.Food>>
+internal sealed class GetFoodQueryHandler : IQueryHandler<GetFoodQuery, IEnumerable<FoodModel>>
 {
     private readonly IFoodRepository _foodRepository;
 
@@ -14,9 +14,13 @@ internal sealed class GetFoodQueryHandler : IQueryHandler<GetFoodQuery, List<Dom
     }
 
 
-    public async Task<Result<List<Domain.Foods.Food>>> Handle(GetFoodQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<FoodModel>>> Handle(GetFoodQuery request, CancellationToken cancellationToken)
     {
-        return await _foodRepository.GetFood(request.FoodName, cancellationToken);
+        var foodResult = await _foodRepository.GetFood(request.FoodName, cancellationToken);
+
+        return foodResult.IsFailure ?
+            Result.Failure<IEnumerable<FoodModel>>(foodResult.Error) :
+            Result.Create(foodResult.Value.Select(FoodModel.FromDomainObject));
     }
 
 }
