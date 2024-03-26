@@ -24,17 +24,27 @@ internal sealed class LogInCommandHandler : ICommandHandler<LogInCommand, Access
             return Result.Failure<AccessToken>(usernameResult.Error);
         }
 
-        var user = await _userRepository.GetUserByUsername(usernameResult.Value, cancellationToken);
+        var getUserResult = await _userRepository.GetUserByUsername(usernameResult.Value, cancellationToken);
 
-        if (user.IsFailure)
+        if (getUserResult.IsFailure)
         {
             return Result.Failure<AccessToken>(Error.InvalidRequest($"User with username: {request.Username} does not exist"));
         }
 
         var result = await _jwtService.GetAccessTokenAsync(
-            user.Value,
+            getUserResult.Value,
             request.Password,
             cancellationToken);
+
+        var user = getUserResult.Value;
+        user.LogIn();
+
+        var userUpdateResult = await _userRepository.Update(user, cancellationToken);
+
+        if (userUpdateResult.IsFailure)
+        {
+            return Result.Failure<AccessToken>(userUpdateResult.Error);
+        }
 
         return result.IsFailure
             ? Result.Failure<AccessToken>(UserErrors.InvalidCredentials)

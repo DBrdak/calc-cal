@@ -1,6 +1,6 @@
 ﻿using CalcCal.Domain.Users;
 
-namespace CalcCal.Application.Users;
+namespace CalcCal.Application.Users.GetUserDetails;
 
 public sealed record UserModel
 {
@@ -8,7 +8,7 @@ public sealed record UserModel
     public string FirstName { get; init; }
     public string LastName { get; init; }
     public string PhoneNumber { get; init; }
-    public List<EatenFoodModel> EatenFood { get; init;}
+    public List<EatenFoodModel> EatenFood { get; init; }
 
     private UserModel(
         string userId,

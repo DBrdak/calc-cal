@@ -5,7 +5,7 @@ using Responses.DB;
 
 namespace CalcCal.Application.Users.GetCurrentUser;
 
-internal sealed class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, UserModel>
+internal sealed class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, UserSimpleModel>
 {
     private readonly IUserContext _userContext;
     private readonly IUserRepository _userRepository;
@@ -16,15 +16,15 @@ internal sealed class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQ
         _userRepository = userRepository;
     }
 
-    public async Task<Result<UserModel>> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
+    public async Task<Result<UserSimpleModel>> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
         var result = await _userRepository.GetUserById(new UserId(_userContext.UserId), cancellationToken);
 
         if (result.IsFailure)
         {
-            return Result.Failure<UserModel>(result.Error);
+            return Result.Failure<UserSimpleModel>(result.Error);
         }
 
-        return UserModel.FromDomainObject(result.Value);
+        return UserSimpleModel.FromDomainObject(result.Value);
     }
 }

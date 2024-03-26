@@ -25,12 +25,26 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
         var cursor = await Context.Set<Food>().FindAsync(searchEngine.Filter, searchEngine.Options, cancellationToken);
         var food = await cursor.ToListAsync(cancellationToken);
 
-        if (food == null || !food.Any())
+        if (food is null)
         {
             return Result.Failure<List<Food>>(Error.NotFound("Food not found"));
         }
 
         return Result.Success(food);
+    }
+
+    public async Task<Result<Food>> GetFoodById(FoodId foodId, CancellationToken cancellationToken)
+    {
+        var cursor = await Context.Set<Food>().FindAsync(food => food.Id == foodId, null, cancellationToken);
+
+        var food = cursor.FirstOrDefault(cancellationToken);
+
+        if (food is null)
+        {
+            return Result.Failure<Food>(Error.NotFound("Food not found"));
+        }
+
+        return food;
     }
 
     private sealed class SearchEngine(string searchPhrase)

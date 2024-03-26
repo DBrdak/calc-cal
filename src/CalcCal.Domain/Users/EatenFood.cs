@@ -1,4 +1,5 @@
-﻿using CalcCal.Domain.Foods;
+﻿using System.Xml;
+using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
 using Responses.DB;
 
@@ -8,11 +9,13 @@ public sealed record EatenFood : ValueObject
 {
     public Food Food { get; init; }
     public Quantity Quantity { get; init; }
+    public Calories CaloriesEaten { get; init; }
 
-    private EatenFood(Food food, Quantity quantity)
+    private EatenFood(Food food, Quantity quantity, Calories caloriesEaten)
     {
         Food = food;
         Quantity = quantity;
+        CaloriesEaten = caloriesEaten;
     }
 
     public static Result<EatenFood> Create(Food food, decimal quantity)
@@ -24,8 +27,17 @@ public sealed record EatenFood : ValueObject
             return Result.Failure<EatenFood>(quantityResult.Error);
         }
 
+        var caloriesEatenResult = Calories.Create(CalculateCalories(food, quantityResult.Value));
+
+        if (caloriesEatenResult.IsFailure)
+        {
+            return Result.Failure<EatenFood>(caloriesEatenResult.Error);
+        }
+
         food.Eat();
 
-        return new EatenFood(food, quantityResult.Value);
+        return new EatenFood(food, quantityResult.Value, caloriesEatenResult.Value);
     }
+
+    private static decimal CalculateCalories(Food food, Quantity quantity) => food.Caloriers.Value * (quantity.Value / food.Weight.Value);
 }

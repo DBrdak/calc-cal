@@ -67,6 +67,11 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
         var isUsernameUnique = users.Value.All(u => u.Username.Value.ToLower() != username.ToLower());
 
+        if (!isUsernameUnique)
+        {
+            return Result.Failure<User>(Error.InvalidRequest($"Username: {username} is taken"));
+        }
+
         return Result.Success();
     }
 }

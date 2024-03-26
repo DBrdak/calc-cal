@@ -2,6 +2,6 @@
 
 namespace CalcCal.Application.Users.GetCurrentUser;
 
-public sealed record GetCurrentUserQuery() : IQuery<UserModel>
+public sealed record GetCurrentUserQuery() : IQuery<UserSimpleModel>
 {
 }

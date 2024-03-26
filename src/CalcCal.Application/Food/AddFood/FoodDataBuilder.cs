@@ -55,7 +55,7 @@ namespace CalcCal.Application.Food.AddFood
                 return Result.Failure(foodResult.Error);
             }
 
-            Food = foodResult.Value;
+            _food = foodResult.Value;
 
             return Result.Success();
         }

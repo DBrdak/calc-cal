@@ -73,7 +73,7 @@ public sealed class Food : Entity<FoodId>
         return new Food(nameResult.Value, caloriesResult.Value, quantityResult.Value);
     }
 
-    public void Eat()
+    internal void Eat()
     {
         LastEatenOn = DateTime.UtcNow;
         EatCount++;
