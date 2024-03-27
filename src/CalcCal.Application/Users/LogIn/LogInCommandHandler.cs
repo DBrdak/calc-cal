@@ -1,6 +1,6 @@
 ﻿using CalcCal.Application.Abstractions.Authentication;
+using CalcCal.Application.Abstractions.Messaging;
 using CalcCal.Domain.Users;
-using CommonAbstractions.DB.Messaging;
 using Responses.DB;
 
 namespace CalcCal.Application.Users.LogIn;

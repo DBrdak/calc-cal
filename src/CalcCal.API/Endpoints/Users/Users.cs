@@ -6,55 +6,56 @@ using CalcCal.Application.Users.RegisterUser;
 using Carter;
 using MediatR;
 
-namespace CalcCal.API.Endpoints.Users;
-
-public class Users : ICarterModule
+namespace CalcCal.API.Endpoints.Users
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public class Users : ICarterModule
     {
-        app.MapGet(
-            "api/users/current",
-            async (ISender sender, CancellationToken cancellationToken) =>
-            {
-                var query = new GetCurrentUserQuery();
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapGet(
+                "api/users/current",
+                async (ISender sender, CancellationToken cancellationToken) =>
+                {
+                    var query = new GetCurrentUserQuery();
 
-                var result = await sender.Send(query, cancellationToken);
+                    var result = await sender.Send(query, cancellationToken);
+                    
+                    return result.IsSuccess
+                        ? Results.Ok(result.Value)
+                        : Results.NotFound(result.Error);
+                }).RequireAuthorization().RequireRateLimiting(RateLimiterPolicies.FixedLoose);
 
-                return result.IsSuccess
-                    ? Results.Ok(result.Value)
-                    : Results.NotFound(result.Error);
-            }).RequireAuthorization().RequireRateLimiting(RateLimiterPolicies.FixedLoose);
+            app.MapPost(
+                "api/users/login",
+                async (ISender sender, LogInRequest request, CancellationToken cancellationToken) =>
+                {
+                    var command = new LogInCommand(request.Username, request.Password);
 
-        app.MapPost(
-            "api/users/login",
-            async (ISender sender, LogInRequest request, CancellationToken cancellationToken) =>
-            {
-                var command = new LogInCommand(request.Username, request.Password);
+                    var result = await sender.Send(command, cancellationToken);
 
-                var result = await sender.Send(command, cancellationToken);
+                    return result.IsSuccess
+                        ? Results.Ok(result.Value)
+                        : Results.BadRequest(result.Error);
+                }).RequireRateLimiting(RateLimiterPolicies.FixedStandard);
 
-                return result.IsSuccess
-                    ? Results.Ok(result.Value)
-                    : Results.BadRequest(result.Error);
-            }).RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+            app.MapPost(
+                "api/users/register",
+                async (ISender sender, RegisterRequest request, CancellationToken cancellationToken) =>
+                {
+                    var command = new RegisterUserCommand(
+                        request.Username,
+                        request.FirstName,
+                        request.LastName,
+                        request.CountryCode,
+                        request.PhoneNumber,
+                        request.Password);
 
-        app.MapPost(
-            "api/users/register",
-            async (ISender sender, RegisterRequest request, CancellationToken cancellationToken) =>
-            {
-                var command = new RegisterUserCommand(
-                    request.Username,
-                    request.FirstName,
-                    request.LastName,
-                    request.CountryCode,
-                    request.PhoneNumber,
-                    request.Password);
-                
-                var result = await sender.Send(command, cancellationToken);
+                    var result = await sender.Send(command, cancellationToken);
 
-                return result.IsSuccess
-                    ? Results.Ok()
-                    : Results.BadRequest(result.Error);
-            }).RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+                    return result.IsSuccess
+                        ? Results.Ok()
+                        : Results.BadRequest(result.Error);
+                }).RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+        }
     }
 }

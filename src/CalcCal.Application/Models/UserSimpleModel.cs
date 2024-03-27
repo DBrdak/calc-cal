@@ -1,8 +1,9 @@
-﻿using CalcCal.Domain.Users;
+﻿using CalcCal.Domain.Shared;
+using CalcCal.Domain.Users;
 
-namespace CalcCal.Application.Users.GetCurrentUser;
+namespace CalcCal.Application.Models;
 
-public record UserSimpleModel
+public record UserSimpleModel : EntityBusinessModel
 {
     public string UserId { get; init; }
     public string FirstName { get; init; }
@@ -15,7 +16,8 @@ public record UserSimpleModel
         string firstName,
         string lastName,
         string username,
-        string phoneNumber)
+        string phoneNumber,
+        IEnumerable<IDomainEvent> domainEvents) : base(domainEvents)
     {
         UserId = userId;
         FirstName = firstName;
@@ -31,6 +33,7 @@ public record UserSimpleModel
             domainObject.FirstName.Value,
             domainObject.LastName.Value,
             domainObject.Username.Value,
-            domainObject.PhoneNumber.Value);
+            domainObject.PhoneNumber.Value,
+            domainObject.GetDomainEvents());
     }
 }

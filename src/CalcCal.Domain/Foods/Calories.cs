@@ -14,7 +14,7 @@ public sealed record Calories : ValueObject<decimal>
 
     public static Result<Calories> Create(decimal value)
     {
-        if (value is > minValue and < maxValue)
+        if (value is <= minValue or >= maxValue)
         {
             return Result.Failure<Calories>(FoodErrors.InvalidCalories);
         }

@@ -5,11 +5,15 @@ namespace CalcCal.Application.Food.AddFood
     internal sealed class PromptBuilder
     {
         private Prompt? _getFoodPrompt = null;
-        private string foodName;
+        private readonly string _foodName;
+        private const int maxFoodNameLength = 150;
+        private static readonly Error foodNameTooLongError = new(
+            "PromptBuilder.TooLongFoodName",
+            "Food name is too long");
 
         public PromptBuilder(string foodName)
         {
-            this.foodName = foodName;
+            this._foodName = foodName;
         }
 
         public Prompt GetFoodPrompt => _getFoodPrompt ??
@@ -17,6 +21,11 @@ namespace CalcCal.Application.Food.AddFood
 
         public Result BuildGetFoodPrompt()
         {
+            if (_foodName.Length > maxFoodNameLength)
+            {
+                return Result.Failure(foodNameTooLongError);
+            }
+
             var promptResult = Prompt.Create(
                 $"""
                  Below you will get a input from user, you have to validate this input and if it's valid pass calorie content, there are 3 rules of validation:
@@ -32,6 +41,9 @@ namespace CalcCal.Application.Food.AddFood
                  Pattern of your answer:
                  If is valid: [Adjusted name of dish with location if provided] - [product or dish] - [number] kcal/[dish weight or 100g]
                  If is invalid: Invalid - reason of invalidation
+                 
+                 Food with location pattern:
+                 [Name of food], [Name of restaurant], [Name of city]
 
                  There are some example cases:
 
@@ -48,10 +60,10 @@ namespace CalcCal.Application.Food.AddFood
                  You: Invalid - Given food isn't served in given restaurant
 
                  Validate this food:
-                 User: Big Mac w makdonaldzie w złotych tarasach
+                 User: {_foodName}
                  You: [answer pattern: Valid pattern (if valid) Invalid pattern (if invalid)]
 
-                 Answer in max few words
+                 Answer in max few words as in pattern and translate to english
                  """);
 
             if (promptResult.IsFailure)

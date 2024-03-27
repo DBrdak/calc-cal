@@ -5,8 +5,8 @@ namespace CalcCal.Application.Food.AddFood
     public sealed record Prompt
     {
         public string Value { get; init; }
-        private const int valueMaxLength = 1_000;
-        private static readonly Error _promptTooLongError = new(
+        private const int valueMaxLength = 1_500;
+        private static readonly Error promptTooLongError = new(
             "Prompt.TooLongValue",
             "Prompt value too long");
 
@@ -19,7 +19,7 @@ namespace CalcCal.Application.Food.AddFood
         {
             if (value.Length > valueMaxLength)
             {
-                return Result.Failure<Prompt>(_promptTooLongError);
+                return Result.Failure<Prompt>(promptTooLongError);
             }
 
             return new Prompt(value);

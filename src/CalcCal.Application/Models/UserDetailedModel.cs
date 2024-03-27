@@ -1,7 +1,7 @@
-﻿using CalcCal.Application.Users.GetCurrentUser;
+﻿using CalcCal.Domain.Shared;
 using CalcCal.Domain.Users;
 
-namespace CalcCal.Application.Users.GetUserDetails;
+namespace CalcCal.Application.Models;
 
 public sealed record UserDetailedModel : UserSimpleModel
 {
@@ -13,8 +13,8 @@ public sealed record UserDetailedModel : UserSimpleModel
         string lastName,
         string username,
         string phoneNumber,
-        List<EatenFoodModel> eatenFood) :
-        base(userId, firstName, lastName, username, phoneNumber)
+        List<EatenFoodModel> eatenFood,
+        IEnumerable<IDomainEvent> domainEvents) : base(userId, firstName, lastName, username, phoneNumber, domainEvents)
     {
         EatenFood = eatenFood;
     }
@@ -27,6 +27,7 @@ public sealed record UserDetailedModel : UserSimpleModel
             domainObject.LastName.Value,
             domainObject.Username.Value,
             domainObject.PhoneNumber.Value,
-            domainObject.EatenFood.Select(EatenFoodModel.FromDomainObject).ToList());
+            domainObject.EatenFood.Select(EatenFoodModel.FromDomainObject).ToList(),
+            domainObject.GetDomainEvents());
     }
 }

@@ -1,5 +1,6 @@
-﻿using CalcCal.Domain.Foods;
-using CommonAbstractions.DB.Messaging;
+﻿using CalcCal.Application.Abstractions.Messaging;
+using CalcCal.Application.Models;
+using CalcCal.Domain.Foods;
 using Responses.DB;
 
 namespace CalcCal.Application.Food.GetFood;

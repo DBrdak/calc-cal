@@ -1,4 +1,4 @@
-﻿using CommonAbstractions.DB.Messaging;
+﻿using CalcCal.Application.Abstractions.Messaging;
 
 namespace CalcCal.Application.Users.LogIn;
 

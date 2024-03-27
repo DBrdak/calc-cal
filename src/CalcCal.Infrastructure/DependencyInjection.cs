@@ -66,7 +66,8 @@ public static class DependencyInjection
                 var geminiOptions = serviceProvider.GetRequiredService<IOptions<GeminiOptions>>().Value;
 
                 httpClient.BaseAddress = new Uri(geminiOptions.Url);
-            });
+            })
+            .AddHttpMessageHandler<GeminiDelegatingHandler>();
 
         services.AddScoped<ILLMService, LLMService>();
     }

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
+using CalcCal.Domain.Users.DomainEvents;
 using Responses.DB;
 
 namespace CalcCal.Domain.Users;
@@ -30,7 +31,7 @@ public sealed class User : Entity<UserId>
         LastName = lastName;
         Username = username;
         PasswordHash = passwordHash;
-        IsPhoneNumberVerified = true; // TODO temporary solution
+        IsPhoneNumberVerified = false; // TODO temporary solution
         CreatedAt = DateTime.UtcNow;
         LastLoggedInAt = DateTime.UtcNow;
         _eatenFood = new List<EatenFood>();
@@ -73,7 +74,11 @@ public sealed class User : Entity<UserId>
             return Result.Failure<User>(usernameResult.Error);
         }
 
-        return new User(phoneNumberResult.Value, firstNameResult.Value, lastNameResult.Value, usernameResult.Value, passwordHash);
+        var user = new User(phoneNumberResult.Value, firstNameResult.Value, lastNameResult.Value, usernameResult.Value, passwordHash);
+
+        user.RaiseDomainEvent(new UserRegisteredDomainEvent(user.Id));
+
+        return user;
     }
 
     public void LogIn() => LastLoggedInAt = DateTime.UtcNow;

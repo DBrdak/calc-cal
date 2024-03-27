@@ -6,6 +6,6 @@ public static class StringFormatter
     {
         return string.IsNullOrEmpty(value) 
             ? value 
-            : string.Concat(char.ToUpper(value[0]), value.ToLower().Skip(1));
+            : string.Concat(char.ToUpper(value[0]), string.Concat(value.ToLower().Skip(1)));
     }
 }

@@ -1,6 +1,8 @@
-﻿using CalcCal.Domain.Users;
+﻿using CalcCal.Domain.Foods;
+using CalcCal.Domain.Shared;
+using CalcCal.Domain.Users;
 
-namespace CalcCal.Application.Users.GetUserDetails;
+namespace CalcCal.Application.Models;
 
 public sealed record EatenFoodModel
 {
@@ -9,7 +11,11 @@ public sealed record EatenFoodModel
     public decimal GramsQuantity { get; init; }
     public decimal CaloriesEaten { get; init; }
 
-    private EatenFoodModel(string Food, decimal Calories, decimal GramsQuantity, decimal caloriesEaten)
+    private EatenFoodModel(
+        string Food,
+        decimal Calories,
+        decimal GramsQuantity,
+        decimal caloriesEaten)
     {
         this.Food = Food;
         this.Calories = Calories;

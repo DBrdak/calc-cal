@@ -6,7 +6,7 @@ namespace CalcCal.Domain.Foods;
 
 public sealed record FoodName : ValueObject<string>
 {
-    private const string valuePattern = @"^[a-zA-Z0-9.-]{1,50}$";
+    private const int valueMaxLength = 150;
 
     private FoodName(string value) : base(value)
     {
@@ -14,11 +14,11 @@ public sealed record FoodName : ValueObject<string>
 
     public static Result<FoodName> Create(string value)
     {
-        if (!Regex.IsMatch(value, valuePattern))
+        if (value.Length > valueMaxLength)
         {
             return Result.Failure<FoodName>(FoodErrors.InvalidName);
         }
 
-        return new FoodName(value.CapitalizeFirstLetter());
+        return new FoodName(value);
     }
 }

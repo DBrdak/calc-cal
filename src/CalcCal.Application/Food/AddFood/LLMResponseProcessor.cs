@@ -19,7 +19,7 @@ namespace CalcCal.Application.Food.AddFood
         {
             var dataArray = response.Split('-').Select(x => x.Trim()).ToArray();
 
-            var validationResult = IsValidationSuccessful(dataArray[0], dataArray[1], dataArray.Length);
+            var validationResult = ValidateResponse(dataArray[0], dataArray[1], dataArray.Length);
 
             if (validationResult.IsFailure)
             {
@@ -36,11 +36,11 @@ namespace CalcCal.Application.Food.AddFood
             return CreateFood(IsDish(dataArray));
         }
 
-        private Result IsValidationSuccessful(string validationResult, string failureReason, int dataArrayLength)
+        private Result ValidateResponse(string validationResult, string failureReason, int dataArrayLength)
         {
             var isValidationSuccessful = validationResult.ToLower() != "invalid" && dataArrayLength == 3;
 
-            return !isValidationSuccessful
+            return isValidationSuccessful
                 ? Result.Success()
                 : Result.Failure(Error.TaskFailed(failureReason));
         }
@@ -61,7 +61,7 @@ namespace CalcCal.Application.Food.AddFood
 
         private bool GetWeightFromFoodData(string data)
         {
-            var weight = string.Concat(data.Split(' ')[1].Split('/').TakeWhile(char.IsDigit));
+            var weight = string.Concat(data.Split('/')[1].Split(' ')[0].TakeWhile(char.IsDigit));
             return decimal.TryParse(weight, out foodWeight);
         }
 

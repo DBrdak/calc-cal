@@ -1,4 +1,4 @@
-﻿namespace CalcCal.Infrastructure.LLM.Gemini.Models.GeminiResponse
+﻿namespace CalcCal.Infrastructure.LLM.Gemini.Models.GeminiRequest
 {
     internal sealed class GenerationConfig
     {

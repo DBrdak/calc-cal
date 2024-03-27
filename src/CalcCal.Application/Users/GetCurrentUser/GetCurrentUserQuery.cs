@@ -1,4 +1,5 @@
-﻿using CommonAbstractions.DB.Messaging;
+﻿using CalcCal.Application.Abstractions.Messaging;
+using CalcCal.Application.Models;
 
 namespace CalcCal.Application.Users.GetCurrentUser;
 

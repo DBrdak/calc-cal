@@ -14,7 +14,6 @@ namespace CalcCal.Infrastructure.LLM.Gemini
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             request.Headers.Add("x-goog-api-key", $"{_chatOptions.ApiKey}");
-            request.Headers.Add("Content-Type", $"application/json");
 
             return base.SendAsync(request, cancellationToken);
         }

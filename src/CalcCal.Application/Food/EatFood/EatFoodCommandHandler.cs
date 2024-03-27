@@ -1,12 +1,13 @@
 ﻿using CalcCal.Application.Abstractions.Authentication;
+using CalcCal.Application.Abstractions.Messaging;
+using CalcCal.Application.Models;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Users;
-using CommonAbstractions.DB.Messaging;
 using Responses.DB;
 
 namespace CalcCal.Application.Food.EatFood
 {
-    internal sealed class EatFoodCommandHandler : ICommandHandler<EatFoodCommand, FoodModel>
+    internal sealed class EatFoodCommandHandler : ICommandHandler<EatFoodCommand, EatenFoodModel>
     {
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
@@ -19,13 +20,15 @@ namespace CalcCal.Application.Food.EatFood
             _foodRepository = foodRepository;
         }
 
-        public async Task<Result<FoodModel>> Handle(EatFoodCommand request, CancellationToken cancellationToken)
+        public async Task<Result<EatenFoodModel>> Handle(EatFoodCommand request, CancellationToken cancellationToken)
         {
+            Result<EatenFood> eatenFoodCreateResult;
+
             var getFoodResult = await _foodRepository.GetFoodById(new(request.FoodId), cancellationToken);
 
             if (getFoodResult.IsFailure)
             {
-                return Result.Failure<FoodModel>(getFoodResult.Error);
+                return Result.Failure<EatenFoodModel>(getFoodResult.Error);
             }
 
             var food = getFoodResult.Value;
@@ -34,7 +37,14 @@ namespace CalcCal.Application.Food.EatFood
 
             if (getUserIdResult.IsFailure)
             {
-                return FoodModel.FromDomainObject(food);
+                eatenFoodCreateResult = EatenFood.Create(food, request.FoodQuantity);
+
+                if (eatenFoodCreateResult.IsFailure)
+                {
+                    return Result.Failure<EatenFoodModel>(eatenFoodCreateResult.Error);
+                }
+
+                return EatenFoodModel.FromDomainObject(eatenFoodCreateResult.Value);
             }
 
             var userId = new UserId(getUserIdResult.Value);
@@ -42,7 +52,7 @@ namespace CalcCal.Application.Food.EatFood
 
             if (getUserResult.IsFailure)
             {
-                return Result.Failure<FoodModel>(getUserResult.Error);
+                return Result.Failure<EatenFoodModel>(getUserResult.Error);
             }
 
             var user = getUserResult.Value;
@@ -53,17 +63,24 @@ namespace CalcCal.Application.Food.EatFood
 
             if (userUpdateResult.IsFailure)
             {
-                return Result.Failure<FoodModel>(userUpdateResult.Error);
+                return Result.Failure<EatenFoodModel>(userUpdateResult.Error);
             }
 
             var foodUpdateResult = await _foodRepository.Update(food, cancellationToken);
 
             if (foodUpdateResult.IsFailure)
             {
-                return Result.Failure<FoodModel>(foodUpdateResult.Error);
+                return Result.Failure<EatenFoodModel>(foodUpdateResult.Error);
             }
 
-            return FoodModel.FromDomainObject(food);
+            eatenFoodCreateResult = EatenFood.Create(food, request.FoodQuantity);
+
+            if (eatenFoodCreateResult.IsFailure)
+            {
+                return Result.Failure<EatenFoodModel>(eatenFoodCreateResult.Error);
+            }
+
+            return EatenFoodModel.FromDomainObject(eatenFoodCreateResult.Value);
         }
     }
 }

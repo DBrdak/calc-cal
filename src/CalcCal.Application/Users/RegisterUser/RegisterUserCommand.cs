@@ -1,5 +1,5 @@
-﻿using CalcCal.Domain.Users;
-using CommonAbstractions.DB.Messaging;
+﻿using CalcCal.Application.Abstractions.Messaging;
+using CalcCal.Domain.Users;
 
 namespace CalcCal.Application.Users.RegisterUser;
 
