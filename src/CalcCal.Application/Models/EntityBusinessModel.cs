@@ -11,12 +11,13 @@ namespace CalcCal.Application.Models
 
     public abstract record EntityBusinessModel
     {
-        [JsonIgnore]
-        public List<IDomainEvent> DomainEvents { get; private set; }
+        private readonly List<IDomainEvent> _domainEvents;
+
+        public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents;
 
         protected EntityBusinessModel(IEnumerable<IDomainEvent> domainEvents)
         {
-            DomainEvents = domainEvents.ToList();
+            _domainEvents = domainEvents.ToList();
         }
     }
     

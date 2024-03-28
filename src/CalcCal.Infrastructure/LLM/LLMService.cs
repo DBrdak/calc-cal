@@ -8,16 +8,16 @@ namespace CalcCal.Infrastructure.LLM
 {
     internal sealed class LLMService : ILLMService
     {
-        private readonly GeminiService _geminiService;
+        private readonly GeminiClient _geminiClient;
 
-        public LLMService(GeminiService geminiService)
+        public LLMService(GeminiClient geminiClient)
         {
-            _geminiService = geminiService;
+            _geminiClient = geminiClient;
         }
 
         public async Task<Result<string>> SendPromptAsync(Prompt prompt, CancellationToken cancellationToken)
         {
-            var response = await _geminiService.GenerateContentAsync(prompt.Value, cancellationToken);
+            var response = await _geminiClient.GenerateContentAsync(prompt.Value, cancellationToken);
 
             return response ?? 
                    Result.Failure<string>(Error.TaskFailed("Problem while reading response from Gemini"));

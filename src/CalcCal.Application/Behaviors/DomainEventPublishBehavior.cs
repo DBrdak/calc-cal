@@ -111,24 +111,7 @@ namespace CalcCal.Application.Behaviors
 
         }
 
-        private static List<IDomainEvent>? GetDomainEvents(object value)
-        {
-            var domainEvents = GetDomainEventsFromEntity(value);
-
-            if (domainEvents is not null)
-            {
-                return domainEvents;
-            }
-
-            domainEvents = GetDomainEventsFromModel(value);
-
-            return domainEvents;
-        }
-
-        private static List<IDomainEvent>? GetDomainEventsFromModel(object value) =>
-            value.GetType().GetProperty("DomainEvents")?.GetValue(value) as List<IDomainEvent>;
-
-        private static List<IDomainEvent>? GetDomainEventsFromEntity(object value) =>
+        private static List<IDomainEvent>? GetDomainEvents(object value) =>
             value.GetType().GetMethod("GetDomainEvents")?.Invoke(value, null) as List<IDomainEvent>;
 
         private static object? GetProperty(object obj, string propName) => obj.GetType().GetProperty(propName)?.GetValue(obj);

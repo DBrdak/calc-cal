@@ -10,17 +10,20 @@ public sealed record EatenFoodModel
     public decimal Calories { get; init; }
     public decimal GramsQuantity { get; init; }
     public decimal CaloriesEaten { get; init; }
+    public DateTime EatenDateTime { get; init; }
 
     private EatenFoodModel(
         string Food,
         decimal Calories,
         decimal GramsQuantity,
-        decimal caloriesEaten)
+        decimal caloriesEaten,
+        DateTime eatenDateTime)
     {
         this.Food = Food;
         this.Calories = Calories;
         this.GramsQuantity = GramsQuantity;
         CaloriesEaten = caloriesEaten;
+        EatenDateTime = eatenDateTime;
     }
 
     internal static EatenFoodModel FromDomainObject(EatenFood domainObject)
@@ -29,6 +32,7 @@ public sealed record EatenFoodModel
             domainObject.Food.Name.Value,
             domainObject.Food.Caloriers.Value,
             domainObject.Quantity.Value,
-            domainObject.CaloriesEaten.Value);
+            domainObject.CaloriesEaten.Value,
+            domainObject.EatenDateTime);
     }
 }

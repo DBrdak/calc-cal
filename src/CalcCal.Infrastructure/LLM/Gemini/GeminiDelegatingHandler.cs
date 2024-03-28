@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Net;
+using Microsoft.Extensions.Options;
 
 namespace CalcCal.Infrastructure.LLM.Gemini
 {

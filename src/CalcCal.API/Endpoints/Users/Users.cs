@@ -1,10 +1,13 @@
-﻿using CalcCal.API.Endpoints.Users.Requests;
+﻿using System.Net;
+using CalcCal.API.Endpoints.Users.Requests;
 using CalcCal.API.Extensions;
+using CalcCal.Application.Models;
 using CalcCal.Application.Users.GetCurrentUser;
 using CalcCal.Application.Users.LogIn;
 using CalcCal.Application.Users.RegisterUser;
 using Carter;
 using MediatR;
+using Responses.DB;
 
 namespace CalcCal.API.Endpoints.Users
 {
@@ -23,7 +26,9 @@ namespace CalcCal.API.Endpoints.Users
                     return result.IsSuccess
                         ? Results.Ok(result.Value)
                         : Results.NotFound(result.Error);
-                }).RequireAuthorization().RequireRateLimiting(RateLimiterPolicies.FixedLoose);
+                })
+                .RequireAuthorization()
+                .RequireRateLimiting(RateLimiterPolicies.FixedLoose);
 
             app.MapPost(
                 "api/users/login",
@@ -36,7 +41,8 @@ namespace CalcCal.API.Endpoints.Users
                     return result.IsSuccess
                         ? Results.Ok(result.Value)
                         : Results.BadRequest(result.Error);
-                }).RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+                })
+                .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
 
             app.MapPost(
                 "api/users/register",
@@ -55,7 +61,8 @@ namespace CalcCal.API.Endpoints.Users
                     return result.IsSuccess
                         ? Results.Ok()
                         : Results.BadRequest(result.Error);
-                }).RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+                })
+                .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
         }
     }
 }

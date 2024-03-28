@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Net;
+using Microsoft.Extensions.Configuration;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Users;
 using CalcCal.Infrastructure.Repositories;
@@ -60,10 +61,12 @@ public static class DependencyInjection
 
         services.AddTransient<GeminiDelegatingHandler>();
 
-        services.AddHttpClient<GeminiService>(
+        services.AddHttpClient<GeminiClient>(
             (serviceProvider, httpClient) =>
             {
                 var geminiOptions = serviceProvider.GetRequiredService<IOptions<GeminiOptions>>().Value;
+                var proxy = new WebProxy(
+                    "wss://brd-customer-hl_d90dedda-zone-scraping_browser1-country-us:sl6twcg0dnmn@brd.superproxy.io:9222");
 
                 httpClient.BaseAddress = new Uri(geminiOptions.Url);
             })
