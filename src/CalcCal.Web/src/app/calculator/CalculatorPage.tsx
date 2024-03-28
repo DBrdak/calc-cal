@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import AppOverlay from "../../components/AppOverlay";
+import AppOverlay from "../../components/MobileOverlay";
 
 export const CalculatorPage = () => {
     return (

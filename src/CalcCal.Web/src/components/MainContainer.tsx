@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import theme from "../app/theme";
-import AppOverlay from "./AppOverlay";
+import AppOverlay from "./MobileOverlay";
 
 interface MainContainerProps {
     children: React.ReactNode
