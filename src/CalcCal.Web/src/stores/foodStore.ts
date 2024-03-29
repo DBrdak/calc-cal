@@ -11,6 +11,7 @@ export default class FoodStore {
     private searchPhrase?: string = undefined
     private usedSearchPhrases: string[] = []
     loading: FoodLoading = new FoodLoading()
+    private selectedFood?: Food
 
     constructor() {
         makeAutoObservable(this);
@@ -28,6 +29,10 @@ export default class FoodStore {
         this.food.set(food.name, food)
     }
 
+    private setSelectedFood(food: Food) {
+        this.selectedFood = food
+    }
+
     private setUsedSearchPhrase(searchPhrase: string){
         this.usedSearchPhrases.push(searchPhrase)
     }
@@ -40,20 +45,17 @@ export default class FoodStore {
     async getFood(foodName: string) {
         foodName = foodName.toLowerCase()
 
-        if(this.usedSearchPhrases.some(n => n.toLowerCase() === foodName)
+        const isApiRequired = !(this.usedSearchPhrases.some(n => n.toLowerCase() === foodName)
             || this.usedSearchPhrases.some(n => n.toLowerCase().includes(foodName))
-            || foodName.length > 4){
-            this.setSearchPhrase(foodName)
-            this.loading.stopGet()
-            return
-        }
+            || foodName.length > 4
+            || foodName.length < 3)
 
         this.loading.startGet()
 
         try {
             this.setSearchPhrase(foodName)
-            const food = await agent.food.getFood(foodName)
-            food.forEach(f => this.setFood(f))
+            const food = isApiRequired && await agent.food.getFood(foodName)
+            food && food.forEach(f => this.setFood(f))
         } catch(e) {
 
         } finally {
@@ -61,12 +63,28 @@ export default class FoodStore {
         }
     }
 
-    async addFood(request: AddFoodRequest) {
+    async selectFood(foodName: string) {
+        const food = this.food.get(foodName)
+
+        if(food) {
+            this.setSelectedFood(food)
+            return food
+        }
+
+        const newFood = await this.addFood({foodName})
+
+        if(newFood){
+            newFood.forEach(f => this.setFood(f))
+            return newFood
+        }
+    }
+
+    private async addFood(request: AddFoodRequest) {
         this.loading.startAdd()
 
         try {
             const addedFood = await agent.food.addFood(request)
-            this.setFood(addedFood)
+            addedFood.forEach(f => this.setFood(f))
             return addedFood
         } catch (e) {
 

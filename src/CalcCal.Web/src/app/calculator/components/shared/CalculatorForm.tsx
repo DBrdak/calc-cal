@@ -10,25 +10,43 @@ import theme from "../../../theme";
 
 export default observer (function CalculatorForm () {
     const [searchPhrase, setSearchPhrase] = useState<string>('')
-    const [selectedFood, setSelectedFood] = useState<Food>()
-    const [submittedValue, setSubmittedValue] = useState<Food | string>('')
-    const [getLoading, setGetLoading] = useState(false)
+    const [submittedValue, setSubmittedValue] = useState<string>('')
+    const [searchLoading, setSearchLoading] = useState(false)
     const {foodStore} = useStore()
 
     useEffect(() => {
-        setGetLoading(true)
+        setSearchLoading(true)
         foodStore.getFood(searchPhrase as string || '').then(() => {
-            setGetLoading(false)
+            setSearchLoading(false)
         })
+
     }, [searchPhrase])
 
-    useEffect(()=>{
-        console.log(foodStore.loading.get)
-    },[foodStore.loading.get])
+    useEffect(() => {
+        if(submittedValue.length < 1){
+            return
+        }
+        setSearchLoading(true)
+        foodStore.selectFood(submittedValue).then(f => {
+            setSearchLoading(false)
+        })
+    }, [submittedValue])
+
 
     function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        setSubmittedValue(searchPhrase)
+        const foodName = (event.currentTarget.elements[0] as HTMLInputElement).value
+        setSearchPhrase(foodName)
+        setSubmittedValue(foodName)
+    }
+
+    function handleFoodChange(foodName: string | null) {
+        if(!foodName) {
+            setSearchPhrase('')
+            return
+        }
+        setSearchPhrase(foodName)
+        setSubmittedValue(foodName)
     }
 
     const handleBlur = () => {
@@ -45,13 +63,11 @@ export default observer (function CalculatorForm () {
             borderRadius: '20px'
         }}>
             <form onSubmit={handleFormSubmit} style={{width: '70%'}}>
-                {getLoading && <DotLoader/>}
+                {searchLoading && <DotLoader/>}
                 <Autocomplete
                     freeSolo
                     value={searchPhrase}
-                    onChange={(event, newValue) => {
-                        console.log(newValue)
-                    }}
+                    onChange={(event, newValue) => handleFoodChange(newValue)}
                     onBlur={() => handleBlur()}
                     options={foodStore.query.map(f => f.name)}
                     sx={{marginTop: theme.spacing(2)}}
@@ -60,6 +76,7 @@ export default observer (function CalculatorForm () {
                             {...params}
                             label="What have you eaten?"
                             onChange={(e) => setSearchPhrase(e.target.value)}
+                            sx={{borderRadius: '30px'}}
                         />
                     )}
                 />

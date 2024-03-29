@@ -59,7 +59,7 @@ axios.interceptors.response.use(async(response) => {
         }
         switch(error.response.status) {
             case 401:
-                toast.error('Unauthorized')
+                //toast.error('Unauthorized')
                 toast.clearWaitingQueue()
                 break
             case 403:
@@ -80,7 +80,7 @@ axios.interceptors.response.use(async(response) => {
 
 const food = {
     getFood: (foodName?: string) => axios.get<Food[]>('/food', { params: { foodName } }).then(responseBody),
-    addFood: (request: AddFoodRequest) => axios.post<Food>('/food', request).then(responseBody),
+    addFood: (request: AddFoodRequest) => axios.post<Food[]>('/food', request).then(responseBody),
     eatFood: (request: EatFoodRequest) => axios.put<EatenFood>('/food', request).then(responseBody),
 }
 
