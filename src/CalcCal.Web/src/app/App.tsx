@@ -2,6 +2,7 @@ import React from 'react';
 import {Outlet, ScrollRestoration, useLocation} from "react-router-dom";
 import {Bounce, ToastContainer} from "react-toastify";
 import {CalculatorPage} from "./calculator/CalculatorPage";
+import {Box} from "@mui/material";
 
 function App() {
   const location = useLocation()

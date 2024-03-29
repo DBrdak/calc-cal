@@ -1,10 +1,25 @@
-import MainContainer from "../../components/MainContainer";
-import AppOverlay from "../../components/MobileOverlay";
+import MobileOverlay from "./components/mobile/MobileOverlay";
+import React from "react";
+import DesktopOverlay from "./components/desktop/DesktopOverlay";
+import CalculatorForm from "./components/shared/CalculatorForm";
+import {AppName} from "../../components/AppName";
 
 export const CalculatorPage = () => {
+
+    function isTouchDevice() {
+        return ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 0) ||
+            ('msMaxTouchPoints' in navigator && Number(navigator.msMaxTouchPoints) > 0);
+    }
+
     return (
-        <AppOverlay>
-            Hello
-        </AppOverlay>
+        isTouchDevice() ?
+            <MobileOverlay>
+                <CalculatorForm />
+            </MobileOverlay>
+            :
+            <DesktopOverlay>
+                <AppName />
+                <CalculatorForm />
+            </DesktopOverlay>
     );
 };

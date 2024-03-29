@@ -10,7 +10,7 @@ using Responses.DB;
 
 namespace CalcCal.API.Endpoints.Food
 {
-    internal sealed class Food : ICarterModule
+    public sealed class Food : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {

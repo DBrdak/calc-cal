@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import theme from "../app/theme";
-import AppOverlay from "./MobileOverlay";
 
 interface MainContainerProps {
     children: React.ReactNode
@@ -17,6 +16,7 @@ const MainContainer = ({children}: MainContainerProps) => {
                 backgroundColor: theme.palette.background.default,
                 alignItems: 'center',
                 justifyContent: 'center',
+                flexDirection: 'column'
             }}
         >
             {children}

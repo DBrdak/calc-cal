@@ -10,8 +10,8 @@ namespace CalcCal.Infrastructure;
 
 public sealed class DbContext
 {
-    private readonly IMongoCollection<Food> _food;
-    private readonly IMongoCollection<User> _users;
+    public IMongoCollection<Food> Food { get; }
+    public IMongoCollection<User> Users { get; }
 
     public DbContext(IConfiguration configuration, IWebHostEnvironment env)
     {
@@ -22,9 +22,9 @@ public sealed class DbContext
         var database = client.GetDatabase(
             configuration["DatabaseSettings:DatabaseName"]);
 
-        _food = database.GetCollection<Food>(
+        Food = database.GetCollection<Food>(
             configuration["DatabaseSettings:Collections:Food"]);
-        _users = database.GetCollection<User>(
+        Users = database.GetCollection<User>(
             configuration["DatabaseSettings:Collections:Users"]);
     }
 
@@ -43,8 +43,8 @@ public sealed class DbContext
     {
         return typeof(T) switch
         {
-            var type when type == typeof(Food) => (IMongoCollection<T>)_food,
-            var type when type == typeof(User) => (IMongoCollection<T>)_users,
+            var type when type == typeof(Food) => (IMongoCollection<T>)Food,
+            var type when type == typeof(User) => (IMongoCollection<T>)Users,
             _ => throw new InvalidOperationException($"No such a collection: {typeof(T)}")
         };
     }

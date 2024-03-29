@@ -11,7 +11,7 @@ using Responses.DB;
 
 namespace CalcCal.API.Endpoints.Users
 {
-    public class Users : ICarterModule
+    public sealed class Users : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {

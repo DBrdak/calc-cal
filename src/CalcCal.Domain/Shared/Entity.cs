@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization.Metadata;
+﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Exceptions.DB;
 
 namespace CalcCal.Domain.Shared;
@@ -6,7 +7,7 @@ namespace CalcCal.Domain.Shared;
 public abstract class Entity
 {
     
-    private readonly List<IDomainEvent> _domainEvents;
+    private readonly List<IDomainEvent> _domainEvents = new();
 
     protected Entity()
     {
@@ -17,7 +18,7 @@ public abstract class Entity
         _domainEvents = domainEvents;
     }
 
-    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents.AsReadOnly();
+    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents;
 
     protected void RaiseDomainEvent(IDomainEvent domainEvent) =>
         _domainEvents.Add(domainEvent);

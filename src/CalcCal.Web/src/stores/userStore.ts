@@ -1,16 +1,14 @@
 import {makeAutoObservable} from "mobx";
-import {bool} from "yup";
 import {UserLoading} from "./models/userLoading";
 import {User} from "../models/user";
 import {RegisterRequest} from "../api/requests/registerRequest";
 import agent from "../api/agent";
 import {LogInRequest} from "../api/requests/logInRequest";
 import {EatenFood} from "../models/eatenFood";
-import {toast} from "react-toastify";
 
 export default class UserStore {
-    guestUser: User = User.guest()
-    authenticatedUser?: User = undefined
+    private guestUser: User = User.guest()
+    private authenticatedUser?: User = undefined
     token: string | null = localStorage.getItem('jwt')
     loading: UserLoading = new UserLoading()
 
@@ -22,6 +20,16 @@ export default class UserStore {
 
             !this.authenticatedUser && this.loadCurrentUser()
         }
+    }
+
+    get eatenFood() {
+        return this.authenticatedUser ?
+            this.authenticatedUser.eatenFood :
+            this.guestUser.eatenFood
+    }
+
+    get user(){
+        return this.authenticatedUser || this.guestUser
     }
 
     private setAuthenticatedUser(user: User | undefined) {

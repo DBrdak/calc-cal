@@ -27,7 +27,7 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
 
         if (food is null)
         {
-            return Result.Failure<List<Food>>(Error.NotFound("Food not found"));
+            return Result.Failure<List<Food>>(Error.NotFound("FoodName not found"));
         }
 
         return Result.Success(food);
@@ -41,7 +41,7 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
 
         if (food is null)
         {
-            return Result.Failure<Food>(Error.NotFound("Food not found"));
+            return Result.Failure<Food>(Error.NotFound("FoodName not found"));
         }
 
         return food;
@@ -58,7 +58,7 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
 
         if (food is null)
         {
-            return Result.Failure<List<Food>>(Error.NotFound("Food not found"));
+            return Result.Failure<List<Food>>(Error.NotFound("FoodName not found"));
         }
 
         return Result.Success(food);
@@ -75,13 +75,13 @@ internal sealed class FoodRepository : Repository<Food, FoodId>, IFoodRepository
                 food => food.Name.Value,
                 new BsonRegularExpression(searchPhrase, "i"));
 
-            //var textScoreProjection = Builders<Food>.Projection.MetaTextScore("score");
+            //var textScoreProjection = Builders<FoodName>.Projection.MetaTextScore("score");
 
             Filter = regexFilter;
-                     //& Builders<Food>.Filter.Text(searchPhrase, new TextSearchOptions { CaseSensitive = false });
+                     //& Builders<FoodName>.Filter.Text(searchPhrase, new TextSearchOptions { CaseSensitive = false });
             Options = new FindOptions<Food>
             {
-                //Sort = Builders<Food>.Sort.MetaTextScore("score"),
+                //Sort = Builders<FoodName>.Sort.MetaTextScore("score"),
                 //Projection = textScoreProjection
                 Sort = Builders<Food>.Sort.Descending(f => f.EatCount)
             };

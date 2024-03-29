@@ -9,7 +9,7 @@ namespace CalcCal.Application.Food.AddFood
         private const int maxFoodNameLength = 150;
         private static readonly Error foodNameTooLongError = new(
             "PromptBuilder.TooLongFoodName",
-            "Food name is too long");
+            "FoodName name is too long");
 
         public PromptBuilder(string foodName)
         {
@@ -42,7 +42,7 @@ namespace CalcCal.Application.Food.AddFood
                  If is valid: [Adjusted name of dish with location if provided] - [product or dish] - [number] kcal/[dish weight or 100g]
                  If is invalid: Invalid - reason of invalidation
                  
-                 Food with location pattern:
+                 FoodName with location pattern:
                  [Name of food], [Name of restaurant], [Name of city]
 
                  There are some example cases:

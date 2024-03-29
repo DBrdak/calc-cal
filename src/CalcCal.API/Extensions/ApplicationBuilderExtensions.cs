@@ -60,7 +60,7 @@ public static class ApplicationBuilderExtensions
                             partitionKey: context.Connection.RemoteIpAddress?.ToString(),
                             factory: _ => new FixedWindowRateLimiterOptions
                             {
-                                PermitLimit = 30,
+                                PermitLimit = 50,
                                 Window = TimeSpan.FromSeconds(10)
                             }));
                 options.AddPolicy(

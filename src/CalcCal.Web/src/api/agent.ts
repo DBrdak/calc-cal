@@ -70,7 +70,8 @@ axios.interceptors.response.use(async(response) => {
                 if(!toast.isActive(1)) toast.error('Too many requests')
                 break
             case 500:
-                router.navigate('/server-error');
+                toast.error('Server error')
+                //router.navigate('/server-error');
                 break;
         }
         return Promise.reject(error);
@@ -78,15 +79,15 @@ axios.interceptors.response.use(async(response) => {
 );
 
 const food = {
-    getFood: (foodName?: string) => axios.get<Food[]>('/api/food', { params: { foodName } }).then(responseBody),
-    addFood: (request: AddFoodRequest) => axios.post<Food>('/api/food', request).then(responseBody),
-    eatFood: (request: EatFoodRequest) => axios.put<EatenFood>('/api/food', request).then(responseBody),
+    getFood: (foodName?: string) => axios.get<Food[]>('/food', { params: { foodName } }).then(responseBody),
+    addFood: (request: AddFoodRequest) => axios.post<Food>('/food', request).then(responseBody),
+    eatFood: (request: EatFoodRequest) => axios.put<EatenFood>('/food', request).then(responseBody),
 }
 
 const users = {
-    getCurrentUser: () => axios.get<User>('/api/users/current').then(responseBody),
-    logInUser: (request: LogInRequest) => axios.post<AccessToken>('/api/users/login', request).then(responseBody),
-    registerUser: (request: RegisterRequest) => axios.post('/api/users/register', request),
+    getCurrentUser: () => axios.get<User>('/users/current').then(responseBody),
+    logInUser: (request: LogInRequest) => axios.post<AccessToken>('/users/login', request).then(responseBody),
+    registerUser: (request: RegisterRequest) => axios.post('/users/register', request),
 }
 
 const agent = {

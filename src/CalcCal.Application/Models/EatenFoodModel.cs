@@ -6,20 +6,20 @@ namespace CalcCal.Application.Models;
 
 public sealed record EatenFoodModel
 {
-    public string Food { get; init; }
+    public string FoodName { get; init; }
     public decimal Calories { get; init; }
     public decimal GramsQuantity { get; init; }
     public decimal CaloriesEaten { get; init; }
     public DateTime EatenDateTime { get; init; }
 
     private EatenFoodModel(
-        string Food,
+        string FoodName,
         decimal Calories,
         decimal GramsQuantity,
         decimal caloriesEaten,
         DateTime eatenDateTime)
     {
-        this.Food = Food;
+        this.FoodName = FoodName;
         this.Calories = Calories;
         this.GramsQuantity = GramsQuantity;
         CaloriesEaten = caloriesEaten;

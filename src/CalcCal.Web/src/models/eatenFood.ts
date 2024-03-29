@@ -1,5 +1,5 @@
 export interface EatenFood {
-    food: string
+    foodName: string
     calories: number
     gramsQuantity: number
     caloriesEaten: number
