@@ -23,7 +23,7 @@ public static class DependencyInjection
 
         services.AddAuthentication(configuration);
 
-        services.AddChat(configuration);
+        services.AddLLM(configuration);
 
         return services;
     }
@@ -55,7 +55,7 @@ public static class DependencyInjection
         services.AddScoped<IJwtService, JwtService>();
     }
 
-    private static void AddChat(this IServiceCollection services, IConfiguration configuration)
+    private static void AddLLM(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<GeminiOptions>(configuration.GetSection("Gemini"));
 
@@ -65,8 +65,6 @@ public static class DependencyInjection
             (serviceProvider, httpClient) =>
             {
                 var geminiOptions = serviceProvider.GetRequiredService<IOptions<GeminiOptions>>().Value;
-                var proxy = new WebProxy(
-                    "wss://brd-customer-hl_d90dedda-zone-scraping_browser1-country-us:sl6twcg0dnmn@brd.superproxy.io:9222");
 
                 httpClient.BaseAddress = new Uri(geminiOptions.Url);
             })

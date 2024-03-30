@@ -1,6 +1,6 @@
 ﻿namespace CalcCal.Infrastructure.LLM.Gemini.Models.GeminiResponse;
 
-internal class Part
+internal sealed class Part
 {
     public string Text { get; set; }
 }

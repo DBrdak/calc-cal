@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Responses.DB;
 
-namespace CalcCal.Application.Abstractions.Phone
+namespace CalcCal.Application.Abstractions.Phone;
+
+public interface IPhoneService
 {
-    public interface IPhoneService
-    {
-        Task<Result> SendVerificationMessage(string message);
-    }
+    Task<Result> SendVerificationMessage(string message);
 }

@@ -4,23 +4,22 @@ using CalcCal.Infrastructure.LLM.Gemini;
 using Responses.DB;
 // ReSharper disable InconsistentNaming
 
-namespace CalcCal.Infrastructure.LLM
+namespace CalcCal.Infrastructure.LLM;
+
+internal sealed class LLMService : ILLMService
 {
-    internal sealed class LLMService : ILLMService
+    private readonly GeminiClient _geminiClient;
+
+    public LLMService(GeminiClient geminiClient)
     {
-        private readonly GeminiClient _geminiClient;
+        _geminiClient = geminiClient;
+    }
 
-        public LLMService(GeminiClient geminiClient)
-        {
-            _geminiClient = geminiClient;
-        }
+    public async Task<Result<string>> SendPromptAsync(Prompt prompt, CancellationToken cancellationToken)
+    {
+        var response = await _geminiClient.GenerateContentAsync(prompt.Value, cancellationToken);
 
-        public async Task<Result<string>> SendPromptAsync(Prompt prompt, CancellationToken cancellationToken)
-        {
-            var response = await _geminiClient.GenerateContentAsync(prompt.Value, cancellationToken);
-
-            return response ?? 
-                   Result.Failure<string>(Error.TaskFailed("Problem while reading response from Gemini"));
-        }
+        return response ?? 
+               Result.Failure<string>(Error.TaskFailed("Problem while reading response from Gemini"));
     }
 }

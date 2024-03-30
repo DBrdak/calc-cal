@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CalcCal.Domain.Shared;
 
-namespace CalcCal.Domain.Users.DomainEvents
+namespace CalcCal.Domain.Users.DomainEvents;
+
+public sealed record UserRegisteredDomainEvent(UserId UserId) : IDomainEvent
 {
-    public sealed record UserRegisteredDomainEvent(UserId UserId) : IDomainEvent
-    {
-    }
 }

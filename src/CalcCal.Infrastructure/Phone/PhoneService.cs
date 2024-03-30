@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CalcCal.Infrastructure.Phone
+namespace CalcCal.Infrastructure.Phone;
+
+internal sealed class PhoneService
 {
-    internal sealed class PhoneService
-    {
-    }
 }

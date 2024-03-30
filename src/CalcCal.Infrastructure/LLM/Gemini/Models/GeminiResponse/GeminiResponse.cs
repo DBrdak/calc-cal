@@ -1,8 +1,7 @@
-﻿namespace CalcCal.Infrastructure.LLM.Gemini.Models.GeminiResponse
+﻿namespace CalcCal.Infrastructure.LLM.Gemini.Models.GeminiResponse;
+
+internal sealed class GeminiResponse
 {
-    internal class GeminiResponse
-    {
-        public Candidate[] Candidates { get; set; }
-        public PromptFeedback PromptFeedback { get; set; }
-    }
+    public Candidate[] Candidates { get; set; }
+    public PromptFeedback PromptFeedback { get; set; }
 }

@@ -6,19 +6,16 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CalcCal.Domain.Shared;
 
-namespace CalcCal.Application.Models
+namespace CalcCal.Application.Models;
+
+public abstract record EntityBusinessModel
 {
+    private readonly List<IDomainEvent> _domainEvents;
 
-    public abstract record EntityBusinessModel
+    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents;
+
+    protected EntityBusinessModel(IEnumerable<IDomainEvent> domainEvents)
     {
-        private readonly List<IDomainEvent> _domainEvents;
-
-        public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents;
-
-        protected EntityBusinessModel(IEnumerable<IDomainEvent> domainEvents)
-        {
-            _domainEvents = domainEvents.ToList();
-        }
+        _domainEvents = domainEvents.ToList();
     }
-    
 }

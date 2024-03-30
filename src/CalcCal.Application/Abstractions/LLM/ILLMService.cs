@@ -2,10 +2,9 @@
 using Responses.DB;
 // ReSharper disable InconsistentNaming
 
-namespace CalcCal.Application.Abstractions.LLM
+namespace CalcCal.Application.Abstractions.LLM;
+
+public interface ILLMService
 {
-    public interface ILLMService
-    {
-        Task<Result<string>> SendPromptAsync(Prompt prompt, CancellationToken cancellationToken);
-    }
+    Task<Result<string>> SendPromptAsync(Prompt prompt, CancellationToken cancellationToken);
 }

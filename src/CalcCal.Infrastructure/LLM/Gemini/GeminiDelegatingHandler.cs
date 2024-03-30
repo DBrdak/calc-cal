@@ -1,22 +1,17 @@
 ﻿using System.Net;
 using Microsoft.Extensions.Options;
 
-namespace CalcCal.Infrastructure.LLM.Gemini
+namespace CalcCal.Infrastructure.LLM.Gemini;
+
+internal sealed class GeminiDelegatingHandler(IOptions<GeminiOptions> geminiOptions) 
+    : DelegatingHandler
 {
-    internal sealed class GeminiDelegatingHandler : DelegatingHandler
+    private readonly GeminiOptions _geminiOptions = geminiOptions.Value;
+
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        private readonly GeminiOptions _chatOptions;
+        request.Headers.Add("x-goog-api-key", $"{_geminiOptions.ApiKey}");
 
-        public GeminiDelegatingHandler(IOptions<GeminiOptions> chatOptions)
-        {
-            _chatOptions = chatOptions.Value;
-        }
-
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            request.Headers.Add("x-goog-api-key", $"{_chatOptions.ApiKey}");
-
-            return base.SendAsync(request, cancellationToken);
-        }
+        return base.SendAsync(request, cancellationToken);
     }
 }

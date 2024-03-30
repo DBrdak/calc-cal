@@ -1,6 +1,5 @@
-﻿namespace CalcCal.API.Endpoints.Users.Requests
+﻿namespace CalcCal.API.Endpoints.Users.Requests;
+
+internal sealed record LogInRequest(string Username, string Password)
 {
-    internal sealed record LogInRequest(string Username, string Password)
-    {
-    }
 }

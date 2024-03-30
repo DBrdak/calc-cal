@@ -9,13 +9,13 @@ using Carter;
 using MediatR;
 using Responses.DB;
 
-namespace CalcCal.API.Endpoints.Users
+namespace CalcCal.API.Endpoints.Users;
+
+public sealed class Users : ICarterModule
 {
-    public sealed class Users : ICarterModule
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        public void AddRoutes(IEndpointRouteBuilder app)
-        {
-            app.MapGet(
+        app.MapGet(
                 "api/users/current",
                 async (ISender sender, CancellationToken cancellationToken) =>
                 {
@@ -27,10 +27,10 @@ namespace CalcCal.API.Endpoints.Users
                         ? Results.Ok(result.Value)
                         : Results.NotFound(result.Error);
                 })
-                .RequireAuthorization()
-                .RequireRateLimiting(RateLimiterPolicies.FixedLoose);
+            .RequireAuthorization()
+            .RequireRateLimiting(RateLimiterPolicies.FixedLoose);
 
-            app.MapPost(
+        app.MapPost(
                 "api/users/login",
                 async (ISender sender, LogInRequest request, CancellationToken cancellationToken) =>
                 {
@@ -42,9 +42,9 @@ namespace CalcCal.API.Endpoints.Users
                         ? Results.Ok(result.Value)
                         : Results.BadRequest(result.Error);
                 })
-                .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+            .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
 
-            app.MapPost(
+        app.MapPost(
                 "api/users/register",
                 async (ISender sender, RegisterRequest request, CancellationToken cancellationToken) =>
                 {
@@ -62,7 +62,6 @@ namespace CalcCal.API.Endpoints.Users
                         ? Results.Ok()
                         : Results.BadRequest(result.Error);
                 })
-                .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
-        }
+            .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
     }
 }

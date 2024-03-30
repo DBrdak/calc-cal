@@ -1,6 +1,5 @@
-﻿namespace CalcCal.API.Endpoints.Food.Requests
+﻿namespace CalcCal.API.Endpoints.Food.Requests;
+
+internal sealed record AddFoodRequest(string FoodName)
 {
-    internal sealed record AddFoodRequest(string FoodName)
-    {
-    }
 }

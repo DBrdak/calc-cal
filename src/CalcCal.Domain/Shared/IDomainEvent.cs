@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace CalcCal.Domain.Shared
+namespace CalcCal.Domain.Shared;
+
+public interface IDomainEvent : INotification
 {
-    public interface IDomainEvent : INotification
-    {
-    }
 }

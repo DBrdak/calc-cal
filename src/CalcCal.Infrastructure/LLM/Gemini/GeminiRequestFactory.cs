@@ -1,60 +1,59 @@
 ﻿using CalcCal.Infrastructure.LLM.Gemini.Models.GeminiRequest;
 using CalcCal.Infrastructure.LLM.Gemini.Models.GeminiResponse;
 
-namespace CalcCal.Infrastructure.LLM.Gemini
+namespace CalcCal.Infrastructure.LLM.Gemini;
+
+internal sealed class GeminiRequestFactory
 {
-    internal sealed class GeminiRequestFactory
+    public static GeminiRequest CreateRequest(string prompt)
     {
-        public static GeminiRequest CreateRequest(string prompt)
+        return new GeminiRequest
         {
-            return new GeminiRequest
+            Contents = new GeminiContent[]
             {
-                Contents = new GeminiContents[]
+                new ()
                 {
-                    new ()
+                    Role = "user",
+                    Parts = new GeminiPart[]
                     {
-                        Role = "user",
-                        Parts = new GeminiPart[]
+                        new()
                         {
-                            new()
-                            {
-                                Text = prompt
-                            }
+                            Text = prompt
                         }
                     }
-                },
-                GenerationConfig = new GenerationConfig
-                {
-                    Temperature = 0,
-                    TopK = 1,
-                    TopP = 1,
-                    MaxOutputTokens = 2048,
-                    StopSequences = new List<object>()
-                },
-                SafetySettings = new SafetySetting[]
-                {
-                    new()
-                    {
-                        Category = "HARM_CATEGORY_HARASSMENT",
-                        Threshold = "BLOCK_ONLY_HIGH"
-                    },
-                    new()
-                    {
-                        Category = "HARM_CATEGORY_HATE_SPEECH",
-                        Threshold = "BLOCK_ONLY_HIGH"
-                    },
-                    new()
-                    {
-                        Category = "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                        Threshold = "BLOCK_ONLY_HIGH"
-                    },
-                    new()
-                    {
-                        Category = "HARM_CATEGORY_DANGEROUS_CONTENT",
-                        Threshold = "BLOCK_ONLY_HIGH"
-                    }
                 }
-            };
-        }
+            },
+            GenerationConfig = new GenerationConfig
+            {
+                Temperature = 0,
+                TopK = 1,
+                TopP = 1,
+                MaxOutputTokens = 2048,
+                StopSequences = new List<object>()
+            },
+            SafetySettings = new SafetySettings[]
+            {
+                new()
+                {
+                    Category = "HARM_CATEGORY_HARASSMENT",
+                    Threshold = "BLOCK_ONLY_HIGH"
+                },
+                new()
+                {
+                    Category = "HARM_CATEGORY_HATE_SPEECH",
+                    Threshold = "BLOCK_ONLY_HIGH"
+                },
+                new()
+                {
+                    Category = "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                    Threshold = "BLOCK_ONLY_HIGH"
+                },
+                new()
+                {
+                    Category = "HARM_CATEGORY_DANGEROUS_CONTENT",
+                    Threshold = "BLOCK_ONLY_HIGH"
+                }
+            }
+        };
     }
 }

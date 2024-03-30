@@ -1,6 +1,6 @@
 ﻿namespace CalcCal.Infrastructure.LLM.Gemini.Models.GeminiResponse;
 
-internal class Candidate
+internal sealed class Candidate
 {
     public Content Content { get; set; }
     public string FinishReason { get; set; }

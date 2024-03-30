@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace CalcCal.Domain.Shared
+namespace CalcCal.Domain.Shared;
+
+public interface IDomainEventHandler<TDomainEvent> : INotificationHandler<TDomainEvent>
+    where TDomainEvent : IDomainEvent
 {
-    public interface IDomainEventHandler<TDomainEvent> : INotificationHandler<TDomainEvent>
-        where TDomainEvent : IDomainEvent
-    {
-    }
 }
