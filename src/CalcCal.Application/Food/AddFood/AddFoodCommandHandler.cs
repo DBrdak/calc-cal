@@ -50,7 +50,8 @@ internal sealed class AddFoodCommandHandler : ICommandHandler<AddFoodCommand, IE
 
         if (responseProcessingResult.IsFailure)
         {
-            return Result.Failure<IEnumerable<FoodModel>>(responseProcessingResult.Error);
+            return Result.Failure<IEnumerable<FoodModel>>(
+                Error.TaskFailed("Sorry, service is temporarily unavailable"));
         }
 
         var food = responseProcessor.Food;

@@ -3,9 +3,9 @@ import {observer} from "mobx-react-lite";
 import {useStore} from "../../../../stores/store";
 import MainContainer from "../../../../components/MainContainer";
 import {Global} from "@emotion/react";
-import {MobileOverlayRoot} from "./MobileOverlayRoot";
-import {TopMobileDrawer} from "./TopMobileDrawer";
-import {BottomMobileDrawer} from "./BottomMobileDrawer";
+import {MobileOverlayRoot} from "./components/MobileOverlayRoot";
+import {TopMobileDrawer} from "./components/TopMobileDrawer";
+import {BottomMobileDrawer} from "./components/BottomMobileDrawer";
 import {CssBaseline} from "@mui/material";
 
 interface MobileOverlayProps {

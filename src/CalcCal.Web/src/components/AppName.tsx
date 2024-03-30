@@ -5,9 +5,9 @@ import React from "react";
 export const AppName = () => {
     return (
         <Box sx={{
-            position: 'absolute', top: 0, left: 0, right: 0,
-            height: '10%',
-            textAlign: 'center'
+            textAlign: 'center',
+            userSelect: 'none',
+            marginBottom: theme.spacing(2)
         }}>
             <Typography variant="h1" height={'100%'} fontWeight={'bolder'} fontFamily={'Segoe UI'} sx={{
                 fontSize: '8vh', letterSpacing: 4

@@ -5,14 +5,17 @@ import {keyframes, styled} from "@mui/material";
 const dotAnimation = keyframes`
     0% {
         transform: scale(1);
+        opacity: 0;
         background-color: ${theme.palette.secondary.main};
     }
     50% {
         transform: scale(1.5);
+        opacity: 1;
         background-color: ${theme.palette.secondary.dark};
     }
     100% {
         transform: scale(1);
+        opacity: 0;
         background-color: ${theme.palette.secondary.light};
     }
 `;

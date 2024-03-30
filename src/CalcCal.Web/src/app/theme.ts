@@ -4,35 +4,35 @@ const theme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: '#EF476F', // Cherry Red (Primary Color)
-            light: '#F781A6', // Lighter tint of Primary Color
-            dark: '#D32F4F', // Darker shade of Primary Color
+            main: '#EF476F',
+            light: '#F781A6',
+            dark: '#D32F4F',
         },
         secondary: {
-            main: '#FCAF03', // Mustard Yellow (Secondary Color)
-            light: '#FCF0C7', // Lighter tint of Secondary Color
-            dark: '#DBA002', // Darker shade of Secondary Color
+            main: '#FCAF03',
+            light: '#FCF0C7',
+            dark: '#DBA002',
         },
         error: {
-            main: '#C62828', // Reddish tone for error messages (same from previous example)
-            dark: '#9D1F1F', // Darker shade for error emphasis (same from previous example)
-            light: '#F9DEDC', // Lighter shade for error background (same from previous example)
+            main: '#C62828',
+            dark: '#9D1F1F',
+            light: '#F9DEDC',
         },
         info: {
-            main: '#A9A9A9', // Light gray for informational elements
+            main: '#A9A9A9',
         },
         background: {
-            default: '#f8f8f8', // Very light gray for background
-            paper: '#FFFFFF', // White for content areas
+            default: '#f8f8f8',
+            paper: '#FFFFFF',
         },
         text: {
-            primary: '#212121', // Dark gray for primary text (same from previous example)
-            secondary: '#757575', // Lighter gray for secondary text (same from previous example)
+            primary: '#212121',
+            secondary: '#757575',
         },
         success: {
-            main: '#43A047', // Green for success messages
-            light: '#C8E6C9', // Lighter shade for success background (same from previous example)
-            dark: '#388E3C', // Darker shade for success emphasis (same from previous example)
+            main: '#43A047',
+            light: '#C8E6C9',
+            dark: '#388E3C',
         },
     },
     breakpoints: {
@@ -75,6 +75,13 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: 50
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: 30
                 },
             },
         },

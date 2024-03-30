@@ -21,7 +21,7 @@ export default class FoodStore {
         const food = Array.from(this.food.values())
 
         return this.searchPhrase ?
-            food.filter(f => f.name.toLowerCase().includes(this.searchPhrase!)) :
+            food.filter(f => f.name.toLowerCase().includes(this.searchPhrase!)).slice(0,10) :
             []
     }
 

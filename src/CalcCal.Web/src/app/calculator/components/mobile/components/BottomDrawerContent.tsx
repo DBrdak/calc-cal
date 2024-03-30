@@ -5,7 +5,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import React from "react";
-import {EatenFood} from "../../../../models/eatenFood";
+import {EatenFood} from "../../../../../models/eatenFood";
 
 interface BottomDrawerContentProps {
     eatenFood: EatenFood[]

@@ -1,7 +1,7 @@
 import MobileOverlay from "./components/mobile/MobileOverlay";
 import React from "react";
 import DesktopOverlay from "./components/desktop/DesktopOverlay";
-import CalculatorForm from "./components/shared/CalculatorForm";
+import CalculatorForm from "./components/shared/Calculator";
 import {AppName} from "../../components/AppName";
 
 export const CalculatorPage = () => {
@@ -18,7 +18,6 @@ export const CalculatorPage = () => {
             </MobileOverlay>
             :
             <DesktopOverlay>
-                <AppName />
                 <CalculatorForm />
             </DesktopOverlay>
     );
