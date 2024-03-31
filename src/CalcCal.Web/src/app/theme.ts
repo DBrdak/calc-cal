@@ -78,10 +78,24 @@ const theme = createTheme({
                 },
             },
         },
+        MuiInputBase: {
+            styleOverrides: {
+                root: {
+                    cursor: 'pointer'
+                },
+                input: {
+                    cursor: 'pointer',
+                    ":focus": {
+                        cursor: 'default'
+                    }
+                },
+            }
+        },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
-                    borderRadius: 30
+                    borderRadius: 30,
+                    caretColor: 'transparent',
                 },
             },
         },

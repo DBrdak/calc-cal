@@ -7,6 +7,8 @@ public sealed record Quantity : ValueObject<decimal>
     private static readonly Error invalidValueError = new Error("Quantity.InvalidValue", "Invalid quantity value");
     public const string UnitCode = "g";
     public const string Unit = "grams";
+    private const int maxQuantity = 100_000;
+    private const int minQuantity = 0;
 
     private Quantity(decimal value) : base(value)
     {
@@ -14,7 +16,7 @@ public sealed record Quantity : ValueObject<decimal>
 
     public static Result<Quantity> Create(decimal value)
     {
-        if (value is < 0 or > 100_000)
+        if (value is < minQuantity or > maxQuantity)
         {
             return Result.Failure<Quantity>(invalidValueError);
         }
