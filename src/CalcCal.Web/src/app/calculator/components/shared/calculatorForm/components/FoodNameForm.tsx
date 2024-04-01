@@ -1,16 +1,17 @@
-import {DotLoader} from "../../../../../components/DotLoader";
-import {Autocomplete, Grid, TextField} from "@mui/material";
-import theme from "../../../../theme";
+import {DotLoader} from "../../../../../../components/DotLoader";
+import {Autocomplete, Button, Grid, TextField} from "@mui/material";
+import theme from "../../../../../theme";
 import {FormEvent, useEffect, useState} from "react";
-import {useStore} from "../../../../../stores/store";
+import {useStore} from "../../../../../../stores/store";
 import {observer} from "mobx-react-lite";
 import './foodNameFormStyles.scss'
+import {KeyboardArrowRight} from "@mui/icons-material";
 
 export default observer ( function FoodNameForm () {
     const [searchPhrase, setSearchPhrase] = useState<string>('')
     const [submittedValue, setSubmittedValue] = useState<string>('')
     const [searchLoading, setSearchLoading] = useState(false)
-    const [isFormFocused, setIsFormFocused] = useState(false)
+    const [isFormFocused, setIsFormFocused] = useState(true)
     const {foodStore} = useStore()
 
     useEffect(() => {
@@ -59,8 +60,6 @@ export default observer ( function FoodNameForm () {
     )
 
     const getLabel = (): string => {
-        const isAnyInput = searchPhrase.length > 0
-        const isInputProcessed = !searchLoading && !!submittedValue && searchPhrase === submittedValue
         return isFormComplete() ? "" : "What have you eaten?"
     }
 
@@ -68,7 +67,8 @@ export default observer ( function FoodNameForm () {
         <Grid item xs={12} sx={{
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'top',
+            position: 'relative'
         }}>
             <form onSubmit={handleFormSubmit} style={{width: '70%', minWidth: '200px'}}>
                 <Autocomplete
@@ -86,6 +86,7 @@ export default observer ( function FoodNameForm () {
                             {children}
                         </div>
                     )}
+                    autoFocus
                     ListboxProps={{sx: {
                             overflow: 'visible',
                             textAlign: 'center',
@@ -97,20 +98,9 @@ export default observer ( function FoodNameForm () {
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            sx={{
-                                '&.MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: isFormComplete() ? theme.palette.success : 'inherit'
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: isFormComplete() ? theme.palette.success : 'inherit'
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: isFormComplete() ? theme.palette.success : 'inherit'
-                                    },
-                                }
-                            }}
                             label={getLabel()}
+                            autoFocus
+                            focused={isFormFocused || searchPhrase.length > 0}
                             onFocusCapture={e => setIsFormFocused(true)}
                             onBlurCapture={e => setIsFormFocused(false)}
                             onChange={(e) => setSearchPhrase(e.target.value)}

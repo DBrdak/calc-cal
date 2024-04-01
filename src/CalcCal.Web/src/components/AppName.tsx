@@ -10,7 +10,7 @@ export const AppName = () => {
             marginBottom: theme.spacing(2)
         }}>
             <Typography variant="h1" height={'100%'} fontWeight={'bolder'} fontFamily={'Segoe UI'} sx={{
-                fontSize: '8vh', letterSpacing: 4
+                fontSize: '10vh', letterSpacing: 4
             }}>
                 <span style={{ color: theme.palette.primary.main }}>Calc</span>
                 <span style={{ color: theme.palette.secondary.main }}>Cal</span>

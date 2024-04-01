@@ -1,11 +1,11 @@
 import React from 'react';
 import {observer} from "mobx-react-lite";
-import {useStore} from "../../../../stores/store";
-import MainContainer from "../../../../components/MainContainer";
+import {useStore} from "../../../../../stores/store";
+import MainContainer from "../../../../../components/MainContainer";
 import {Global} from "@emotion/react";
 import {MobileOverlayRoot} from "./components/MobileOverlayRoot";
 import {TopMobileDrawer} from "./components/TopMobileDrawer";
-import {BottomMobileDrawer} from "./components/BottomMobileDrawer";
+import BottomMobileDrawer from "./components/BottomMobileDrawer";
 import {CssBaseline} from "@mui/material";
 
 interface MobileOverlayProps {
@@ -13,7 +13,7 @@ interface MobileOverlayProps {
 }
 
 const MobileOverlay = ({ children}: MobileOverlayProps) => {
-    const {userStore} = useStore()
+    const {userStore, foodStore } = useStore()
     const drawerBleeding = 56;
 
     return (
@@ -35,7 +35,7 @@ const MobileOverlay = ({ children}: MobileOverlayProps) => {
             <MainContainer>
                 {children}
             </MainContainer>
-            <BottomMobileDrawer eatenFood={userStore.eatenFood || []} />
+            <BottomMobileDrawer eatenFood={userStore.eatenFood || []} eatLoading={foodStore.eatloading} />
         </MobileOverlayRoot>
     );
 };

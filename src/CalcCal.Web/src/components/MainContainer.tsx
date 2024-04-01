@@ -16,7 +16,8 @@ const MainContainer = ({children}: MainContainerProps) => {
                 backgroundColor: theme.palette.background.default,
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                padding: `${theme.spacing(5)} 0px`
             }}
         >
             {children}

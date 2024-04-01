@@ -1,9 +1,9 @@
 import {observer} from "mobx-react-lite";
-import {useStore} from "../../../../stores/store";
+import {useStore} from "../../../../../stores/store";
 import {ReactNode} from "react";
-import MainContainer from "../../../../components/MainContainer";
+import MainContainer from "../../../../../components/MainContainer";
 import {Box, Button} from "@mui/material";
-import theme from "../../../theme";
+import theme from "../../../../theme";
 import {PersonOutlined} from "@mui/icons-material";
 
 interface DesktopOverlayProps {

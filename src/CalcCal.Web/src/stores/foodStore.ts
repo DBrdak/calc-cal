@@ -10,8 +10,11 @@ export default class FoodStore {
     private food: Map<string, Food> = new Map<string, Food>()
     private searchPhrase?: string = undefined
     private usedSearchPhrases: string[] = []
-    loading: FoodLoading = new FoodLoading()
-    private selectedFood?: Food
+    getloading: boolean = false
+    addloading: boolean = false
+    eatloading: boolean = false
+    selectedFood?: Food
+    selectedFoodWeight?: number
 
     constructor() {
         makeAutoObservable(this);
@@ -21,15 +24,35 @@ export default class FoodStore {
         const food = Array.from(this.food.values())
 
         return this.searchPhrase ?
-            food.filter(f => f.name.toLowerCase().includes(this.searchPhrase!)).slice(0,10) :
+            food.filter(f => f.name.toLowerCase().includes(this.searchPhrase!)).slice(0,5) :
             []
+    }
+
+    setSelectedFoodWeight(weight?: number) {
+        this.selectedFoodWeight = weight
+    }
+
+    undoFoodSelection() {
+        this.setSelectedFood()
+    }
+
+    private setEatLoading(state: boolean) {
+        this.eatloading = state
+    }
+
+    private setGetLoading(state: boolean) {
+        this.getloading = state
+    }
+
+    private setAddLoading(state: boolean) {
+        this.addloading = state
     }
 
     private setFood(food: Food){
         this.food.set(food.name, food)
     }
 
-    private setSelectedFood(food: Food) {
+    private setSelectedFood(food?: Food) {
         this.selectedFood = food
     }
 
@@ -50,7 +73,7 @@ export default class FoodStore {
             || foodName.length > 4
             || foodName.length < 3)
 
-        this.loading.startGet()
+        this.setGetLoading(true)
 
         try {
             this.setSearchPhrase(foodName)
@@ -59,7 +82,7 @@ export default class FoodStore {
         } catch(e) {
 
         } finally {
-            this.loading.stopGet()
+            this.setGetLoading(false)
         }
     }
 
@@ -80,7 +103,7 @@ export default class FoodStore {
     }
 
     private async addFood(request: AddFoodRequest) {
-        this.loading.startAdd()
+        this.setAddLoading(true)
 
         try {
             const addedFood = await agent.food.addFood(request)
@@ -89,21 +112,31 @@ export default class FoodStore {
         } catch (e) {
 
         } finally {
-            this.loading.stopAdd()
+            this.setAddLoading(false)
         }
     }
 
-    async eatFood(request: EatFoodRequest, userStore: UserStore){
-        this.loading.startEat()
+    async eatFood(userStore: UserStore){
+        if(!this.selectedFood || !this.selectedFoodWeight) {
+            return
+        }
+        this.setEatLoading(true)
+
+        const request: EatFoodRequest = {
+            foodId: this.selectedFood.foodId,
+            foodWeight: this.selectedFoodWeight
+        }
 
         try {
             const eatenFood = await agent.food.eatFood(request)
             userStore.eat(eatenFood)
+            this.setSelectedFood()
+            this.setSelectedFoodWeight()
             return eatenFood
         } catch (e) {
 
         } finally {
-            this.loading.stopEat()
+            this.setEatLoading(false)
         }
     }
 }
