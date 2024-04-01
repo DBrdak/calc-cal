@@ -1,11 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {DotLoader} from "../../../../../../components/DotLoader";
-import {Autocomplete, Button, Grid, TextField} from "@mui/material";
+import {Autocomplete, Grid, TextField} from "@mui/material";
 import theme from "../../../../../theme";
 import {FormEvent, useEffect, useState} from "react";
 import {useStore} from "../../../../../../stores/store";
 import {observer} from "mobx-react-lite";
 import './foodNameFormStyles.scss'
-import {KeyboardArrowRight} from "@mui/icons-material";
 
 export default observer ( function FoodNameForm () {
     const [searchPhrase, setSearchPhrase] = useState<string>('')
@@ -27,7 +27,7 @@ export default observer ( function FoodNameForm () {
             return
         }
         setSearchLoading(true)
-        foodStore.selectFood(submittedValue).then(f => {
+        foodStore.selectFood(submittedValue).then(() => {
             setSearchLoading(false)
         })
     }, [submittedValue])
@@ -101,8 +101,8 @@ export default observer ( function FoodNameForm () {
                             label={getLabel()}
                             autoFocus
                             focused={isFormFocused || searchPhrase.length > 0}
-                            onFocusCapture={e => setIsFormFocused(true)}
-                            onBlurCapture={e => setIsFormFocused(false)}
+                            onFocusCapture={() => setIsFormFocused(true)}
+                            onBlurCapture={() => setIsFormFocused(false)}
                             onChange={(e) => setSearchPhrase(e.target.value)}
                             InputLabelProps={{ shrink: false, focused: isFormFocused || searchPhrase.length > 0 }}
                         />

@@ -1,6 +1,6 @@
 import {observer} from "mobx-react-lite";
 import {ChangeEvent, FormEvent, useState} from "react";
-import {Grid, InputAdornment, TextField} from "@mui/material";
+import {Grid, TextField} from "@mui/material";
 import {isDigit} from "../../../../../../utlis/extensions/stringExtensions";
 import './foodQuantityFormStyles.css'
 import {MAX_WEIGHT, MIN_WEIGHT} from "../../../../../../utlis/settings/constants";
@@ -73,8 +73,8 @@ export default observer(function FoodQuantityForm() {
                     label={getLabel()}
                     onChange={handleValueChange}
                     onBlur={handleBlur}
-                    onFocusCapture={e => setIsFormFocused(true)}
-                    onBlurCapture={e => setIsFormFocused(false)}
+                    onFocusCapture={() => setIsFormFocused(true)}
+                    onBlurCapture={() => setIsFormFocused(false)}
                     focused={isFormFocused || value.length > 0}
                     autoFocus
                     inputProps={{

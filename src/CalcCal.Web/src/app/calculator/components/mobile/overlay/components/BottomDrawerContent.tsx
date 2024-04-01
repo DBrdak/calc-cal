@@ -1,9 +1,4 @@
-import {Box, List, ListItem, ListItemText, Paper, Typography} from "@mui/material";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
+import {Box, List, ListItem, ListItemText, Paper} from "@mui/material";
 import React from "react";
 import {EatenFood} from "../../../../../../models/eatenFood";
 import formatCalories from "../../../../../../utlis/formatters/caloriesFormatter";

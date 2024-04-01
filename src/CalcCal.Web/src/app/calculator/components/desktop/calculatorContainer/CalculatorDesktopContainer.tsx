@@ -1,5 +1,5 @@
 import CalculatorForm from "../../shared/calculatorForm/CalculatorForm";
-import {Grid, Paper, Stack} from "@mui/material";
+import {Stack} from "@mui/material";
 import {AppName} from "../../../../../components/AppName";
 import CalorieTableContainer from "./calorieTable/CalorieTableContainer";
 

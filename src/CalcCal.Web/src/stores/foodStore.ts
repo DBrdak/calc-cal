@@ -1,5 +1,4 @@
 import {makeAutoObservable} from "mobx";
-import {FoodLoading} from "./models/foodLoading";
 import {Food} from "../models/food";
 import agent from "../api/agent";
 import {AddFoodRequest} from "../api/requests/addFoodRequest";

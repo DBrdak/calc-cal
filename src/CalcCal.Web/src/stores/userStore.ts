@@ -1,11 +1,9 @@
 import {makeAutoObservable} from "mobx";
-import {UserLoading} from "./models/userLoading";
 import {User} from "../models/user";
 import {RegisterRequest} from "../api/requests/registerRequest";
 import agent from "../api/agent";
 import {LogInRequest} from "../api/requests/logInRequest";
 import {EatenFood} from "../models/eatenFood";
-import {bool} from "yup";
 
 export default class UserStore {
     private guestUser: User = User.guest()

@@ -7,7 +7,6 @@ import {EatenFood} from "../../../../../../models/eatenFood";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
 import {AccessibleSwipeableDrawer} from "../../../../../../components/AccessibleSwipeableDrawer";
-import {observer} from "mobx-react-lite";
 import {DotLoader} from "../../../../../../components/DotLoader";
 
 interface BottomMobileDrawerProps {

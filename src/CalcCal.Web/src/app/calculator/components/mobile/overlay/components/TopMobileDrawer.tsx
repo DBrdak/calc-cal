@@ -1,12 +1,10 @@
-import {IconButton, SwipeableDrawer, Typography} from "@mui/material";
+import {SwipeableDrawer, Typography} from "@mui/material";
 import theme from "../../../../../theme";
 import {TopDrawerContent} from "./TopDrawerContent";
 import React from "react";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
 import {User} from "../../../../../../models/user";
-import {AccessibleSwipeableDrawer} from "../../../../../../components/AccessibleSwipeableDrawer";
-import {KeyboardArrowDown} from "@mui/icons-material";
 
 interface TopMobileDrawerProps {
     isAuthenticated: boolean

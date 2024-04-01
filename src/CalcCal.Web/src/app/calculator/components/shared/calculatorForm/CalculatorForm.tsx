@@ -1,8 +1,8 @@
-import {Grid, Paper, Stack} from "@mui/material";
+/* eslint-disable react-hooks/exhaustive-deps */
+import {Grid, Paper } from "@mui/material";
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../../../../stores/store";
 import FoodNameForm from "./components/FoodNameForm";
-import {AppName} from "../../../../../components/AppName";
 import FoodQuantityForm from "./components/FoodQuantityForm";
 import {useEffect, useState} from "react";
 import theme from "../../../../theme";

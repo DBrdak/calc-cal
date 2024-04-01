@@ -1,7 +1,6 @@
-import {Box, Button, Stack} from "@mui/material";
+import {Stack} from "@mui/material";
 import {AppName} from "../../../../../components/AppName";
 import CalculatorForm from "../../shared/calculatorForm/CalculatorForm";
-import theme from "../../../../theme";
 
 export const CalculatorMobileContainer = () => {
     return (
