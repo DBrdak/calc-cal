@@ -1,6 +1,6 @@
 import {Paper} from "@mui/material";
 import theme from "../../../../../theme";
-import CalorieTable from "../../../shared/calorieTable/CalorieTable";
+import CalorieTable from "./components/CalorieTable";
 export default function CalorieTableContainer() {
     return (
         <Paper variant={'elevation'} elevation={0} sx={{
