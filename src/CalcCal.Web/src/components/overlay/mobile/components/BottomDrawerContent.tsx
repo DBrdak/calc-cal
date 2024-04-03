@@ -1,9 +1,9 @@
 import {Box, List, ListItem, ListItemText, Paper} from "@mui/material";
 import React from "react";
-import {EatenFood} from "../../../../../../models/eatenFood";
-import formatCalories from "../../../../../../utlis/formatters/caloriesFormatter";
-import formatGrams from "../../../../../../utlis/formatters/gramFormatter";
-import theme from "../../../../../theme";
+import {EatenFood} from "../../../../models/eatenFood";
+import formatCalories from "../../../../utlis/formatters/caloriesFormatter";
+import formatGrams from "../../../../utlis/formatters/gramFormatter";
+import theme from "../../../../app/theme";
 
 interface BottomDrawerContentProps {
     eatenFood: EatenFood[]

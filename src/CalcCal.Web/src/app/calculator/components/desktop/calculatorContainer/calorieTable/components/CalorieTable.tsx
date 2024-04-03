@@ -43,7 +43,7 @@ export default observer (function CalorieTable() {
                         <TableRow>
                             <TableCell align={'center'} colSpan={3}>
                                 <Typography variant={'subtitle2'} color={theme.palette.text.secondary}>
-                                    Your eaten food will appear here
+                                    No food yet
                                 </Typography>
                             </TableCell>
                         </TableRow>

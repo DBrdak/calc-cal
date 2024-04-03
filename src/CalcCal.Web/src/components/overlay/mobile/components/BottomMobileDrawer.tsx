@@ -1,13 +1,13 @@
 import {Box, Typography} from "@mui/material";
-import theme from "../../../../../theme";
-import formatCalories from "../../../../../../utlis/formatters/caloriesFormatter";
+import theme from "../../../../app/theme";
+import formatCalories from "../../../../utlis/formatters/caloriesFormatter";
 import {BottomDrawerContent} from "./BottomDrawerContent";
 import React from "react";
-import {EatenFood} from "../../../../../../models/eatenFood";
+import {EatenFood} from "../../../../models/eatenFood";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
-import {AccessibleSwipeableDrawer} from "../../../../../../components/AccessibleSwipeableDrawer";
-import {DotLoader} from "../../../../../../components/DotLoader";
+import {AccessibleSwipeableDrawer} from "../../../AccessibleSwipeableDrawer";
+import {DotLoader} from "../../../DotLoader";
 
 interface BottomMobileDrawerProps {
     eatenFood: EatenFood[]

@@ -1,10 +1,10 @@
 import {SwipeableDrawer, Typography} from "@mui/material";
-import theme from "../../../../../theme";
+import theme from "../../../../app/theme";
 import {TopDrawerContent} from "./TopDrawerContent";
 import React from "react";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
-import {User} from "../../../../../../models/user";
+import {User} from "../../../../models/user";
 
 interface TopMobileDrawerProps {
     isAuthenticated: boolean
