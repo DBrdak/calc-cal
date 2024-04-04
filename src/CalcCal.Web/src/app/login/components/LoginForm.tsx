@@ -1,4 +1,4 @@
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, Grid, TextField, Typography} from "@mui/material";
 import {Form, Formik} from "formik";
 import {LogInRequest} from "../../../api/requests/logInRequest";
 import * as yup from 'yup'
@@ -6,14 +6,14 @@ import {string} from "yup";
 import {USERNAME_PATTERN} from "../../../utlis/settings/constants";
 import theme from "../../theme";
 import {useState} from "react";
+import {observer} from "mobx-react-lite";
+import {useStore} from "../../../stores/store";
+import {DotLoader} from "../../../components/DotLoader";
 
-export function LoginForm() {
+export default observer(function LoginForm() {
     const [isUsernameFormFocused, setIsUsernameFormFocused] = useState(false)
     const [isPasswordFormFocused, setIsPasswordFormFocused] = useState(false)
-// TODO Fix submit handling
-    function handleFormSubmit(formValues: LogInRequest) {
-        console.log(formValues)
-    }
+    const {userStore} = useStore()
 
     const validationSchema = yup.object({
         username: string()
@@ -23,12 +23,17 @@ export function LoginForm() {
             .required('Password is required')
     })
 
+    function handleFormSubmit(formValues: LogInRequest) {
+        userStore.logIn(formValues).then(isSuccessful => {
+        })
+    }
+
     return (
         <Grid item xs={12}>
             <Formik initialValues={new LogInRequest()} onSubmit={handleFormSubmit} validationSchema={validationSchema} sx={{
                 width: '100%'
             }}>
-                {({values, handleSubmit}) => (
+                {({values, handleSubmit, handleChange, dirty, errors}) => (
                     <Form autoComplete={'off'} style={{
                         width: '100%',
                         display: 'flex',
@@ -41,29 +46,40 @@ export function LoginForm() {
                             <TextField
                                 type={'text'}
                                 name={'username'}
-                                label={isUsernameFormFocused ? 'Username' : ''}
+                                label={isUsernameFormFocused && !errors.username ? 'Username' : ''}
                                 placeholder={'Username'}
                                 fullWidth
+                                onChange={handleChange}
                                 onFocusCapture={() => setIsUsernameFormFocused(true)}
                                 onBlurCapture={() => setIsUsernameFormFocused(false)}
-                                focused={isUsernameFormFocused || values.username.length > 0}
+                                focused={isUsernameFormFocused}
+                                helperText={errors.username}
+                                error={!!errors.username}
+                                sx={{width: '300px'}}
                                 InputLabelProps={{
                                     shrink: false,
                                     focused: isUsernameFormFocused,
                                 }}
-                                sx={{minWidth: '300px'}}
+                                FormHelperTextProps={{sx:{
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    justifyContent: 'center',
+                                    transform: 'translateY(-50%)',
+                                    fontSize: 16
+                                }}}
                             />
                         </Grid>
                         <Grid item xs={12} marginBottom={theme.spacing(3)}>
                             <TextField
                                 type={'password'}
                                 name={'password'}
-                                label={isPasswordFormFocused ? 'Password' : ''}
+                                label={isPasswordFormFocused && !errors.username ? 'Password' : ''}
                                 placeholder={'Password'}
                                 fullWidth
+                                onChange={handleChange}
                                 onFocusCapture={() => setIsPasswordFormFocused(true)}
                                 onBlurCapture={() => setIsPasswordFormFocused(false)}
-                                focused={isPasswordFormFocused || values.password.length > 0}
+                                focused={isPasswordFormFocused}
                                 inputProps={{
                                     min: 1,
                                     max: 99999,
@@ -72,17 +88,32 @@ export function LoginForm() {
                                     shrink: false,
                                     focused: isPasswordFormFocused
                                 }}
-                                sx={{minWidth: '300px'}}
+                                helperText={errors.password}
+                                error={!!errors.password}
+                                sx={{width: '300px'}}
+                                FormHelperTextProps={{sx:{
+                                        display: 'flex',
+                                        alignItems: 'start',
+                                        justifyContent: 'center',
+                                        transform: 'translateY(-50%)',
+                                        fontSize: 16
+                                    }}}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant={'contained'} type={'submit'}>
-                                Login
-                            </Button>
+                            {
+                                userStore.loginLoading ?
+                                    <DotLoader />
+                                    :
+                                    <Button variant={'contained'} type={'submit'}
+                                            disabled={!!errors.password || !!errors.username}>
+                                        Login
+                                    </Button>
+                            }
                         </Grid>
                     </Form>
                 )}
             </Formik>
         </Grid>
     )
-}
+})

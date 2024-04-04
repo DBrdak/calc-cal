@@ -2,12 +2,14 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import {useState} from "react";
 
 export default function CountrySelect() {
+    const [isFormFocused, setIsFormFocused] = useState(false)
+
     return (
         <Autocomplete
-            id="country-select-demo"
-            sx={{ width: 300 }}
+            fullWidth
             options={countries}
             autoHighlight
             getOptionLabel={(option) => option.label}
@@ -18,7 +20,7 @@ export default function CountrySelect() {
                         width="20"
                         srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
                         src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                        alt=""
+                        alt={option.label}
                     />
                     {option.label} ({option.code}) +{option.phone}
                 </Box>
@@ -26,11 +28,26 @@ export default function CountrySelect() {
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Choose a country"
+                    fullWidth
+                    onFocusCapture={() => setIsFormFocused(true)}
+                    onBlurCapture={() => setIsFormFocused(false)}
+                    label={isFormFocused ? "Country" : ''}
+                    placeholder={'Country'}
                     inputProps={{
                         ...params.inputProps,
-                        autoComplete: 'new-password', // disable autocomplete and autofill
+                        autoComplete: 'new-password',
                     }}
+                    InputLabelProps={{
+                        shrink: false,
+                        focused: isFormFocused,
+                    }}
+                    FormHelperTextProps={{sx:{
+                            display: 'flex',
+                            alignItems: 'start',
+                            justifyContent: 'center',
+                            transform: 'translateY(-50%)',
+                            fontSize: 16
+                        }}}
                 />
             )}
         />
@@ -53,18 +70,11 @@ const countries: readonly CountryType[] = [
         phone: '971',
     },
     { code: 'AF', label: 'Afghanistan', phone: '93' },
-    {
-        code: 'AG',
-        label: 'Antigua and Barbuda',
-        phone: '1-268',
-    },
-    { code: 'AI', label: 'Anguilla', phone: '1-264' },
     { code: 'AL', label: 'Albania', phone: '355' },
     { code: 'AM', label: 'Armenia', phone: '374' },
     { code: 'AO', label: 'Angola', phone: '244' },
     { code: 'AQ', label: 'Antarctica', phone: '672' },
     { code: 'AR', label: 'Argentina', phone: '54' },
-    { code: 'AS', label: 'American Samoa', phone: '1-684' },
     { code: 'AT', label: 'Austria', phone: '43' },
     {
         code: 'AU',
@@ -80,7 +90,6 @@ const countries: readonly CountryType[] = [
         label: 'Bosnia and Herzegovina',
         phone: '387',
     },
-    { code: 'BB', label: 'Barbados', phone: '1-246' },
     { code: 'BD', label: 'Bangladesh', phone: '880' },
     { code: 'BE', label: 'Belgium', phone: '32' },
     { code: 'BF', label: 'Burkina Faso', phone: '226' },
@@ -89,11 +98,9 @@ const countries: readonly CountryType[] = [
     { code: 'BI', label: 'Burundi', phone: '257' },
     { code: 'BJ', label: 'Benin', phone: '229' },
     { code: 'BL', label: 'Saint Barthelemy', phone: '590' },
-    { code: 'BM', label: 'Bermuda', phone: '1-441' },
     { code: 'BN', label: 'Brunei Darussalam', phone: '673' },
     { code: 'BO', label: 'Bolivia', phone: '591' },
     { code: 'BR', label: 'Brazil', phone: '55' },
-    { code: 'BS', label: 'Bahamas', phone: '1-242' },
     { code: 'BT', label: 'Bhutan', phone: '975' },
     { code: 'BV', label: 'Bouvet Island', phone: '47' },
     { code: 'BW', label: 'Botswana', phone: '267' },
@@ -147,12 +154,6 @@ const countries: readonly CountryType[] = [
     },
     { code: 'DJ', label: 'Djibouti', phone: '253' },
     { code: 'DK', label: 'Denmark', phone: '45' },
-    { code: 'DM', label: 'Dominica', phone: '1-767' },
-    {
-        code: 'DO',
-        label: 'Dominican Republic',
-        phone: '1-809',
-    },
     { code: 'DZ', label: 'Algeria', phone: '213' },
     { code: 'EC', label: 'Ecuador', phone: '593' },
     { code: 'EE', label: 'Estonia', phone: '372' },
@@ -182,7 +183,6 @@ const countries: readonly CountryType[] = [
     },
     { code: 'GA', label: 'Gabon', phone: '241' },
     { code: 'GB', label: 'United Kingdom', phone: '44' },
-    { code: 'GD', label: 'Grenada', phone: '1-473' },
     { code: 'GE', label: 'Georgia', phone: '995' },
     { code: 'GF', label: 'French Guiana', phone: '594' },
     { code: 'GG', label: 'Guernsey', phone: '44' },
@@ -200,7 +200,6 @@ const countries: readonly CountryType[] = [
         phone: '500',
     },
     { code: 'GT', label: 'Guatemala', phone: '502' },
-    { code: 'GU', label: 'Guam', phone: '1-671' },
     { code: 'GW', label: 'Guinea-Bissau', phone: '245' },
     { code: 'GY', label: 'Guyana', phone: '592' },
     { code: 'HK', label: 'Hong Kong', phone: '852' },
@@ -232,7 +231,6 @@ const countries: readonly CountryType[] = [
     { code: 'IS', label: 'Iceland', phone: '354' },
     { code: 'IT', label: 'Italy', phone: '39' },
     { code: 'JE', label: 'Jersey', phone: '44' },
-    { code: 'JM', label: 'Jamaica', phone: '1-876' },
     { code: 'JO', label: 'Jordan', phone: '962' },
     {
         code: 'JP',
@@ -246,18 +244,12 @@ const countries: readonly CountryType[] = [
     { code: 'KI', label: 'Kiribati', phone: '686' },
     { code: 'KM', label: 'Comoros', phone: '269' },
     {
-        code: 'KN',
-        label: 'Saint Kitts and Nevis',
-        phone: '1-869',
-    },
-    {
         code: 'KP',
         label: "Korea, Democratic People's Republic of",
         phone: '850',
     },
     { code: 'KR', label: 'Korea, Republic of', phone: '82' },
     { code: 'KW', label: 'Kuwait', phone: '965' },
-    { code: 'KY', label: 'Cayman Islands', phone: '1-345' },
     { code: 'KZ', label: 'Kazakhstan', phone: '7' },
     {
         code: 'LA',
@@ -265,7 +257,6 @@ const countries: readonly CountryType[] = [
         phone: '856',
     },
     { code: 'LB', label: 'Lebanon', phone: '961' },
-    { code: 'LC', label: 'Saint Lucia', phone: '1-758' },
     { code: 'LI', label: 'Liechtenstein', phone: '423' },
     { code: 'LK', label: 'Sri Lanka', phone: '94' },
     { code: 'LR', label: 'Liberia', phone: '231' },
@@ -298,14 +289,8 @@ const countries: readonly CountryType[] = [
     { code: 'MM', label: 'Myanmar', phone: '95' },
     { code: 'MN', label: 'Mongolia', phone: '976' },
     { code: 'MO', label: 'Macao', phone: '853' },
-    {
-        code: 'MP',
-        label: 'Northern Mariana Islands',
-        phone: '1-670',
-    },
     { code: 'MQ', label: 'Martinique', phone: '596' },
     { code: 'MR', label: 'Mauritania', phone: '222' },
-    { code: 'MS', label: 'Montserrat', phone: '1-664' },
     { code: 'MT', label: 'Malta', phone: '356' },
     { code: 'MU', label: 'Mauritius', phone: '230' },
     { code: 'MV', label: 'Maldives', phone: '960' },
@@ -381,21 +366,11 @@ const countries: readonly CountryType[] = [
     },
     { code: 'SV', label: 'El Salvador', phone: '503' },
     {
-        code: 'SX',
-        label: 'Sint Maarten (Dutch part)',
-        phone: '1-721',
-    },
-    {
         code: 'SY',
         label: 'Syrian Arab Republic',
         phone: '963',
     },
     { code: 'SZ', label: 'Swaziland', phone: '268' },
-    {
-        code: 'TC',
-        label: 'Turks and Caicos Islands',
-        phone: '1-649',
-    },
     { code: 'TD', label: 'Chad', phone: '235' },
     {
         code: 'TF',
@@ -406,16 +381,10 @@ const countries: readonly CountryType[] = [
     { code: 'TH', label: 'Thailand', phone: '66' },
     { code: 'TJ', label: 'Tajikistan', phone: '992' },
     { code: 'TK', label: 'Tokelau', phone: '690' },
-    { code: 'TL', label: 'Timor-Leste', phone: '670' },
     { code: 'TM', label: 'Turkmenistan', phone: '993' },
     { code: 'TN', label: 'Tunisia', phone: '216' },
     { code: 'TO', label: 'Tonga', phone: '676' },
     { code: 'TR', label: 'Turkey', phone: '90' },
-    {
-        code: 'TT',
-        label: 'Trinidad and Tobago',
-        phone: '1-868',
-    },
     { code: 'TV', label: 'Tuvalu', phone: '688' },
     {
         code: 'TW',
@@ -442,22 +411,7 @@ const countries: readonly CountryType[] = [
         label: 'Holy See (Vatican City State)',
         phone: '379',
     },
-    {
-        code: 'VC',
-        label: 'Saint Vincent and the Grenadines',
-        phone: '1-784',
-    },
     { code: 'VE', label: 'Venezuela', phone: '58' },
-    {
-        code: 'VG',
-        label: 'British Virgin Islands',
-        phone: '1-284',
-    },
-    {
-        code: 'VI',
-        label: 'US Virgin Islands',
-        phone: '1-340',
-    },
     { code: 'VN', label: 'Vietnam', phone: '84' },
     { code: 'VU', label: 'Vanuatu', phone: '678' },
     { code: 'WF', label: 'Wallis and Futuna', phone: '681' },

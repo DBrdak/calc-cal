@@ -9,6 +9,7 @@ import AccessToken from "./responses/accessToken";
 import {User} from "../models/user";
 import {Food} from "../models/food";
 import {EatenFood} from "../models/eatenFood";
+import {store} from "../stores/store";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -19,13 +20,11 @@ const sleep = (delay: number) => {
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
 axios.interceptors.request.use(config => {
-    /* TODO Implement authentication
-    const token = store.userStore.token;
+    const token = store.userStore.token
 
-    config.headers.Authorization = `Bearer ${token}`;
-    */
-    return config;
+    config.headers.Authorization = `Bearer ${token}`
 
+    return config
 })
 
 const responseBody = <T> (response: AxiosResponse<T>) => response.data;

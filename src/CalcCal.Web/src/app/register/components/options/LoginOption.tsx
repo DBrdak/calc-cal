@@ -1,8 +1,8 @@
 import {Box, Button, Typography} from "@mui/material";
-import theme from "../../theme";
+import theme from "../../../theme";
 import {useNavigate} from "react-router-dom";
 
-export const RegisterOption = () => {
+export const LoginOption = () => {
     const navigate = useNavigate()
 
     return (
@@ -16,10 +16,10 @@ export const RegisterOption = () => {
             flexDirection: 'column',
         }}>
             <Typography>
-                Don't have an account yet?
+                Already have an account?
             </Typography>
-            <Button onClick={() => navigate('/register')} sx={{ padding: theme.spacing(1)}}>
-                Register
+            <Button onClick={() => navigate('/login')} sx={{ padding: theme.spacing(1)}}>
+                Login
             </Button>
         </Box>
     );
