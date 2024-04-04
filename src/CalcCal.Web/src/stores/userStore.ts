@@ -19,7 +19,7 @@ export default class UserStore {
         if(localStorage.getItem('jwt')) {
             this.token = localStorage.getItem('jwt')
 
-            !this.authenticatedUser && this.loadCurrentUser()
+            !this.isAuthenticated() && this.loadCurrentUser()
         }
     }
 
@@ -111,6 +111,12 @@ export default class UserStore {
         } finally {
             this.setGetLoading(false)
         }
+    }
+
+    logout() {
+        this.setAuthenticatedUser(undefined)
+        this.setToken(null)
+        localStorage.removeItem('jwt')
     }
 
     eat(food: EatenFood){

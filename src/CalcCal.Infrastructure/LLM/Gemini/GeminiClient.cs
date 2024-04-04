@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Responses.DB;
 
 namespace CalcCal.Infrastructure.LLM.Gemini;
 
@@ -25,7 +26,7 @@ internal sealed class GeminiClient
         _logger = logger;
     }
 
-    public async Task<string?> GenerateContentAsync(string prompt, CancellationToken cancellationToken)
+    public async Task<Result<string>> GenerateContentAsync(string prompt, CancellationToken cancellationToken)
     {
         var requestBody = GeminiRequestFactory.CreateRequest(prompt);
         var content = new StringContent(JsonConvert.SerializeObject(requestBody, Formatting.None, _serializerSettings), Encoding.UTF8, "application/json");
@@ -37,7 +38,11 @@ internal sealed class GeminiClient
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogError(responseBody);
-            return null;
+
+            return Result.Failure<string>(
+                responseBody.Contains("User location is not supported for the API use.") ?
+                    Error.TaskFailed("Feature is not available in your region") :
+                    Error.TaskFailed("Something went wrong while processing your prompt"));
         }
 
         var geminiResponse = JsonConvert.DeserializeObject<GeminiResponse>(responseBody);

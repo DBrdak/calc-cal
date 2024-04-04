@@ -11,7 +11,7 @@ import { useField } from 'formik';
 import { observer } from 'mobx-react-lite';
 
 interface Props {
-    placeholder: string;
+    placeholder?: string;
     name: string;
     showErrors?: any;
     label?: string;

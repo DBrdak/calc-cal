@@ -9,7 +9,7 @@ public record PhoneNumber : ValueObject
     public string Value { get; init; }
     public string CountryCode { get; init; }
     private const string valuePattern = @"^[0-9]{8,11}$";
-    private const string countryCodePattern = @"^[\+][0-9]{1,3}$";
+    private const string countryCodePattern = @"^[+][0-9]{1,3}$";
 
     private PhoneNumber(string countryCode, string value)
     {

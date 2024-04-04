@@ -4,6 +4,7 @@ import {createBrowserRouter} from "react-router-dom";
 import {UserPage} from "../app/user/UserPage";
 import {RegisterPage} from "../app/register/RegisterPage";
 import {LoginPage} from "../app/login/LoginPage";
+import LogoutPage from "../app/logout/LogoutPage";
 
 export const routes: RouteObject[] = [
     {
@@ -12,7 +13,8 @@ export const routes: RouteObject[] = [
         children: [
             {path: '/user', element: <UserPage />},
             {path: '/login', element: <LoginPage />},
-            {path: '/register', element: <RegisterPage />}
+            {path: '/register', element: <RegisterPage />},
+            {path: '/logout', element: <LogoutPage />},
         ]
     }
 ]

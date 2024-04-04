@@ -1,4 +1,5 @@
-﻿using CalcCal.Application.Abstractions.Messaging;
+﻿using System.Text.RegularExpressions;
+using CalcCal.Application.Abstractions.Messaging;
 using CalcCal.Domain.Users;
 using Responses.DB;
 
@@ -8,6 +9,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordService _passwordService;
+    private const string passwordPattern = @"^(?=.*[!@#$%^&*()-_=+{};:',.<>?])(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
 
     public RegisterUserCommandHandler(
         IUserRepository userRepository,
@@ -23,6 +25,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
             request.CountryCode,
             request.PhoneNumber,
             request.Username,
+            request.Password,
             cancellationToken);
 
         if (validationResult.IsFailure)
@@ -49,8 +52,14 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         string countryCode,
         string phoneNumber,
         string username,
+        string password,
         CancellationToken cancellationToken)
     {
+        if (!Regex.IsMatch(password, passwordPattern))
+        {
+            return Result.Failure<User>(Error.InvalidRequest("Password is too weak"));
+        }
+
         var users = await _userRepository.GetAllUsers(cancellationToken);
 
         if (users.IsFailure)

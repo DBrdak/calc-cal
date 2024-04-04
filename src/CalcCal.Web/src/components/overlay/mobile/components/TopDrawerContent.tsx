@@ -2,7 +2,7 @@ import {Box, List, ListItem, ListItemIcon, ListItemText} from "@mui/material";
 import {LoginOutlined, LogoutOutlined, PersonAddAltOutlined, PersonOutlined} from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface TopDrawerContentProps {
     isAuthenticated: boolean
@@ -10,6 +10,7 @@ interface TopDrawerContentProps {
 
 export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
     const location = useLocation()
+    const navigate = useNavigate()
 
     return (
         <Box sx={{
@@ -25,7 +26,7 @@ export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
             }}>
                 {
                     !isAuthenticated &&
-                    <ListItem button onClick={() => console.log()} sx={{}}>
+                    <ListItem button onClick={() => navigate('/login')} sx={{}}>
                         <ListItemIcon>
                             <LoginOutlined />
                         </ListItemIcon>
@@ -34,7 +35,7 @@ export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
                 }
                 {
                     !isAuthenticated &&
-                    <ListItem button onClick={() => console.log()}>
+                    <ListItem button onClick={() => navigate('/register')}>
                         <ListItemIcon>
                             <PersonAddAltOutlined />
                         </ListItemIcon>
@@ -43,7 +44,7 @@ export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
                 }
                 {
                     isAuthenticated &&
-                    <ListItem button onClick={() => console.log()}>
+                    <ListItem button onClick={() => navigate('/user')}>
                         <ListItemIcon>
                             <PersonOutlined />
                         </ListItemIcon>
@@ -52,7 +53,7 @@ export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
                 }
                 {
                     isAuthenticated &&
-                    <ListItem button onClick={() => console.log()}>
+                    <ListItem button onClick={() => navigate('/logout')}>
                         <ListItemIcon>
                             <LogoutOutlined />
                         </ListItemIcon>

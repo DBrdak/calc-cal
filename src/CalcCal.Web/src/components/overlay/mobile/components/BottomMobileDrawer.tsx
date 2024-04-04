@@ -1,7 +1,7 @@
 import {Box, Typography} from "@mui/material";
 import theme from "../../../../app/theme";
 import formatCalories from "../../../../utlis/formatters/caloriesFormatter";
-import {BottomDrawerContent} from "./BottomDrawerContent";
+import BottomDrawerContent from "./BottomDrawerContent";
 import React from "react";
 import {EatenFood} from "../../../../models/eatenFood";
 import {DrawerBox} from "./DrawerBox";

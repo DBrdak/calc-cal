@@ -19,7 +19,6 @@ internal sealed class LLMService : ILLMService
     {
         var response = await _geminiClient.GenerateContentAsync(prompt.Value, cancellationToken);
 
-        return response ?? 
-               Result.Failure<string>(Error.TaskFailed("Problem while reading response from Gemini"));
+        return response;
     }
 }
