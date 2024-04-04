@@ -91,6 +91,8 @@ export default class UserStore {
                 localStorage.setItem('jwt', accessToken.value)
                 this.setToken(accessToken.value)
                 await this.loadCurrentUser()
+            } else {
+                return false
             }
 
             return true

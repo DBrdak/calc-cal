@@ -3,16 +3,28 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {useState} from "react";
+import '../app/calculator/components/shared/calculatorForm/components/foodQuantityFormStyles.css'
 
-export default function CountrySelect() {
+interface CountrySelectProps {
+    onChange: (countryCode: string) => void
+}
+
+export default function CountrySelect({onChange}: CountrySelectProps) {
     const [isFormFocused, setIsFormFocused] = useState(false)
 
     return (
         <Autocomplete
+            sx={{width: '300px'}}
             fullWidth
             options={countries}
             autoHighlight
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => `${option.label} +${option.phone}`}
+            onChange={(e, value) => value ? onChange(`+${value.phone}`) : onChange(``)}
+            ListboxProps={{sx:{
+                height: '20vh',
+                maxHeight: '300px',
+                minWidth: '50px'
+            }}}
             renderOption={(props, option) => (
                 <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                     <img
@@ -22,7 +34,7 @@ export default function CountrySelect() {
                         src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
                         alt={option.label}
                     />
-                    {option.label} ({option.code}) +{option.phone}
+                    {option.label} +{option.phone}
                 </Box>
             )}
             renderInput={(params) => (
@@ -35,7 +47,7 @@ export default function CountrySelect() {
                     placeholder={'Country'}
                     inputProps={{
                         ...params.inputProps,
-                        autoComplete: 'new-password',
+                        autoComplete: 'new-password'
                     }}
                     InputLabelProps={{
                         shrink: false,

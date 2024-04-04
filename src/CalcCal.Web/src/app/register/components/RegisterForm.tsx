@@ -16,9 +16,12 @@ import {
 import MyTextInput from "../../../components/MyTextInput";
 import {RegisterRequest} from "../../../api/requests/registerRequest";
 import CountrySelect from "../../../components/CountrySelect";
+import {useNavigate} from "react-router-dom";
 
 export const RegisterForm = () => {
     const {userStore} = useStore()
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
 
     const validationSchema = yup.object({
         username: string()
@@ -41,8 +44,14 @@ export const RegisterForm = () => {
             .matches(PHONE_NUMBER_PATTERN, {message: 'Invalid phone number'})
     })
 
-    function handleFormSubmit(formValues: LogInRequest) {
-        userStore.logIn(formValues).then(isSuccessful => {
+    function handleFormSubmit(formValues: RegisterRequest) {
+        setLoading(true)
+        userStore.register(formValues).then(isSuccessful => {
+            setLoading(false)
+
+            if(isSuccessful){
+                navigate('/')
+            }
         })
     }
 
@@ -51,7 +60,7 @@ export const RegisterForm = () => {
             <Formik initialValues={new RegisterRequest()} onSubmit={handleFormSubmit} validationSchema={validationSchema} sx={{
                 width: '100%'
             }}>
-                {({values, handleSubmit, handleChange, dirty, errors}) => (
+                {({values, handleSubmit, handleChange, setValues, errors}) => (
                     <Form autoComplete={'off'} style={{
                         width: '100%',
                         display: 'flex',
@@ -88,15 +97,17 @@ export const RegisterForm = () => {
                             />
                         </Grid>
                         <Grid item xs={12} marginBottom={theme.spacing(5)}>
-                            <CountrySelect />
+                            <CountrySelect
+                                onChange={countryCode => setValues({...values, countryCode: countryCode})}
+                            />
                         </Grid>
-                        <Grid item xs={8} marginBottom={theme.spacing(5)}>
+                        <Grid item xs={12} marginBottom={theme.spacing(5)}>
                             <MyTextInput
-                                type={'text'}
-                                name={'username'}
-                                label={'Username'}
+                                type={'phoneNumber'}
+                                name={'phoneNumber'}
+                                label={'Phone number'}
                                 onChange={handleChange}
-                                errors={errors.username}
+                                errors={errors.phoneNumber}
                             />
                         </Grid>
                         <Grid item xs={12} marginBottom={theme.spacing(5)}>
@@ -110,11 +121,18 @@ export const RegisterForm = () => {
                         </Grid>
                         <Grid item xs={12}>
                             {
-                                userStore.registerLoading ?
+                                loading ?
                                     <DotLoader />
                                     :
                                     <Button variant={'contained'} type={'submit'}
-                                            disabled={!!errors.password || !!errors.username}>
+                                            disabled={
+                                                !!errors.password
+                                                || !!errors.username
+                                                || !!errors.firstName
+                                                || !!errors.lastName
+                                                || !!errors.countryCode
+                                                || !!errors.phoneNumber
+                                    }>
                                         Register
                                     </Button>
                             }

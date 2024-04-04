@@ -9,10 +9,13 @@ import {useState} from "react";
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../../stores/store";
 import {DotLoader} from "../../../components/DotLoader";
+import {useNavigate} from "react-router-dom";
 
 export default observer(function LoginForm() {
     const [isUsernameFormFocused, setIsUsernameFormFocused] = useState(false)
     const [isPasswordFormFocused, setIsPasswordFormFocused] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
     const {userStore} = useStore()
 
     const validationSchema = yup.object({
@@ -24,7 +27,12 @@ export default observer(function LoginForm() {
     })
 
     function handleFormSubmit(formValues: LogInRequest) {
+        setLoading(true)
         userStore.logIn(formValues).then(isSuccessful => {
+            setLoading(false)
+            if(isSuccessful){
+                navigate('/')
+            }
         })
     }
 
@@ -102,7 +110,7 @@ export default observer(function LoginForm() {
                         </Grid>
                         <Grid item xs={12}>
                             {
-                                userStore.loginLoading ?
+                                loading ?
                                     <DotLoader />
                                     :
                                     <Button variant={'contained'} type={'submit'}

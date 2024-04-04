@@ -21,6 +21,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
 axios.interceptors.request.use(config => {
     const token = store.userStore.token
+    console.log(token)
 
     config.headers.Authorization = `Bearer ${token}`
 

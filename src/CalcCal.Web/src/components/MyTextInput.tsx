@@ -30,6 +30,7 @@ function MyTextInput({name, props, type, label, errors, onChange}: Props) {
             onChange={onChange}
             type={type}
             name={name}
+            sx={{width: '300px'}}
             label={isFormFocused && !errors ? label : ''}
             placeholder={label}
             fullWidth
