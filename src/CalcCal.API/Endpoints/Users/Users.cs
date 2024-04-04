@@ -3,6 +3,7 @@ using CalcCal.API.Endpoints.Users.Requests;
 using CalcCal.API.Extensions;
 using CalcCal.Application.Models;
 using CalcCal.Application.Users.GetCurrentUser;
+using CalcCal.Application.Users.GetUserDetails;
 using CalcCal.Application.Users.LogIn;
 using CalcCal.Application.Users.RegisterUser;
 using Carter;

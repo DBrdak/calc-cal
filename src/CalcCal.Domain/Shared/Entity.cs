@@ -50,6 +50,7 @@ public abstract class Entity<TId> : Entity
              throw new DomainException<Entity<TId>>($"Cannot create id of type {typeof(TId)} from value {id}");
     }
 
+    [JsonConstructor]
     protected Entity()
     {
         

@@ -2,6 +2,7 @@
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
 using CalcCal.Domain.Users.DomainEvents;
+using MongoDB.Bson.Serialization.Attributes;
 using Responses.DB;
 
 namespace CalcCal.Domain.Users;
@@ -13,6 +14,7 @@ public sealed class User : Entity<UserId>
     public LastName LastName { get; private set; }
     public Username Username { get; private set; }
     public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood.AsReadOnly();
+    [BsonElement]
     private readonly List<EatenFood> _eatenFood;
     public string PasswordHash { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }
@@ -24,21 +26,22 @@ public sealed class User : Entity<UserId>
         FirstName firstName,
         LastName lastName,
         Username username,
-        string passwordHash)
+        string passwordHash) : base(new UserId())
     {
         PhoneNumber = phoneNumber;
         FirstName = firstName;
         LastName = lastName;
         Username = username;
         PasswordHash = passwordHash;
-        IsPhoneNumberVerified = false; // TODO temporary solution
+        IsPhoneNumberVerified = false;
         CreatedAt = DateTime.UtcNow;
         LastLoggedInAt = DateTime.UtcNow;
         _eatenFood = new List<EatenFood>();
     }
 
+    [BsonConstructor]
     [JsonConstructor]
-    private User()
+    private User() : base()
     {
 
     }

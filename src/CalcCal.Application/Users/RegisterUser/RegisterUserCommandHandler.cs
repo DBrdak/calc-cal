@@ -67,7 +67,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
             return Result.Failure<User>(users.Error);
         }
 
-        var isPhoneNumberUnique = users.Value.All(u => u.PhoneNumber.Value != phoneNumber && u.PhoneNumber.CountryCode != countryCode);
+        var isPhoneNumberUnique = users.Value.All(u => u.PhoneNumber.Value != phoneNumber || u.PhoneNumber.CountryCode != countryCode);
 
         if (!isPhoneNumberUnique)
         {

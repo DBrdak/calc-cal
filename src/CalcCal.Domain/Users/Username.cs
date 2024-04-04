@@ -21,9 +21,4 @@ public record Username : ValueObject<string>
 
         return new Username(value);
     }
-
-    public virtual bool Equals(Username? other)
-    {
-        return string.Equals(other?.Value, Value, StringComparison.CurrentCultureIgnoreCase);
-    }
 }

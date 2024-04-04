@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using CalcCal.Application.Abstractions.Authentication;
+using CalcCal.Infrastructure.Authentication.Models;
 using Microsoft.AspNetCore.Http;
 using Responses.DB;
 
@@ -19,7 +20,7 @@ internal class UserContext : IUserContext
             .HttpContext?
             .User
             .Claims
-            .SingleOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?
+            .SingleOrDefault(claim => claim.Type == UserRepresentationModel.IdClaimName)?
             .Value ??
         throw new ApplicationException("User context is unavailable");
 

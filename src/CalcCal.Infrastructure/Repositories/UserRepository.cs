@@ -26,7 +26,12 @@ internal sealed class  UserRepository : Repository<User, UserId>, IUserRepositor
 
     public async Task<Result<User>> GetUserByUsername(Username username, CancellationToken cancellationToken)
     {
-        var cursor = await Context.Set<User>().FindAsync(u => u.Username.Equals(username), null, cancellationToken);
+        var cursor = await Context.Set<User>()
+            .FindAsync(
+                u => u.Username.Value.ToLower()
+                    .Equals(username.Value.ToLower()),
+                null,
+                cancellationToken);
 
         var user = await cursor.SingleOrDefaultAsync(cancellationToken);
 
