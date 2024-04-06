@@ -1,12 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
+using CalcCal.Domain.Users.Converters;
 using CalcCal.Domain.Users.DomainEvents;
 using MongoDB.Bson.Serialization.Attributes;
 using Responses.DB;
 
 namespace CalcCal.Domain.Users;
 
+[JsonConverter(typeof(UserConverter))]
 public sealed class User : Entity<UserId>
 {
     public PhoneNumber PhoneNumber { get; private set; }
@@ -14,7 +16,6 @@ public sealed class User : Entity<UserId>
     public LastName LastName { get; private set; }
     public Username Username { get; private set; }
     public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood.AsReadOnly();
-    [BsonElement]
     private readonly List<EatenFood> _eatenFood;
     public string PasswordHash { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }
