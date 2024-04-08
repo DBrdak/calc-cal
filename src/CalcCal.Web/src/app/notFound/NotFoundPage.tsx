@@ -1,19 +1,12 @@
 import {useEffect, useState} from "react";
-import {observer} from "mobx-react-lite";
-import {useStore} from "../../stores/store";
-import {Box, LinearProgress, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import {Box, LinearProgress, Typography} from "@mui/material";
 
-export default observer (function LogoutPage () {
+export default function NotFoundPage () {
     const [progress, setProgress] = useState(0)
-    const {userStore} = useStore()
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(!userStore.token || !userStore.isAuthenticated()){
-            navigate('/')
-        }
-
         const timer = setInterval(() => {
             setProgress((oldProgress) => {
                 if (oldProgress === 100) {
@@ -31,7 +24,6 @@ export default observer (function LogoutPage () {
 
     useEffect(() => {
         if(progress === 100) {
-            userStore.logout()
             navigate('/')
         }
     }, [progress])
@@ -45,9 +37,9 @@ export default observer (function LogoutPage () {
             width={'100svw'}
         >
             <Typography variant="h6" marginBottom={2}>
-                Logging out...
+                Content not found
             </Typography>
             <LinearProgress variant='determinate' color='primary' value={progress} style={{ width: '500px' }} />
         </Box>
     )
-})
+}
