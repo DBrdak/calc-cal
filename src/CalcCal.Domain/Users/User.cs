@@ -1,22 +1,23 @@
 ﻿using System.Text.Json.Serialization;
 using CalcCal.Domain.Foods;
 using CalcCal.Domain.Shared;
-using CalcCal.Domain.Users.Converters;
 using CalcCal.Domain.Users.DomainEvents;
 using MongoDB.Bson.Serialization.Attributes;
 using Responses.DB;
 
 namespace CalcCal.Domain.Users;
 
-[JsonConverter(typeof(UserConverter))]
 public sealed class User : Entity<UserId>
 {
     public PhoneNumber PhoneNumber { get; private set; }
     public FirstName FirstName { get; private set; }
     public LastName LastName { get; private set; }
     public Username Username { get; private set; }
-    public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood.AsReadOnly();
-    private readonly List<EatenFood> _eatenFood;
+
+    public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood;
+    [BsonElement("EatenFood")]
+    // ReSharper disable once FieldCanBeMadeReadOnly.Local (Bson needs)
+    private List<EatenFood> _eatenFood;
     public string PasswordHash { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }
     public DateTime CreatedAt { get; init; }
