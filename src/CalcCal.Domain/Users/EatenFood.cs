@@ -6,14 +6,14 @@ namespace CalcCal.Domain.Users;
 
 public sealed record EatenFood : ValueObject
 {
-    public Food Food { get; init; }
+    public FoodName FoodName { get; init; }
     public Quantity Quantity { get; init; }
     public Calories CaloriesEaten { get; init; }
     public DateTime EatenDateTime { get; init; }
 
-    private EatenFood(Food food, Quantity quantity, Calories caloriesEaten, DateTime eatenDateTime)
+    private EatenFood(FoodName foodName, Quantity quantity, Calories caloriesEaten, DateTime eatenDateTime)
     {
-        Food = food;
+        FoodName = foodName;
         Quantity = quantity;
         CaloriesEaten = caloriesEaten;
         EatenDateTime = eatenDateTime;
@@ -38,7 +38,7 @@ public sealed record EatenFood : ValueObject
         food.Eat();
 
         return new EatenFood(
-            food, 
+            food.Name, 
             quantityResult.Value, 
             caloriesEatenResult.Value, 
             DateTime.UtcNow);
