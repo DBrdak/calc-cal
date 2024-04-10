@@ -1,6 +1,7 @@
-import {Stack} from "@mui/material"
+import {Box, Button, Stack} from "@mui/material"
 import {AppName} from "../../../../components/AppName"
 import {UserBaseInfoPaper} from "../shared/UserBaseInfoPaper";
+import {UserHistory} from "./UserHistory";
 
 export const DesktopUserContainer = () => {
     return (
@@ -12,6 +13,7 @@ export const DesktopUserContainer = () => {
         }}>
             <AppName />
             <UserBaseInfoPaper />
+            <UserHistory />
         </Stack>
     );
 };

@@ -5,5 +5,5 @@ namespace CalcCal.Application.Abstractions.Authentication;
 public interface IUserContext
 {
     string UserId { get; }
-    Result<string> TryGetUserId();
+    Result<string> GetUserId();
 }

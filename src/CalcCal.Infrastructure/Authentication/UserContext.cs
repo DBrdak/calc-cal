@@ -24,7 +24,7 @@ internal class UserContext : IUserContext
             .Value ??
         throw new ApplicationException("User context is unavailable");
 
-    public Result<string> TryGetUserId()
+    public Result<string> GetUserId()
     {
         try
         {

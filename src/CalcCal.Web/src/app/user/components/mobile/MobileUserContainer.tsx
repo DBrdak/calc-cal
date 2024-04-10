@@ -1,5 +1,6 @@
 import {Stack} from "@mui/material";
 import {AppName} from "../../../../components/AppName";
+import {UserBaseInfoPaper} from "../shared/UserBaseInfoPaper";
 
 export const MobileUserContainer = () => {
     return (
@@ -14,6 +15,7 @@ export const MobileUserContainer = () => {
             justifyContent: 'center'
         }}>
             <AppName />
+            <UserBaseInfoPaper />
         </Stack>
     );
 };

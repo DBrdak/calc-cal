@@ -1,20 +1,22 @@
 import {Grid, Paper} from "@mui/material";
 import theme from "../../../theme";
 import UserBaseInfo from "./UserBaseInfo";
+import {isTouchDevice} from "../../../../utlis/layout/deviceInspector";
 
 export const UserBaseInfoPaper = () => {
     return (
         <Grid container component={Paper} sx={{
-            maxWidth: '500px',
+            maxWidth: '600px',
             width: '95vw',
             minWidth: '250px',
             maxHeight: '700px',
-            minHeight: '460px',
+            zIndex: 1000,
+            borderRadius: isTouchDevice() ? '20px' : '20px 20px 0px 0px',
+            minHeight: '350px',
             display: 'flex',
             alignItems: 'start',
-            borderRadius: '20px',
             position: 'relative',
-            paddingTop: theme.spacing(6)
+            paddingTop: theme.spacing(2)
         }}>
             <UserBaseInfo />
         </Grid>

@@ -1,13 +1,15 @@
 import {Box, Typography} from "@mui/material";
 import theme from "../../../../app/theme";
 import formatCalories from "../../../../utlis/formatters/caloriesFormatter";
-import BottomDrawerContent from "./BottomDrawerContent";
+import BottomDrawerEatenFood from "./BottomDrawerEatenFood";
 import React from "react";
 import {EatenFood} from "../../../../models/eatenFood";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
 import {AccessibleSwipeableDrawer} from "../../../AccessibleSwipeableDrawer";
 import {DotLoader} from "../../../DotLoader";
+import {useLocation} from "react-router-dom";
+import BottomDrawerUserHistory from "./BottomDrawerUserHistory";
 
 interface BottomMobileDrawerProps {
     eatenFood: EatenFood[]
@@ -17,6 +19,7 @@ interface BottomMobileDrawerProps {
 export default function BottomMobileDrawer({eatenFood, eatLoading}: BottomMobileDrawerProps) {
     const [bottomDrawerOpen, setBottomDrawerOpen] = React.useState(false)
     const drawerBleeding = 56
+    const location = useLocation()
 
     const handleBottomDrawerOpen = () => {
         setBottomDrawerOpen(true);
@@ -60,7 +63,7 @@ export default function BottomMobileDrawer({eatenFood, eatLoading}: BottomMobile
                 <Typography fontWeight={'bolder'} fontSize={'x-large'} sx={{
                     p: 2, color: theme.palette.text.secondary
                 }}>
-                    {formatCalories(sumCaloriesEaten(eatenFood))}
+                    {location.pathname === '/user' ? 'History' : formatCalories(sumCaloriesEaten(eatenFood))}
                 </Typography>
                 <Box sx={{
                     position: 'absolute',
@@ -81,7 +84,7 @@ export default function BottomMobileDrawer({eatenFood, eatLoading}: BottomMobile
                     overflow: 'auto',
                 }}
             >
-                <BottomDrawerContent eatenFood={eatenFood} />
+                {location.pathname === '/user' ? <BottomDrawerUserHistory /> : <BottomDrawerEatenFood eatenFood={eatenFood} />}
             </DrawerBox>
         </AccessibleSwipeableDrawer>
     )

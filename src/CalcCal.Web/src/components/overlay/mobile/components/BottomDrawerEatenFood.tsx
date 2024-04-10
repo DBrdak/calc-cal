@@ -11,7 +11,7 @@ interface BottomDrawerContentProps {
     eatenFood: EatenFood[]
 }
 
-export default function BottomDrawerContent ({eatenFood}: BottomDrawerContentProps) {
+export default function BottomDrawerEatenFood ({eatenFood}: BottomDrawerContentProps) {
 
     return (
         <Box marginTop={1}>

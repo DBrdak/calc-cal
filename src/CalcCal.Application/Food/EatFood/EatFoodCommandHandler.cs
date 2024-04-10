@@ -33,7 +33,7 @@ internal sealed class EatFoodCommandHandler : ICommandHandler<EatFoodCommand, Ea
 
         var food = getFoodResult.Value;
 
-        var getUserIdResult = _userContext.TryGetUserId();
+        var getUserIdResult = _userContext.GetUserId();
 
         if (getUserIdResult.IsFailure)
         {
