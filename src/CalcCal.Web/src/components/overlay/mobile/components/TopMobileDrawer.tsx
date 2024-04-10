@@ -5,13 +5,15 @@ import React from "react";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
 import {User} from "../../../../models/user";
+import {DotLoader} from "../../../DotLoader";
 
 interface TopMobileDrawerProps {
     isAuthenticated: boolean
     user: User
+    loading: boolean
 }
 
-export const TopMobileDrawer = ({isAuthenticated, user}: TopMobileDrawerProps) => {
+export const TopMobileDrawer = ({isAuthenticated, user, loading}: TopMobileDrawerProps) => {
     const [topDrawerOpen, setTopDrawerOpen] = React.useState(false)
     const drawerBleeding = 56
 
@@ -54,7 +56,7 @@ export const TopMobileDrawer = ({isAuthenticated, user}: TopMobileDrawerProps) =
                 <Typography sx={{ p: 2, color: theme.palette.text.secondary, width: '100%', textAlign: 'center' }}
                             fontWeight={'bolder'}
                             fontSize={'x-large'}>
-                    {user.username}
+                    {loading ? <DotLoader /> : user.username}
                 </Typography>
             </DrawerBox>
             <DrawerBox

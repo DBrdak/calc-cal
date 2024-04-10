@@ -18,7 +18,7 @@ export default observer (function DesktopOverlay({children}: DesktopOverlayProps
 
     function handleClick() {
         const navigatePath = location.pathname === '/' ?
-            userStore.isAuthenticated() ?
+            userStore.isAuthenticated() || userStore.token ?
                 '/user' :
                 '/login' :
             '/'

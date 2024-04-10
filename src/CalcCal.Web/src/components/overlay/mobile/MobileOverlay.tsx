@@ -31,7 +31,11 @@ const MobileOverlay = ({ children}: MobileOverlayProps) => {
                     },
                 })}
             />
-            <TopMobileDrawer isAuthenticated={userStore.isAuthenticated()} user={userStore.user} />
+            <TopMobileDrawer
+                isAuthenticated={userStore.isAuthenticated()}
+                user={userStore.user}
+                loading={userStore.getLoading}
+            />
             <MainContainer>
                 {children}
             </MainContainer>

@@ -43,12 +43,21 @@ export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
                     </ListItem>
                 }
                 {
-                    isAuthenticated &&
+                    isAuthenticated && location.pathname !== '/user' &&
                     <ListItem button onClick={() => navigate('/user')}>
                         <ListItemIcon>
                             <PersonOutlined />
                         </ListItemIcon>
                         <ListItemText primary="Profile" />
+                    </ListItem>
+                }
+                {
+                    location.pathname !== '/' &&
+                    <ListItem button onClick={() => navigate('/')}>
+                        <ListItemIcon>
+                            <MenuIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Calculator" />
                     </ListItem>
                 }
                 {
@@ -58,15 +67,6 @@ export const TopDrawerContent = ({isAuthenticated}: TopDrawerContentProps) => {
                             <LogoutOutlined />
                         </ListItemIcon>
                         <ListItemText primary="Logout" />
-                    </ListItem>
-                }
-                {
-                    location.pathname !== '/' &&
-                    <ListItem button onClick={() => console.log()}>
-                        <ListItemIcon>
-                            <MenuIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Calculator" />
                     </ListItem>
                 }
             </List>

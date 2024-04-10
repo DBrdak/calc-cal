@@ -22,7 +22,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL
 axios.interceptors.request.use(config => {
     const token = store.userStore.token
 
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = token && `Bearer ${token}`
 
     return config
 })
@@ -45,6 +45,7 @@ axios.interceptors.response.use(async(response) => {
                     return Promise.reject();
                 case 403:
                     errorMessages.forEach(toast.error)
+                    toast.clearWaitingQueue()
                     return Promise.reject();
                 case 404:
                     if(error.response.config.method === 'get' && error.response.data.errors.hasOwnProperty('id')){
@@ -52,27 +53,24 @@ axios.interceptors.response.use(async(response) => {
                     }
                     errorMessages.forEach(toast.error)
                     return Promise.reject();
-                default:
+                case 401:
+                    //toast.error('Unauthorized')
+                    toast.clearWaitingQueue()
+                    break
+                case 419:
                     errorMessages.forEach(toast.error)
+                    store.userStore.logout()
+                    break
+                case 429:
+                    errorMessages.forEach(toast.error)
+                    break
+                case 500:
+                    toast.error('Server error')
+                    //router.navigate('/server-error');
+                    break;
             }
         }
-        switch(error.response.status) {
-            case 401:
-                //toast.error('Unauthorized')
-                toast.clearWaitingQueue()
-                break
-            case 403:
-                toast.error(error.response.data.error.name)
-                toast.clearWaitingQueue()
-                break
-            case 429:
-                if(!toast.isActive(1)) toast.error('Too many requests')
-                break
-            case 500:
-                toast.error('Server error')
-                //router.navigate('/server-error');
-                break;
-        }
+
         return Promise.reject(error);
     }
 );

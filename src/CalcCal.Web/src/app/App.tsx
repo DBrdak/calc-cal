@@ -3,12 +3,13 @@ import {Outlet, ScrollRestoration, useLocation} from "react-router-dom";
 import {Bounce, ToastContainer} from "react-toastify";
 import {CalculatorPage} from "./calculator/CalculatorPage";
 import 'react-toastify/dist/ReactToastify.css'
+import {Box} from "@mui/material";
 
 function App() {
   const location = useLocation()
 
   return(
-      <>
+      <Box sx={{overflowX: 'hidden'}}>
         <ScrollRestoration />
         {
           location.pathname === '/' ?
@@ -30,7 +31,7 @@ function App() {
             theme="colored"
             transition={Bounce}
         />
-      </>
+      </Box>
   )
 }
 
