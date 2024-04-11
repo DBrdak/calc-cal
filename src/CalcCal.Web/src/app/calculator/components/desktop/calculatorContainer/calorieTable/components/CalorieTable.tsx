@@ -9,14 +9,24 @@ import {DotLoader} from "../../../../../../../components/DotLoader";
 import formatCalories from "../../../../../../../utlis/formatters/caloriesFormatter";
 import {useStore} from "../../../../../../../stores/store";
 import {observer} from "mobx-react-lite";
+import {useEffect, useRef, useState} from "react";
+import {EatenFood} from "../../../../../../../models/eatenFood";
 
 export default observer (function CalorieTable() {
     const {foodStore, userStore} = useStore()
+    const tableContainerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (tableContainerRef.current) {
+            tableContainerRef.current.scrollTop = tableContainerRef.current.scrollHeight;
+        }
+    }, [userStore.eatenFood, foodStore.selectedFood, tableContainerRef]);
 
     return (
-        <TableContainer sx={{
+        <TableContainer ref={tableContainerRef} sx={{
             minHeight: '300px',
-            maxHeight: '400px'
+            maxHeight: '400px',
+            overflowY: 'auto'
         }}>
             <Table sx={{
                 overflow: 'visible',
@@ -49,7 +59,7 @@ export default observer (function CalorieTable() {
                             </TableCell>
                         </TableRow>
                     }
-                    {userStore.eatenFood?.map((food, i) => (
+                    {userStore.eatenFood.map((food, i) => (
                         <TableRow key={i}>
                             <TableCell align={'center'}>
                                 {food.foodName}

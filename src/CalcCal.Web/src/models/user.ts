@@ -20,10 +20,6 @@ export class User implements User {
         this.eatenFood = eatenFood || []
     }
 
-    eat(food: EatenFood) {
-        this.eatenFood?.push(food)
-    }
-
     static guest() {
         return new User('', 'Guest', 'Guest', 'Guest', '', []);
     }
