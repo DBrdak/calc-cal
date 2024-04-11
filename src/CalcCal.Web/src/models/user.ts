@@ -6,7 +6,7 @@ export interface User {
     lastName: string
     username: string
     phoneNumber: string
-    eatenFood?: EatenFood[]
+    eatenFood: EatenFood[]
 }
 
 export class User implements User {

@@ -1,4 +1,4 @@
 
 export default function formatCalories(value: number) {
-    return `${value} kcal`
+    return `${value.toFixed(0)} kcal`
 }

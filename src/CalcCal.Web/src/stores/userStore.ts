@@ -25,8 +25,8 @@ export default class UserStore {
 
     get eatenFood() {
         return this.authenticatedUser ?
-            this.authenticatedUser.eatenFood :
-            this.guestUser.eatenFood
+            this.authenticatedUser.eatenFood.filter(f => new Date(f.eatenDateTime).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]) :
+            this.guestUser.eatenFood.filter(f => new Date(f.eatenDateTime).toISOString().split('T')[0] === new Date().toISOString().split('T')[0])
     }
 
     get user(){

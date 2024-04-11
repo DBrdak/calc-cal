@@ -15,7 +15,8 @@ export default observer (function CalorieTable() {
 
     return (
         <TableContainer sx={{
-            maxHeight: '300px'
+            minHeight: '300px',
+            maxHeight: '400px'
         }}>
             <Table sx={{
                 overflow: 'visible',
@@ -77,7 +78,11 @@ export default observer (function CalorieTable() {
                     }
                 </TableBody>
                 {userStore.eatenCalories() > 0 &&
-                    <TableFooter>
+                    <TableFooter sx={{
+                        position: 'sticky',
+                        bottom: 0,
+                        backgroundColor: theme.palette.background.default
+                    }}>
                         <TableRow>
                             <TableCell colSpan={3} align={'center'} >
                                     <Typography variant={'subtitle1'} color={theme.palette.primary.dark}>

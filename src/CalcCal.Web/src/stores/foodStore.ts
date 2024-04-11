@@ -4,6 +4,7 @@ import agent from "../api/agent";
 import {AddFoodRequest} from "../api/requests/addFoodRequest";
 import {EatFoodRequest} from "../api/requests/eatFoodRequest";
 import UserStore from "./userStore";
+import {store} from "./store";
 
 export default class FoodStore {
     private food: Map<string, Food> = new Map<string, Food>()
@@ -12,8 +13,8 @@ export default class FoodStore {
     getloading: boolean = false
     addloading: boolean = false
     eatloading: boolean = false
-    selectedFood?: Food
-    selectedFoodWeight?: number
+    selectedFood: Food | null = null
+    selectedFoodWeight: number | null = null
 
     constructor() {
         makeAutoObservable(this);
@@ -27,12 +28,12 @@ export default class FoodStore {
             []
     }
 
-    setSelectedFoodWeight(weight?: number) {
+    setSelectedFoodWeight(weight: number | null) {
         this.selectedFoodWeight = weight
     }
 
     undoFoodSelection() {
-        this.setSelectedFood()
+        this.setSelectedFood(null)
     }
 
     private setEatLoading(state: boolean) {
@@ -51,7 +52,7 @@ export default class FoodStore {
         this.food.set(food.name, food)
     }
 
-    private setSelectedFood(food?: Food) {
+    private setSelectedFood(food: Food | null) {
         this.selectedFood = food
     }
 
@@ -115,7 +116,7 @@ export default class FoodStore {
         }
     }
 
-    async eatFood(userStore: UserStore){
+    async eatFood(){
         if(!this.selectedFood || !this.selectedFoodWeight) {
             return
         }
@@ -128,9 +129,9 @@ export default class FoodStore {
 
         try {
             const eatenFood = await agent.food.eatFood(request)
-            userStore.eat(eatenFood)
-            this.setSelectedFood()
-            this.setSelectedFoodWeight()
+            this.setSelectedFood(null)
+            this.setSelectedFoodWeight(null)
+            store.userStore.eat(eatenFood)
             return eatenFood
         } catch (e) {
 
