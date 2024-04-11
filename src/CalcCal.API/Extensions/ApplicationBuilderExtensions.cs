@@ -88,6 +88,7 @@ public static class ApplicationBuilderExtensions
 
     public static void AddMiddlewares(this IApplicationBuilder app)
     {
+        app.UseMiddleware<ExpiredTokenMiddleware>();
         app.UseMiddleware<MonitoringMiddleware>();
         app.UseMiddleware<ExceptionMiddleware>();
     }
