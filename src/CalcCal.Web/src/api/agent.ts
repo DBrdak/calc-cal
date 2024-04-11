@@ -58,7 +58,7 @@ axios.interceptors.response.use(async(response) => {
                     toast.clearWaitingQueue()
                     break
                 case 419:
-                    errorMessages.forEach(toast.error)
+                    toast.error('Session expired - please login')
                     store.userStore.logout()
                     break
                 case 429:
@@ -69,6 +69,11 @@ axios.interceptors.response.use(async(response) => {
                     //router.navigate('/server-error');
                     break;
             }
+        }
+
+        if(error.response.status === 419) {
+            !toast.isActive(1) && toast.error('Session expired - please login')
+            store.userStore.logout()
         }
 
         return Promise.reject(error);

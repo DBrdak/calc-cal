@@ -1,5 +1,6 @@
 import {Paper} from "@mui/material";
 import theme from "../../../theme";
+import UserHistoryChart from "../shared/UserHistoryChart";
 
 export const UserHistory = () => {
     return (
@@ -12,7 +13,7 @@ export const UserHistory = () => {
             padding: theme.spacing(3),
             display: 'flex', justifyContent: 'center', alignItems: 'top'
         }}>
-            Here goes the history chart
+            <UserHistoryChart />
         </Paper>
     );
 };

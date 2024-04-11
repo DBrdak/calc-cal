@@ -16,7 +16,7 @@ export default observer (function CalculatorForm () {
 
     useEffect(() => {
         setEatLoading(true)
-        foodStore.eatFood(userStore).then(() => setEatLoading(false))
+        foodStore.eatFood().then(() => setEatLoading(false))
     }, [foodStore.selectedFood, foodStore.selectedFoodWeight])
 
     const handleUndo = () => {

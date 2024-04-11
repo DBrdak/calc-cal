@@ -1,12 +1,13 @@
 import {useStore} from "../../../../stores/store";
 import {observer} from "mobx-react-lite";
+import UserHistoryChart from "../../../../app/user/components/shared/UserHistoryChart";
 
 const BottomDrawerUserHistory = () => {
     const {userStore} = useStore()
 
     return (
         <>
-            Here goes the history chart
+            <UserHistoryChart mobile />
         </>
     );
 };
