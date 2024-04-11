@@ -24,7 +24,7 @@ app.UseSerilogRequestLogging();
 
 app.UseCors("DefaultPolicy");
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseRouting();
 
@@ -32,17 +32,17 @@ app.AddHealthChecks();
 
 app.AddMiddlewares();
 
-//app.SecureApp();
+app.SecureApp();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-//app.UseDefaultFiles();
-//app.UseStaticFiles();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.MapCarter();
 
-//app.MapFallbackToController("Index", "Fallback");
+app.MapFallbackToController("Index", "Fallback");
 
 await app.RunAsync();
