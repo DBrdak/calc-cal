@@ -1,4 +1,6 @@
-﻿namespace CalcCal.Domain.Users;
+﻿using Responses.DB;
+
+namespace CalcCal.Domain.Users;
 
 public interface IPasswordService
 {

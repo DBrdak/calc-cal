@@ -53,6 +53,8 @@ public static class DependencyInjection
         services.AddTransient<IPasswordService, PasswordService>();
 
         services.AddScoped<IJwtService, JwtService>();
+
+        services.AddScoped<IPhoneService, PhoneService>();
     }
 
     private static void AddLLM(this IServiceCollection services, IConfiguration configuration)

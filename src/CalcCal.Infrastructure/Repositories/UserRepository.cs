@@ -56,4 +56,22 @@ internal sealed class  UserRepository : Repository<User, UserId>, IUserRepositor
 
         return users;
     }
+
+    public async Task<Result<User>> GetUserByPhoneNumber(PhoneNumber phoneNumber, CancellationToken cancellationToken)
+    {
+        var cursor = await Context.Set<User>()
+            .FindAsync(
+                u => u.PhoneNumber == phoneNumber,
+                null,
+                cancellationToken);
+
+        var user = await cursor.SingleOrDefaultAsync(cancellationToken);
+
+        if (user is null)
+        {
+            Result.Failure<User>(Error.NotFound("Users not found"));
+        }
+
+        return user;
+    }
 }

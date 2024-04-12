@@ -81,7 +81,7 @@ public sealed class User : Entity<UserId>
 
         var user = new User(phoneNumberResult.Value, firstNameResult.Value, lastNameResult.Value, usernameResult.Value, passwordHash);
 
-        user.RaiseDomainEvent(new UserRegisteredDomainEvent(user.Id));
+        user.RaiseDomainEvent(new UserRegisteredDomainEvent(user.PhoneNumber));
 
         return user;
     }
@@ -89,6 +89,8 @@ public sealed class User : Entity<UserId>
     public void LogIn() => LastLoggedInAt = DateTime.UtcNow;
 
     public void VerifyPhoneNumber() => IsPhoneNumberVerified = true;
+
+    public void ChangePassword(string newPasswordHash) => PasswordHash = newPasswordHash;
 
     public Result Eat(Food food, decimal gramsQuantity)
     {

@@ -7,6 +7,6 @@ using CalcCal.Domain.Shared;
 
 namespace CalcCal.Domain.Users.DomainEvents;
 
-public sealed record UserRegisteredDomainEvent(UserId UserId) : IDomainEvent
+public sealed record UserRegisteredDomainEvent(PhoneNumber phoneNumber) : IDomainEvent
 {
 }

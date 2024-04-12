@@ -9,6 +9,6 @@ public interface IUserRepository
     Task<Result<User>> Add(User user, CancellationToken cancellationToken);
     Task<Result<User>> Update(User user, CancellationToken cancellationToken);
     Task<Result> Remove(UserId id, CancellationToken cancellationToken);
-
     Task<Result<List<User>>> GetAllUsers(CancellationToken cancellationToken);
+    Task<Result<User>> GetUserByPhoneNumber(PhoneNumber phoneNumber, CancellationToken cancellationToken);
 }
