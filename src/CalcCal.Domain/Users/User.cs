@@ -18,6 +18,8 @@ public sealed class User : Entity<UserId>
     [BsonElement("EatenFood")]
     // ReSharper disable once FieldCanBeMadeReadOnly.Local (Bson needs)
     private List<EatenFood> _eatenFood;
+    [BsonElement("VerificationCode")] 
+    private VerificationCode? _verificationCode;
     public string PasswordHash { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }
     public DateTime CreatedAt { get; init; }
@@ -38,6 +40,7 @@ public sealed class User : Entity<UserId>
         IsPhoneNumberVerified = false;
         CreatedAt = DateTime.UtcNow;
         LastLoggedInAt = DateTime.UtcNow;
+        _verificationCode = null;
         _eatenFood = new List<EatenFood>();
     }
 
@@ -104,5 +107,33 @@ public sealed class User : Entity<UserId>
         _eatenFood.Add(eatenFoodResult.Value);
 
         return Result.Success();
+    }
+
+    public Result SetVerificationCode(string code)
+    {
+        var verificationCodeCreateResult = VerificationCode.Create(code);
+
+        if (verificationCodeCreateResult.IsFailure)
+        {
+            return Result.Failure(verificationCodeCreateResult.Error);
+        }
+
+        _verificationCode = verificationCodeCreateResult.Value;
+
+        return Result.Success();
+    }
+
+    public Result VerifyCode(string code)
+    {
+        if (_verificationCode is null || _verificationCode.IsValid())
+        {
+            return Result.Failure(UserErrors.VerificationCodeExpired);
+        }
+
+        var isValid = _verificationCode.Verify(code);
+
+        return isValid ?
+            Result.Success() :
+            Result.Failure(UserErrors.VerificationCodeIncorrect);
     }
 }

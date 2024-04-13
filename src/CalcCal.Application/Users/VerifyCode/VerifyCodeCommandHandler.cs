@@ -20,6 +20,7 @@ namespace CalcCal.Application.Users.VerifyCode
 
         public async Task<Result> Handle(VerifyCodeCommand request, CancellationToken cancellationToken)
         {
+            //TODO Change logic
             return await _phoneService.VerifyCodeAsync(request.Code, cancellationToken);
         }
     }
