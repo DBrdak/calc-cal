@@ -27,4 +27,5 @@ public record PhoneNumber : ValueObject
         return new PhoneNumber(countryCode, value);
     }
 
+    public override string ToString() => $"{CountryCode}{Value}";
 }
