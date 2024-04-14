@@ -46,7 +46,12 @@ namespace CalcCal.Application.Users.ChangePassword
 
             var user = userGetResult.Value;
 
-            user.ChangePassword(request.NewPassword);
+            var changePasswordResult = user.ChangePassword(request.NewPassword);
+
+            if (changePasswordResult.IsFailure)
+            {
+                return Result.Failure<UserDetailedModel>(changePasswordResult.Error);
+            }
 
             var userUpdateResult = await _userRepository.Update(user, cancellationToken);
 

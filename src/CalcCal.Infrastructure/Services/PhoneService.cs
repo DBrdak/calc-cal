@@ -10,14 +10,9 @@ namespace CalcCal.Infrastructure.Services
 {
     internal sealed class PhoneService : IPhoneService
     {
-        public async Task<Result> SendVerificationCodeAsync(PhoneNumber phoneNumber, CancellationToken cancellationToken = default)
+        public async Task<Result<string>> SendVerificationCodeAsync(PhoneNumber phoneNumber, CancellationToken cancellationToken = default)
         {
-            return Result.Success();
-        }
-
-        public async Task<Result> VerifyCodeAsync(string code, CancellationToken cancellationToken = default)
-        {
-            return Result.Success();
+            return Result.Success("");
         }
     }
 }

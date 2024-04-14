@@ -44,4 +44,9 @@ public static class UserErrors
         new(
             "Users.VerificationCodeIncorrect",
             "Verification code incorrect");
+
+    public static Error VerificationCodeNotVerified =>
+        new(
+            "Users.VerificationCodeNotVerified",
+            "Verify the verification code");
 }

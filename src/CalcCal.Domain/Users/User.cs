@@ -93,7 +93,17 @@ public sealed class User : Entity<UserId>
 
     public void VerifyPhoneNumber() => IsPhoneNumberVerified = true;
 
-    public void ChangePassword(string newPasswordHash) => PasswordHash = newPasswordHash;
+    public Result ChangePassword(string newPasswordHash)
+    {
+        if (_verificationCode is not null)
+        {
+            return Result.Failure(UserErrors.VerificationCodeNotVerified);
+        }
+
+        PasswordHash = newPasswordHash;
+
+        return Result.Success();
+    }
 
     public Result Eat(Food food, decimal gramsQuantity)
     {
@@ -109,8 +119,14 @@ public sealed class User : Entity<UserId>
         return Result.Success();
     }
 
-    public Result SetVerificationCode(string code)
+    public Result SetVerificationCode(string? code)
     {
+        if (code is null)
+        {
+            _verificationCode = null;
+            return Result.Success();
+        }
+
         var verificationCodeCreateResult = VerificationCode.Create(code);
 
         if (verificationCodeCreateResult.IsFailure)
@@ -132,8 +148,13 @@ public sealed class User : Entity<UserId>
 
         var isValid = _verificationCode.Verify(code);
 
-        return isValid ?
-            Result.Success() :
-            Result.Failure(UserErrors.VerificationCodeIncorrect);
+        if (!isValid)
+        {
+            return Result.Failure(UserErrors.VerificationCodeIncorrect);
+        }
+
+        SetVerificationCode(null);
+        return Result.Success();
+
     }
 }
