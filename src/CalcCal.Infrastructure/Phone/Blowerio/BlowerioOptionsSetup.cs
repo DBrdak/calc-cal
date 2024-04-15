@@ -6,19 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CalcCal.Infrastructure.Phone
+namespace CalcCal.Infrastructure.Phone.Blowerio
 {
-    public sealed class SmsGatewayOptionsSetup : IConfigureOptions<SmsGatewayOptions>
+    internal sealed class BlowerioOptionsSetup : IConfigureOptions<BlowerioOptions>
     {
-        private const string sectionName = "SmsGateway";
+        private const string sectionName = "Blowerio";
         private readonly IConfiguration _configuration;
 
-        public SmsGatewayOptionsSetup(IConfiguration configuration)
+        public BlowerioOptionsSetup(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public void Configure(SmsGatewayOptions options)
+        public void Configure(BlowerioOptions options)
         {
             _configuration.GetSection(sectionName).Bind(options);
         }

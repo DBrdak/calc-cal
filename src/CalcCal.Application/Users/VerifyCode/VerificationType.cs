@@ -7,7 +7,7 @@ using Responses.DB;
 
 namespace CalcCal.Application.Users.VerifyCode
 {
-    internal sealed record VerificationType
+    public sealed record VerificationType
     {
         public string Value { get; init; }
         private static readonly Error createError = new (

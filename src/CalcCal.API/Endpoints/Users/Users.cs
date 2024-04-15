@@ -2,10 +2,13 @@
 using CalcCal.API.Endpoints.Users.Requests;
 using CalcCal.API.Extensions;
 using CalcCal.Application.Models;
+using CalcCal.Application.Users.ChangePassword;
 using CalcCal.Application.Users.GetCurrentUser;
 using CalcCal.Application.Users.GetUserDetails;
 using CalcCal.Application.Users.LogIn;
 using CalcCal.Application.Users.RegisterUser;
+using CalcCal.Application.Users.SendVerificationCode;
+using CalcCal.Application.Users.VerifyCode;
 using Carter;
 using MediatR;
 using Responses.DB;
@@ -64,5 +67,73 @@ public sealed class Users : ICarterModule
                         : Results.BadRequest(result.Error);
                 })
             .RequireRateLimiting(RateLimiterPolicies.FixedStandard);
+
+        app.MapPut(
+                "api/users/verification/send",
+                async (ISender sender, VerificationSendRequest request, CancellationToken cancellationToken) =>
+                {
+                    var command = new SendVerificationCodeCommand(request.CountryCode, request.PhoneNumber);
+
+                    var result = await sender.Send(command, cancellationToken);
+
+                    return result.IsSuccess
+                        ? Results.Ok()
+                        : Results.BadRequest(result.Error);
+                })
+            .RequireRateLimiting(RateLimiterPolicies.FixedStrict);
+
+        app.MapPut(
+                "api/users/verification/verify-code",
+                async (ISender sender, VerificationVerifyRequest request, CancellationToken cancellationToken) =>
+                {
+                    var command = new VerifyCodeCommand(
+                        request.Code,
+                        request.CountryCode,
+                        request.PhoneNumber,
+                        VerificationType.Other.Value);
+
+                    var result = await sender.Send(command, cancellationToken);
+
+                    return result.IsSuccess
+                        ? Results.Ok()
+                        : Results.BadRequest(result.Error);
+                })
+            .RequireRateLimiting(RateLimiterPolicies.FixedStrict);
+
+        app.MapPut(
+                "api/users/verification/verify-phone",
+                async (ISender sender, VerificationVerifyRequest request, CancellationToken cancellationToken) =>
+                {
+                    var command = new VerifyCodeCommand(
+                        request.Code,
+                        request.CountryCode,
+                        request.PhoneNumber,
+                        VerificationType.PhoneNumberVerification.Value);
+
+                    var result = await sender.Send(command, cancellationToken);
+
+                    return result.IsSuccess
+                        ? Results.Ok()
+                        : Results.BadRequest(result.Error);
+                })
+            .RequireRateLimiting(RateLimiterPolicies.FixedStrict);
+
+        app.MapPut(
+                "api/users/new-password",
+                async (ISender sender, NewPasswordRequest request, CancellationToken cancellationToken) =>
+                {
+                    var command = new ChangePasswordCommand(
+                        request.Username,
+                        request.CountryCode,
+                        request.PhoneNumber,
+                        request.NewPassword);
+
+                    var result = await sender.Send(command, cancellationToken);
+
+                    return result.IsSuccess
+                        ? Results.Ok()
+                        : Results.BadRequest(result.Error);
+                })
+            .RequireRateLimiting(RateLimiterPolicies.FixedStrict);
     }
 }
