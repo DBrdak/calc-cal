@@ -90,6 +90,10 @@ const users = {
     getCurrentUser: () => axios.get<User>('/users/current').then(responseBody),
     logInUser: (request: LogInRequest) => axios.post<AccessToken>('/users/login', request).then(responseBody),
     registerUser: (request: RegisterRequest) => axios.post('/users/register', request),
+    sendVerificationCode: (request: SendVerificationCodeRequest) => axios.post('/users/register', request),
+    verifyPhone: (request: VerifyCodeRequest) => axios.post('/users/register', request),
+    verifyCode: (request: VerifyCodeRequest) => axios.post('/users/register', request),
+    changePassword: (request: ChangePasswordRequest) => axios.post('/users/register', request),
 }
 
 const agent = {

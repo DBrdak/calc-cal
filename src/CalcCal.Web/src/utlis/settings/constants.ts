@@ -10,3 +10,5 @@ export const NAME_PATTERN = RegExp('^[a-zA-Z]{1,50}$')
 export const PHONE_NUMBER_PATTERN = RegExp('^[0-9]{8,11}$')
 
 export const COUNTRY_CODE_PATTERN = RegExp(`^[+][0-9]{1,3}$`)
+
+export const VERIFICATION_CODE_PATTERN = RegExp(`^[0-9]{6}$`)

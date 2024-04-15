@@ -9,6 +9,8 @@ export default class UserStore {
     private guestUser: User = User.guest()
     private authenticatedUser?: User = undefined
     token: string | null = localStorage.getItem('jwt')
+    verificationCountryCode?: string
+    verificationPhoneNumber?: string
     getLoading: boolean = false
     loginLoading: boolean = false
     registerLoading: boolean = false
@@ -73,6 +75,7 @@ export default class UserStore {
         try {
             await agent.users.registerUser(registerRequest)
             await this.logIn({username: registerRequest.username, password: registerRequest.password})
+            this.setVerificationPhoneNumber(registerRequest.phoneNumber, registerRequest.phoneNumber)
             return true
         } catch (e) {
             return false
@@ -128,5 +131,10 @@ export default class UserStore {
         } else {
             this.guestUser.eatenFood.push(food)
         }
+    }
+
+    setVerificationPhoneNumber(countryCode: string, phoneNumber: string){
+        this.verificationPhoneNumber = phoneNumber
+        this.verificationCountryCode = countryCode
     }
 }
