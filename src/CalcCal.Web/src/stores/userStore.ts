@@ -14,6 +14,8 @@ export default class UserStore {
     getLoading: boolean = false
     loginLoading: boolean = false
     registerLoading: boolean = false
+    changePasswordLoading = false
+    verifyPhoneNumberLoading = false
 
     constructor() {
         makeAutoObservable(this);
@@ -55,6 +57,14 @@ export default class UserStore {
 
     private setGetLoading(state: boolean) {
         this.getLoading = state
+    }
+
+    private setChangePasswordLoading(state: boolean) {
+        this.changePasswordLoading = state
+    }
+
+    private setVerifyPhoneNumberLoading(state: boolean) {
+        this.verifyPhoneNumberLoading = state
     }
 
     private setAuthenticatedUser(user: User | undefined) {
@@ -115,6 +125,37 @@ export default class UserStore {
         } catch (e) {
         } finally {
             this.setGetLoading(false)
+        }
+    }
+
+    async changePassword(newPassword: string, verificationCode: string){
+        this.setChangePasswordLoading(true)
+
+        try {
+            this.verificationCountryCode && this.verificationPhoneNumber && await agent.users.changePassword({
+                newPassword: newPassword,
+                countryCode: this.verificationCountryCode,
+                phoneNumber: this.verificationPhoneNumber,
+                verificationCode: verificationCode
+            })
+        } catch (e) {
+        } finally {
+            this.setChangePasswordLoading(false)
+        }
+    }
+
+    async verifyPhoneNumber(verificationCode: string) {
+        this.setVerifyPhoneNumberLoading(true)
+
+        try {
+            this.verificationCountryCode && this.verificationPhoneNumber && await agent.users.verifyPhone({
+                countryCode: this.verificationCountryCode,
+                phoneNumber: this.verificationPhoneNumber,
+                code: verificationCode
+            })
+        } catch (e) {
+        } finally {
+            this.setVerifyPhoneNumberLoading(false)
         }
     }
 

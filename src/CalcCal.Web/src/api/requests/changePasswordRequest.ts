@@ -1,6 +1,6 @@
-interface ChangePasswordRequest {
-    username?: string | null
-    countryCode?: string | null
-    phoneNumber?: string | null
+export interface ChangePasswordRequest {
+    verificationCode: string
+    countryCode: string
+    phoneNumber: string
     newPassword: string
 }

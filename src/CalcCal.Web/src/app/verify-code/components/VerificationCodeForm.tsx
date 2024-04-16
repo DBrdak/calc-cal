@@ -4,17 +4,28 @@ import * as yup from 'yup'
 import theme from "../../theme";
 import {DotLoader} from "../../../components/DotLoader";
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {VERIFICATION_CODE_PATTERN} from "../../../utlis/settings/constants";
 import '../../calculator/components/shared/calculatorForm/components/foodQuantityFormStyles.css'
+import {observer} from "mobx-react-lite";
+import {useStore} from "../../../stores/store";
 
-export const VerificationCodeForm = () => {
+const VerificationCodeForm = () => {
     const [isFormFocused, setIsFormFocused] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const {type} = useParams()
+    const {userStore} = useStore()
 
     function handleFormSubmit(code: string) {
-        console.log(code)
+        if(type === 'phone'){
+            setLoading(true)
+            userStore.verifyPhoneNumber(code).then(() => {
+                setLoading(false)
+                navigate('/')
+            })
+        }
+
     }
 
     const validationSchema = yup.object({
@@ -83,3 +94,5 @@ export const VerificationCodeForm = () => {
         </Grid>
     );
 };
+
+export default observer(VerificationCodeForm)

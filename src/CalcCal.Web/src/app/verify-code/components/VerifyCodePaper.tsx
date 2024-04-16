@@ -1,4 +1,4 @@
-import {VerificationCodeForm} from "./VerificationCodeForm";
+import VerificationCodeForm from "./VerificationCodeForm";
 import PhoneNumberForm from "./PhoneNumberForm";
 import {useStore} from "../../../stores/store";
 import {useParams} from "react-router-dom";

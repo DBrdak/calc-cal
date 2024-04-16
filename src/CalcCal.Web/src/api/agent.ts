@@ -10,6 +10,7 @@ import {User} from "../models/user";
 import {Food} from "../models/food";
 import {EatenFood} from "../models/eatenFood";
 import {store} from "../stores/store";
+import {ChangePasswordRequest} from "./requests/changePasswordRequest";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {

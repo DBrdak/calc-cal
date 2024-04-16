@@ -7,7 +7,6 @@ import {Stack} from "@mui/material";
 import VerifyCodePaper from "./components/VerifyCodePaper";
 
 export const VerifyCodePage = () => {
-    const {type} = useParams()
 
     return (
         isTouchDevice() ?
