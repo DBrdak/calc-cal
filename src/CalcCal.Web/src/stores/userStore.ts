@@ -4,6 +4,7 @@ import {RegisterRequest} from "../api/requests/registerRequest";
 import agent from "../api/agent";
 import {LogInRequest} from "../api/requests/logInRequest";
 import {EatenFood} from "../models/eatenFood";
+import {toast} from "react-toastify";
 
 export default class UserStore {
     private guestUser: User = User.guest()
@@ -11,11 +12,13 @@ export default class UserStore {
     token: string | null = localStorage.getItem('jwt')
     verificationCountryCode?: string
     verificationPhoneNumber?: string
+    verificationCode?: string
     getLoading: boolean = false
     loginLoading: boolean = false
     registerLoading: boolean = false
     changePasswordLoading = false
     verifyPhoneNumberLoading = false
+    sendVerificationCodeLoading = false
 
     constructor() {
         makeAutoObservable(this);
@@ -63,9 +66,14 @@ export default class UserStore {
         this.changePasswordLoading = state
     }
 
+    private setSendVerificationCodeLoading(state: boolean) {
+        this.sendVerificationCodeLoading = state
+    }
+
     private setVerifyPhoneNumberLoading(state: boolean) {
         this.verifyPhoneNumberLoading = state
     }
+
 
     private setAuthenticatedUser(user: User | undefined) {
         this.authenticatedUser = user
@@ -122,22 +130,28 @@ export default class UserStore {
         try {
             const user = await agent.users.getCurrentUser()
             this.setAuthenticatedUser(user)
+            return true
         } catch (e) {
+            return false
         } finally {
             this.setGetLoading(false)
         }
     }
 
-    async changePassword(newPassword: string, verificationCode: string){
+    async changePassword(newPassword: string){
         this.setChangePasswordLoading(true)
 
         try {
-            this.verificationCountryCode && this.verificationPhoneNumber && await agent.users.changePassword({
-                newPassword: newPassword,
-                countryCode: this.verificationCountryCode,
-                phoneNumber: this.verificationPhoneNumber,
-                verificationCode: verificationCode
-            })
+            if(this.verificationCountryCode && this.verificationPhoneNumber && this.verificationCode){
+                await agent.users.changePassword({
+                    newPassword: newPassword,
+                    countryCode: this.verificationCountryCode,
+                    phoneNumber: this.verificationPhoneNumber,
+                    verificationCode: this.verificationCode
+                })
+                this.setVerificationPhoneNumber(undefined, undefined)
+                this.setVerificationCode(undefined)
+            }
         } catch (e) {
         } finally {
             this.setChangePasswordLoading(false)
@@ -148,14 +162,33 @@ export default class UserStore {
         this.setVerifyPhoneNumberLoading(true)
 
         try {
-            this.verificationCountryCode && this.verificationPhoneNumber && await agent.users.verifyPhone({
-                countryCode: this.verificationCountryCode,
-                phoneNumber: this.verificationPhoneNumber,
-                code: verificationCode
-            })
+            if(this.verificationCountryCode && this.verificationPhoneNumber){
+                await agent.users.verifyPhone({
+                        countryCode: this.verificationCountryCode,
+                        phoneNumber: this.verificationPhoneNumber,
+                        code: verificationCode
+                })
+                this.setVerificationPhoneNumber(undefined, undefined)
+                this.setVerificationCode(undefined)
+            }
         } catch (e) {
         } finally {
             this.setVerifyPhoneNumberLoading(false)
+        }
+    }
+
+    async sendVerificationCode(countryCode: string, phoneNumber: string) {
+        this.setSendVerificationCodeLoading(true)
+
+        try {
+            await agent.users.sendVerificationCode({
+                countryCode: countryCode,
+                phoneNumber: phoneNumber,
+            })
+            this.setVerificationPhoneNumber(countryCode, phoneNumber)
+        } catch (e) {
+        } finally {
+            this.setSendVerificationCodeLoading(false)
         }
     }
 
@@ -174,8 +207,12 @@ export default class UserStore {
         }
     }
 
-    setVerificationPhoneNumber(countryCode: string, phoneNumber: string){
+    setVerificationPhoneNumber(countryCode: string | undefined, phoneNumber: string | undefined){
         this.verificationPhoneNumber = phoneNumber
         this.verificationCountryCode = countryCode
+    }
+
+    setVerificationCode(code: string | undefined) {
+        this.verificationCode = code
     }
 }

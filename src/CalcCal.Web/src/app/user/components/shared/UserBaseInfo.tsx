@@ -2,8 +2,9 @@ import {Button, ButtonGroup, Grid, SxProps, Theme, Typography} from "@mui/materi
 import theme from "../../../theme"
 import {useStore} from "../../../../stores/store";
 import {useNavigate} from "react-router-dom";
+import {observer} from "mobx-react-lite";
 
-export default function UserBaseInfo () {
+export default observer(function UserBaseInfo () {
     const {userStore} = useStore()
     const navigate = useNavigate()
 
@@ -37,11 +38,14 @@ export default function UserBaseInfo () {
                     {userStore.user.firstName} {userStore.user.lastName}
                 </Typography>
             </Grid>
-            <Grid item xs={12} marginBottom={theme.spacing(3)} textAlign={'center'} >
-                <Button variant={'outlined'} onClick={() => navigate('/logout')}>
+            <Grid item xs={12} marginBottom={theme.spacing(3)} textAlign={'center'} sx={{
+                flexDirection: 'column',
+                display: 'flex', justifyContent: 'center', alignItems: 'center',
+            }} >
+                <Button variant={'outlined'} onClick={() => navigate('/logout')} sx={{maxWidth: '150px'}}>
                     Logout
                 </Button>
             </Grid>
         </Grid>
     );
-};
+})

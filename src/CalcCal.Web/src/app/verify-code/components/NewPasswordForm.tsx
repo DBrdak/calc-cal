@@ -5,40 +5,35 @@ import theme from "../../theme";
 import {DotLoader} from "../../../components/DotLoader";
 import {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {VERIFICATION_CODE_PATTERN} from "../../../utlis/settings/constants";
+import {PASSWORD_PATTERN, VERIFICATION_CODE_PATTERN} from "../../../utlis/settings/constants";
 import '../../calculator/components/shared/calculatorForm/components/foodQuantityFormStyles.css'
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../../stores/store";
 
-const VerificationCodeForm = () => {
+const NewPasswordForm = () => {
     const [isFormFocused, setIsFormFocused] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const {type} = useParams()
     const {userStore} = useStore()
 
-    function handleFormSubmit(code: string) {
-        if(type === 'phone'){
-            setLoading(true)
-            userStore.verifyPhoneNumber(code).then(() => {
-                setLoading(false)
-                navigate('/')
-            })
-        }
-        if(type === 'password') {
-            userStore.setVerificationCode(code)
-        }
+    function handleFormSubmit(password: string) {
+        setLoading(true)
+        userStore.changePassword(password).then(() => {
+            setLoading(false)
+            navigate('/login')
+        })
     }
 
     const validationSchema = yup.object({
-        code: yup.string()
-            .required('Insert verification code')
-            .matches(VERIFICATION_CODE_PATTERN, 'Invalid verification code')
+        password: yup.string()
+            .required('Insert password')
+            .matches(PASSWORD_PATTERN, 'Password too weak')
     })
 
     return (
         <Grid item xs={12}>
-            <Formik initialValues={{code: ''}} onSubmit={values => handleFormSubmit(values.code)} validationSchema={validationSchema}>
+            <Formik initialValues={{password: ''}} onSubmit={values => handleFormSubmit(values.password)} validationSchema={validationSchema}>
                 {({handleChange, errors}) => (
                     <Form autoComplete={'off'} style={{
                         width: '100%',
@@ -50,8 +45,9 @@ const VerificationCodeForm = () => {
                     }}>
                         <Grid item xs={12} marginBottom={theme.spacing(3)}>
                             <TextField
-                                name={'code'}
-                                label={isFormFocused && !errors.code ? 'Verification code' : ''}
+                                name={'password'}
+                                type={'password'}
+                                label={isFormFocused && !errors.password ? 'Verification code' : ''}
                                 placeholder={'Verification code'}
                                 fullWidth
                                 onChange={handleChange}
@@ -67,8 +63,8 @@ const VerificationCodeForm = () => {
                                     shrink: false,
                                     focused: isFormFocused
                                 }}
-                                helperText={errors.code}
-                                error={!!errors.code}
+                                helperText={errors.password}
+                                error={!!errors.password}
                                 sx={{width: '300px'}}
                                 FormHelperTextProps={{sx:{
                                         display: 'flex',
@@ -85,8 +81,8 @@ const VerificationCodeForm = () => {
                                     <DotLoader />
                                     :
                                     <Button variant={'contained'} type={'submit'}
-                                            disabled={!!errors.code || !!errors.code}>
-                                        Verify
+                                            disabled={!!errors.password}>
+                                        Change Password
                                     </Button>
                             }
                         </Grid>
@@ -97,4 +93,4 @@ const VerificationCodeForm = () => {
     );
 };
 
-export default observer(VerificationCodeForm)
+export default observer(NewPasswordForm)

@@ -24,20 +24,9 @@ namespace CalcCal.Application.Users.ChangePassword
 
         public async Task<Result<UserDetailedModel>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var usernameCreateResult = Username.Create(request.Username ?? "");
-
             var phoneNumberCreateResult = PhoneNumber.Create(request.CountryCode ?? "", request.PhoneNumber ?? "");
 
-            var userGetResult = Result.Failure<User>(Error.NotFound("User not found"));
-
-            if (usernameCreateResult.IsSuccess)
-            {
-                userGetResult = await _userRepository.GetUserByUsername(usernameCreateResult.Value, cancellationToken);
-            }
-            else if (phoneNumberCreateResult.IsSuccess)
-            {
-                userGetResult = await _userRepository.GetUserByPhoneNumber(phoneNumberCreateResult.Value, cancellationToken);
-            }
+            var userGetResult = await _userRepository.GetUserByPhoneNumber(phoneNumberCreateResult.Value, cancellationToken);
 
             if (userGetResult.IsFailure)
             {
@@ -45,6 +34,13 @@ namespace CalcCal.Application.Users.ChangePassword
             }
 
             var user = userGetResult.Value;
+
+            var verificationResult = user.VerifyCode(request.VerificationCode);
+
+            if (verificationResult.IsFailure)
+            {
+                return Result.Failure<UserDetailedModel>(verificationResult.Error);
+            }
 
             var changePasswordResult = user.ChangePassword(request.NewPassword);
 

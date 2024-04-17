@@ -29,8 +29,10 @@ const PhoneNumberForm = () => {
     })
 
     function handleFormSubmit(phoneNumber: string, countryCode: string) {
-        console.log({phoneNumber, countryCode})
-        userStore.setVerificationPhoneNumber(countryCode, phoneNumber)
+        setLoading(true)
+        userStore.sendVerificationCode(countryCode, phoneNumber).then(() => {
+            setLoading(false)
+        })
     }
     return (
         <Grid item xs={12}>

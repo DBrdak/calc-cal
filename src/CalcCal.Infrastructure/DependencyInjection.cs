@@ -81,6 +81,8 @@ public static class DependencyInjection
     {
         services.ConfigureOptions<BlowerioOptionsSetup>();
 
+        services.AddTransient<BlowerioDelegatingHandler>();
+
         services.AddHttpClient<BlowerioClient>(
                 (serviceProvider, httpClient) =>
                 {

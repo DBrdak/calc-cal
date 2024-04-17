@@ -10,7 +10,6 @@ namespace CalcCal.Infrastructure.Phone.Blowerio
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request.Headers.Add("content-type", "application/x-www-form-urlencoded");
             request.Headers.Add("Accepts", "application/json");
 
             return base.SendAsync(request, cancellationToken);

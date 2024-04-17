@@ -10,9 +10,9 @@ using CalcCal.Domain.Users;
 namespace CalcCal.Application.Users.ChangePassword
 {
     public sealed record ChangePasswordCommand(
-        string? Username,
-        string? CountryCode,
-        string? PhoneNumber,
+        string VerificationCode,
+        string CountryCode,
+        string PhoneNumber,
         string NewPassword) : ICommand<UserDetailedModel> 
     {
     }

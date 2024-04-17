@@ -1,4 +1,4 @@
-import {Grid, Paper} from "@mui/material";
+import {Button, Grid, Paper} from "@mui/material";
 import theme from "../../../theme";
 import UserBaseInfo from "./UserBaseInfo";
 import {isTouchDevice} from "../../../../utlis/layout/deviceInspector";

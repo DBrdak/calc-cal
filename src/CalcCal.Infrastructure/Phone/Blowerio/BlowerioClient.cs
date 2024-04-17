@@ -13,6 +13,9 @@ namespace CalcCal.Infrastructure.Phone.Blowerio
     {
         private readonly HttpClient _httpClient;
         private const string smsSendPath = "/messages";
+        private readonly Error _sendingError = new(
+            "Blowerio.SendFailure",
+            "Failed to send message");
 
         public BlowerioClient(HttpClient httpClient)
         {
@@ -25,7 +28,9 @@ namespace CalcCal.Infrastructure.Phone.Blowerio
 
             var response = await _httpClient.PostAsync(smsSendPath, request, cancellationToken);
 
-            return Result.Success();
+            return response.IsSuccessStatusCode ? 
+                Result.Success() : 
+                Result.Failure(_sendingError);
         }
     }
 }

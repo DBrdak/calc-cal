@@ -16,12 +16,7 @@ internal sealed class  UserRepository : Repository<User, UserId>, IUserRepositor
 
         var user = await cursor.SingleOrDefaultAsync(cancellationToken);
 
-        if (user == null)
-        {
-            Result.Failure<User>(Error.NotFound("User not found"));
-        }
-
-        return user;
+        return user ?? Result.Failure<User>(Error.NotFound("User not found"));
     }
 
     public async Task<Result<User>> GetUserByUsername(Username username, CancellationToken cancellationToken)
@@ -35,12 +30,7 @@ internal sealed class  UserRepository : Repository<User, UserId>, IUserRepositor
 
         var user = await cursor.SingleOrDefaultAsync(cancellationToken);
 
-        if (user is null)
-        {
-            Result.Failure<User>(Error.NotFound("Users not found"));
-        }
-
-        return user;
+        return user ?? Result.Failure<User>(Error.NotFound("Users not found"));
     }
 
     public async Task<Result<List<User>>> GetAllUsers(CancellationToken cancellationToken)
@@ -49,12 +39,7 @@ internal sealed class  UserRepository : Repository<User, UserId>, IUserRepositor
 
         var users = await cursor.ToListAsync(cancellationToken);
 
-        if (users is null)
-        {
-            Result.Failure<User>(Error.NotFound("Users not found"));
-        }
-
-        return users;
+        return users ?? Result.Failure<List<User>>(Error.NotFound("Users not found"));
     }
 
     public async Task<Result<User>> GetUserByPhoneNumber(PhoneNumber phoneNumber, CancellationToken cancellationToken)
@@ -67,11 +52,6 @@ internal sealed class  UserRepository : Repository<User, UserId>, IUserRepositor
 
         var user = await cursor.SingleOrDefaultAsync(cancellationToken);
 
-        if (user is null)
-        {
-            Result.Failure<User>(Error.NotFound("Users not found"));
-        }
-
-        return user;
+        return user ?? Result.Failure<User>(Error.NotFound("User not found"));
     }
 }

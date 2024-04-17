@@ -80,7 +80,7 @@ public sealed class Users : ICarterModule
                         ? Results.Ok()
                         : Results.BadRequest(result.Error);
                 })
-            .RequireRateLimiting(RateLimiterPolicies.FixedStrict);
+            .RequireRateLimiting(RateLimiterPolicies.UserOnePer5Minutes);
 
         app.MapPut(
                 "api/users/verification/verify-code",
@@ -123,7 +123,7 @@ public sealed class Users : ICarterModule
                 async (ISender sender, NewPasswordRequest request, CancellationToken cancellationToken) =>
                 {
                     var command = new ChangePasswordCommand(
-                        request.Username,
+                        request.VerificationCode,
                         request.CountryCode,
                         request.PhoneNumber,
                         request.NewPassword);
