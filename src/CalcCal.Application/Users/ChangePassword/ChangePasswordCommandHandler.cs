@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CalcCal.Application.Abstractions.Authentication;
 using CalcCal.Application.Abstractions.Messaging;
@@ -16,14 +17,22 @@ namespace CalcCal.Application.Users.ChangePassword
     internal sealed class ChangePasswordCommandHandler : ICommandHandler<ChangePasswordCommand, UserDetailedModel>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPasswordService _passwordService;
+        private const string passwordPattern = @"^(?=.*[!@#$%^&*()-_=+{};:',.<>?])(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
 
-        public ChangePasswordCommandHandler(IUserRepository userRepository)
+        public ChangePasswordCommandHandler(IUserRepository userRepository, IPasswordService passwordService)
         {
             _userRepository = userRepository;
+            _passwordService = passwordService;
         }
 
         public async Task<Result<UserDetailedModel>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
+            if (!Regex.IsMatch(request.NewPassword, passwordPattern))
+            {
+                return Result.Failure<UserDetailedModel>(Error.InvalidRequest("Password is too weak"));
+            }
+
             var phoneNumberCreateResult = PhoneNumber.Create(request.CountryCode ?? "", request.PhoneNumber ?? "");
 
             var userGetResult = await _userRepository.GetUserByPhoneNumber(phoneNumberCreateResult.Value, cancellationToken);
@@ -42,7 +51,8 @@ namespace CalcCal.Application.Users.ChangePassword
                 return Result.Failure<UserDetailedModel>(verificationResult.Error);
             }
 
-            var changePasswordResult = user.ChangePassword(request.NewPassword);
+            var passwordHash = _passwordService.HashPassword(request.NewPassword);
+            var changePasswordResult = user.ChangePassword(passwordHash);
 
             if (changePasswordResult.IsFailure)
             {

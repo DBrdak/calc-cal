@@ -13,13 +13,11 @@ public sealed class User : Entity<UserId>
     public FirstName FirstName { get; private set; }
     public LastName LastName { get; private set; }
     public Username Username { get; private set; }
-
     public IReadOnlyCollection<EatenFood> EatenFood => _eatenFood;
     [BsonElement("EatenFood")]
     // ReSharper disable once FieldCanBeMadeReadOnly.Local (Bson needs)
     private List<EatenFood> _eatenFood;
-    [BsonElement("VerificationCode")] 
-    private VerificationCode? _verificationCode;
+    public VerificationCode? VerificationCode { get; private set; }
     public string PasswordHash { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }
     public DateTime CreatedAt { get; init; }
@@ -40,7 +38,7 @@ public sealed class User : Entity<UserId>
         IsPhoneNumberVerified = false;
         CreatedAt = DateTime.UtcNow;
         LastLoggedInAt = DateTime.UtcNow;
-        _verificationCode = null;
+        VerificationCode = null;
         _eatenFood = new List<EatenFood>();
     }
 
@@ -95,7 +93,7 @@ public sealed class User : Entity<UserId>
 
     public Result ChangePassword(string newPasswordHash)
     {
-        if (_verificationCode is not null)
+        if (VerificationCode is not null)
         {
             return Result.Failure(UserErrors.VerificationCodeNotVerified);
         }
@@ -123,7 +121,7 @@ public sealed class User : Entity<UserId>
     {
         if (code is null)
         {
-            _verificationCode = null;
+            VerificationCode = null;
             return Result.Success();
         }
 
@@ -134,19 +132,19 @@ public sealed class User : Entity<UserId>
             return Result.Failure(verificationCodeCreateResult.Error);
         }
 
-        _verificationCode = verificationCodeCreateResult.Value;
+        VerificationCode = verificationCodeCreateResult.Value;
 
         return Result.Success();
     }
 
     public Result VerifyCode(string code)
     {
-        if (_verificationCode is null || _verificationCode.IsValid())
+        if (VerificationCode is null || !VerificationCode.IsValid())
         {
             return Result.Failure(UserErrors.VerificationCodeExpired);
         }
 
-        var isValid = _verificationCode.Verify(code);
+        var isValid = VerificationCode.Verify(code);
 
         if (!isValid)
         {

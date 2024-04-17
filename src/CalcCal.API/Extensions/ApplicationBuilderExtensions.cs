@@ -95,14 +95,14 @@ public static class ApplicationBuilderExtensions
                                 Window = TimeSpan.FromHours(1)
                             }));
                 options.AddPolicy(
-                    RateLimiterPolicies.UserOnePer5Minutes,
+                    RateLimiterPolicies.UserOnePerMinute,
                     context =>
                         RateLimitPartition.GetFixedWindowLimiter(
                             partitionKey: context.User.Identity?.Name?.ToString(),
                             factory: _ => new FixedWindowRateLimiterOptions
                             {
                                 PermitLimit = 1,
-                                Window = TimeSpan.FromMinutes(5)
+                                Window = TimeSpan.FromMinutes(1)
                             }));
             });
     }

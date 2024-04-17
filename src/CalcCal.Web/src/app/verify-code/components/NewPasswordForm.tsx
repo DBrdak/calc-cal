@@ -47,8 +47,8 @@ const NewPasswordForm = () => {
                             <TextField
                                 name={'password'}
                                 type={'password'}
-                                label={isFormFocused && !errors.password ? 'Verification code' : ''}
-                                placeholder={'Verification code'}
+                                label={isFormFocused && !errors.password ? 'Password' : ''}
+                                placeholder={'Password'}
                                 fullWidth
                                 onChange={handleChange}
                                 onFocusCapture={() => setIsFormFocused(true)}

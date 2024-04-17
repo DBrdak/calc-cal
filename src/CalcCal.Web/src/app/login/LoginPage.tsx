@@ -14,6 +14,7 @@ export default observer(function LoginPage () {
     const navigate = useNavigate()
 
     useEffect(() => {
+        console.log(userStore.token, userStore.isAuthenticated())
         if(userStore.token || userStore.isAuthenticated()) {
             navigate('/')
         }

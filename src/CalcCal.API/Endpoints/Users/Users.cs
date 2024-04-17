@@ -29,7 +29,7 @@ public sealed class Users : ICarterModule
                     
                     return result.IsSuccess
                         ? Results.Ok(result.Value)
-                        : Results.NotFound(result.Error);
+                        : Results.BadRequest(result.Error);
                 })
             .RequireAuthorization()
             .RequireRateLimiting(RateLimiterPolicies.FixedLoose);
@@ -80,7 +80,7 @@ public sealed class Users : ICarterModule
                         ? Results.Ok()
                         : Results.BadRequest(result.Error);
                 })
-            .RequireRateLimiting(RateLimiterPolicies.UserOnePer5Minutes);
+            .RequireRateLimiting(RateLimiterPolicies.UserOnePerMinute);
 
         app.MapPut(
                 "api/users/verification/verify-code",

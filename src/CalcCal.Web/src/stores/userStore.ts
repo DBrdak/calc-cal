@@ -93,7 +93,7 @@ export default class UserStore {
         try {
             await agent.users.registerUser(registerRequest)
             await this.logIn({username: registerRequest.username, password: registerRequest.password})
-            this.setVerificationPhoneNumber(registerRequest.phoneNumber, registerRequest.phoneNumber)
+            this.setVerificationPhoneNumber(registerRequest.countryCode, registerRequest.phoneNumber)
             return true
         } catch (e) {
             return false
@@ -132,6 +132,7 @@ export default class UserStore {
             this.setAuthenticatedUser(user)
             return true
         } catch (e) {
+            this.logout()
             return false
         } finally {
             this.setGetLoading(false)
@@ -163,6 +164,7 @@ export default class UserStore {
 
         try {
             if(this.verificationCountryCode && this.verificationPhoneNumber){
+
                 await agent.users.verifyPhone({
                         countryCode: this.verificationCountryCode,
                         phoneNumber: this.verificationPhoneNumber,
@@ -200,14 +202,15 @@ export default class UserStore {
 
     eat(food: EatenFood){
         if(this.isAuthenticated() && this.authenticatedUser) {
-            console.log(this.authenticatedUser?.eatenFood)
+
             this.authenticatedUser.eatenFood.push(food)
         } else {
             this.guestUser.eatenFood.push(food)
         }
     }
 
-    setVerificationPhoneNumber(countryCode: string | undefined, phoneNumber: string | undefined){
+    private setVerificationPhoneNumber(countryCode: string | undefined, phoneNumber: string | undefined){
+        
         this.verificationPhoneNumber = phoneNumber
         this.verificationCountryCode = countryCode
     }

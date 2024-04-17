@@ -12,7 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using CalcCal.Infrastructure.LLM.Gemini;
 using CalcCal.Infrastructure.Phone;
-using CalcCal.Infrastructure.Phone.Blowerio;
+using CalcCal.Infrastructure.Phone.SmsGateway;
+using System.Net.Http;
 
 namespace CalcCal.Infrastructure;
 
@@ -27,7 +28,7 @@ public static class DependencyInjection
         services.AddLLM(configuration);
 
         services.AddSmsGateway();
-
+        
         return services;
     }
 
@@ -79,18 +80,23 @@ public static class DependencyInjection
 
     private static void AddSmsGateway(this IServiceCollection services)
     {
-        services.ConfigureOptions<BlowerioOptionsSetup>();
+        void ConfigureHttpClient(IServiceProvider serviceProvider, HttpClient client)
+        {
+            var options = serviceProvider.GetRequiredService<IOptions<SmsGatewayOptions>>().Value;
 
-        services.AddTransient<BlowerioDelegatingHandler>();
+            var formattedUrl = options.Url.Remove(
+                options.Url.IndexOf("//", StringComparison.Ordinal) + 2,
+                options.Url.LastIndexOf('@') - options.Url.IndexOf("//", StringComparison.Ordinal) - 1);
 
-        services.AddHttpClient<BlowerioClient>(
-                (serviceProvider, httpClient) =>
-                {
-                    var blowerioOptions = serviceProvider.GetRequiredService<IOptions<BlowerioOptions>>().Value;
+            client.BaseAddress = new Uri(formattedUrl);
+        }
 
-                    httpClient.BaseAddress = new Uri(blowerioOptions.Url);
-                })
-                .AddHttpMessageHandler<BlowerioDelegatingHandler>();
+        services.ConfigureOptions<SmsGatewayOptionsSetup>();
+
+        services.AddTransient<SmsGatewayDelegatingHandler>();
+
+        services.AddHttpClient<SmsGatewayClient>(ConfigureHttpClient)
+                .AddHttpMessageHandler<SmsGatewayDelegatingHandler>();
 
         services.AddScoped<IPhoneService, PhoneService>();
     }

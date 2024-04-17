@@ -45,7 +45,12 @@ namespace CalcCal.Application.Users.SendVerificationCode
 
             var code = sendResult.Value;
 
-            user.SetVerificationCode(code);
+            var setVerificationCodeResult = user.SetVerificationCode(code);
+
+            if (setVerificationCodeResult.IsFailure)
+            {
+                return Result.Failure<UserDetailedModel>(setVerificationCodeResult.Error);
+            }
 
             var userUpdateResult = await _userRepository.Update(user, cancellationToken);
 

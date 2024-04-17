@@ -40,6 +40,6 @@ internal abstract class Repository<TEntity, TEntityId>
 
         return result.IsAcknowledged && result.ModifiedCount > 0 ?
             Result.Success(entity) :
-            Result.Failure<TEntity>(Error.TaskFailed($"Problem while updating {nameof(TEntity)}"));
+            Result.Failure<TEntity>(Error.TaskFailed($"Problem while updating {typeof(TEntity).Name}"));
     }
 }
