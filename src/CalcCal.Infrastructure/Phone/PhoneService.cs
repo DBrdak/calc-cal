@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using CalcCal.Domain.Users;
-using CalcCal.Infrastructure.Phone.Blowerio;
+using CalcCal.Infrastructure.Phone.SmsGateway;
 using Microsoft.Extensions.Options;
 using Responses.DB;
 using PhoneNumber = CalcCal.Domain.Users.PhoneNumber;
@@ -14,10 +14,10 @@ namespace CalcCal.Infrastructure.Phone
 {
     internal sealed class PhoneService : IPhoneService
     {
-        private readonly BlowerioClient _smsGatewayClient;
+        private readonly SmsGatewayClient _smsGatewayClient;
         private const int verificationCodeLength = 6;
 
-        public PhoneService(BlowerioClient client)
+        public PhoneService(SmsGatewayClient client)
         {
             _smsGatewayClient = client;
         }
@@ -45,7 +45,7 @@ namespace CalcCal.Infrastructure.Phone
 
             for (var i = 0; i < verificationCodeLength; i++)
             {
-                verificationCode += rng.Next().ToString();
+                verificationCode += rng.Next(0,10).ToString();
             }
 
             return verificationCode;

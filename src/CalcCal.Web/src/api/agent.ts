@@ -94,7 +94,7 @@ const users = {
     sendVerificationCode: (request: SendVerificationCodeRequest) => axios.put('/users/verification/send', request),
     verifyPhone: (request: VerifyCodeRequest) => axios.put('/users/verification/verify-phone', request),
     verifyCode: (request: VerifyCodeRequest) => axios.put('/users/verification/verify-code', request),
-    changePassword: (request: ChangePasswordRequest) => axios.put('/users/newPassword', request),
+    changePassword: (request: ChangePasswordRequest) => axios.put('/users/new-password', request),
 }
 
 const agent = {

@@ -42,7 +42,7 @@ const VerifyCodePaper = () => {
                     </Grid>
             }
             {type !== 'phone' && !userStore.verificationCountryCode && !userStore.verificationPhoneNumber && <PhoneNumberForm />}
-            {userStore.verificationCountryCode && userStore.verificationPhoneNumber && <VerificationCodeForm />}
+            {userStore.verificationCountryCode && userStore.verificationPhoneNumber && !userStore.verificationCode && <VerificationCodeForm />}
             {type === 'password' && userStore.verificationCountryCode && userStore.verificationPhoneNumber && userStore.verificationCode && <NewPasswordForm />}
         </Grid>
     );

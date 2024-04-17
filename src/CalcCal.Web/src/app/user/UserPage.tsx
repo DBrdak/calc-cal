@@ -19,7 +19,7 @@ const UserPage = () => {
         userStore.loadCurrentUser().then(async () => {
 
             if(!userStore.token || !userStore.isAuthenticated() || !localStorage.getItem('jwt')) {
-                navigate('/')
+                navigate('/login')
                 return
             }
 

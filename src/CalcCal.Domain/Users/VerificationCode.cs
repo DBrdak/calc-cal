@@ -14,8 +14,8 @@ namespace CalcCal.Domain.Users
         public string Value { get; init; }
         public DateTime CreatedAt { get; init; }
         public DateTime ValidTo { get; init; }
-        private const int validForMinutes = 5;
-        private const string valuePattern = @"^[0-9]{6}$";
+        private const int validForMinutes = 2;
+        private const string valuePattern = @"^\d{6}$";
 
         private VerificationCode(string value)
         {
@@ -26,7 +26,7 @@ namespace CalcCal.Domain.Users
 
         public static Result<VerificationCode> Create(string value)
         {
-            if (Regex.IsMatch(value, valuePattern))
+            if (!Regex.IsMatch(value, valuePattern))
             {
                 return Result.Failure<VerificationCode>(UserErrors.InvalidVerificationCode);
             }
