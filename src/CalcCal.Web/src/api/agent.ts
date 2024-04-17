@@ -10,6 +10,7 @@ import {User} from "../models/user";
 import {Food} from "../models/food";
 import {EatenFood} from "../models/eatenFood";
 import {store} from "../stores/store";
+import {ChangePasswordRequest} from "./requests/changePasswordRequest";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -20,7 +21,7 @@ const sleep = (delay: number) => {
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
 axios.interceptors.request.use(config => {
-    const token = store.userStore.token
+    const token = store.userStore.token || localStorage.getItem('jwt')
 
     config.headers.Authorization = token && `Bearer ${token}`
 
@@ -90,6 +91,10 @@ const users = {
     getCurrentUser: () => axios.get<User>('/users/current').then(responseBody),
     logInUser: (request: LogInRequest) => axios.post<AccessToken>('/users/login', request).then(responseBody),
     registerUser: (request: RegisterRequest) => axios.post('/users/register', request),
+    sendVerificationCode: (request: SendVerificationCodeRequest) => axios.put('/users/verification/send', request),
+    verifyPhone: (request: VerifyCodeRequest) => axios.put('/users/verification/verify-phone', request),
+    verifyCode: (request: VerifyCodeRequest) => axios.put('/users/verification/verify-code', request),
+    changePassword: (request: ChangePasswordRequest) => axios.put('/users/newPassword', request),
 }
 
 const agent = {

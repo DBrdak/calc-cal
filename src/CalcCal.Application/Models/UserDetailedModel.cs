@@ -12,9 +12,19 @@ public sealed record UserDetailedModel : UserSimpleModel
         string firstName,
         string lastName,
         string username,
+        string countryCode,
         string phoneNumber,
+        bool isPhoneNumberVerified,
         List<EatenFoodModel> eatenFood,
-        IEnumerable<IDomainEvent> domainEvents) : base(userId, firstName, lastName, username, phoneNumber, domainEvents)
+        IEnumerable<IDomainEvent> domainEvents) : base(
+        userId,
+        firstName,
+        lastName,
+        username,
+        countryCode,
+        phoneNumber,
+        isPhoneNumberVerified,
+        domainEvents)
     {
         EatenFood = eatenFood;
     }
@@ -26,7 +36,9 @@ public sealed record UserDetailedModel : UserSimpleModel
             domainObject.FirstName.Value,
             domainObject.LastName.Value,
             domainObject.Username.Value,
+            domainObject.PhoneNumber.CountryCode,
             domainObject.PhoneNumber.Value,
+            domainObject.IsPhoneNumberVerified,
             domainObject.EatenFood.Select(EatenFoodModel.FromDomainObject).ToList(),
             domainObject.GetDomainEvents());
     }

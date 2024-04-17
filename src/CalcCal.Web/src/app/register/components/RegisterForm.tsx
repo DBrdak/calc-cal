@@ -50,7 +50,7 @@ export const RegisterForm = () => {
             setLoading(false)
 
             if(isSuccessful){
-                navigate('/')
+                navigate('/verify-code/phone')
             }
         })
     }

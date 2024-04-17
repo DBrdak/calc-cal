@@ -30,4 +30,23 @@ public static class UserErrors
         new Error(
             "Users.InvalidCredentials",
             "Invalid credentials");
+
+    public static Error InvalidVerificationCode =>
+        new(
+            "Users. InvalidVerificationCode",
+            "Invalid verification code");
+
+    public static Error VerificationCodeExpired =>
+        new(
+            "Users.VerificationCodeExpired",
+            "Verification code has expired");
+    public static Error VerificationCodeIncorrect =>
+        new(
+            "Users.VerificationCodeIncorrect",
+            "Verification code incorrect");
+
+    public static Error VerificationCodeNotVerified =>
+        new(
+            "Users.VerificationCodeNotVerified",
+            "Verify the verification code");
 }

@@ -2,7 +2,7 @@
 using System.Text;
 using CalcCal.Domain.Users;
 
-namespace CalcCal.Infrastructure.Services;
+namespace CalcCal.Infrastructure.Authentication;
 
 internal sealed class PasswordService : IPasswordService
 {

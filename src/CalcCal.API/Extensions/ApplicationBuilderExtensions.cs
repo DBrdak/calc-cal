@@ -83,6 +83,27 @@ public static class ApplicationBuilderExtensions
                                 PermitLimit = 10,
                                 Window = TimeSpan.FromSeconds(10)
                             }));
+
+                options.AddPolicy(
+                    RateLimiterPolicies.UserOnePerHour,
+                    context =>
+                        RateLimitPartition.GetFixedWindowLimiter(
+                            partitionKey: context.User.Identity?.Name?.ToString(),
+                            factory: _ => new FixedWindowRateLimiterOptions
+                            {
+                                PermitLimit = 1,
+                                Window = TimeSpan.FromHours(1)
+                            }));
+                options.AddPolicy(
+                    RateLimiterPolicies.UserOnePer5Minutes,
+                    context =>
+                        RateLimitPartition.GetFixedWindowLimiter(
+                            partitionKey: context.User.Identity?.Name?.ToString(),
+                            factory: _ => new FixedWindowRateLimiterOptions
+                            {
+                                PermitLimit = 1,
+                                Window = TimeSpan.FromMinutes(5)
+                            }));
             });
     }
 

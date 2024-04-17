@@ -18,6 +18,8 @@ public sealed class User : Entity<UserId>
     [BsonElement("EatenFood")]
     // ReSharper disable once FieldCanBeMadeReadOnly.Local (Bson needs)
     private List<EatenFood> _eatenFood;
+    [BsonElement("VerificationCode")] 
+    private VerificationCode? _verificationCode;
     public string PasswordHash { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }
     public DateTime CreatedAt { get; init; }
@@ -38,6 +40,7 @@ public sealed class User : Entity<UserId>
         IsPhoneNumberVerified = false;
         CreatedAt = DateTime.UtcNow;
         LastLoggedInAt = DateTime.UtcNow;
+        _verificationCode = null;
         _eatenFood = new List<EatenFood>();
     }
 
@@ -81,7 +84,7 @@ public sealed class User : Entity<UserId>
 
         var user = new User(phoneNumberResult.Value, firstNameResult.Value, lastNameResult.Value, usernameResult.Value, passwordHash);
 
-        user.RaiseDomainEvent(new UserRegisteredDomainEvent(user.Id));
+        user.RaiseDomainEvent(new UserRegisteredDomainEvent(user.PhoneNumber));
 
         return user;
     }
@@ -89,6 +92,18 @@ public sealed class User : Entity<UserId>
     public void LogIn() => LastLoggedInAt = DateTime.UtcNow;
 
     public void VerifyPhoneNumber() => IsPhoneNumberVerified = true;
+
+    public Result ChangePassword(string newPasswordHash)
+    {
+        if (_verificationCode is not null)
+        {
+            return Result.Failure(UserErrors.VerificationCodeNotVerified);
+        }
+
+        PasswordHash = newPasswordHash;
+
+        return Result.Success();
+    }
 
     public Result Eat(Food food, decimal gramsQuantity)
     {
@@ -102,5 +117,44 @@ public sealed class User : Entity<UserId>
         _eatenFood.Add(eatenFoodResult.Value);
 
         return Result.Success();
+    }
+
+    public Result SetVerificationCode(string? code)
+    {
+        if (code is null)
+        {
+            _verificationCode = null;
+            return Result.Success();
+        }
+
+        var verificationCodeCreateResult = VerificationCode.Create(code);
+
+        if (verificationCodeCreateResult.IsFailure)
+        {
+            return Result.Failure(verificationCodeCreateResult.Error);
+        }
+
+        _verificationCode = verificationCodeCreateResult.Value;
+
+        return Result.Success();
+    }
+
+    public Result VerifyCode(string code)
+    {
+        if (_verificationCode is null || _verificationCode.IsValid())
+        {
+            return Result.Failure(UserErrors.VerificationCodeExpired);
+        }
+
+        var isValid = _verificationCode.Verify(code);
+
+        if (!isValid)
+        {
+            return Result.Failure(UserErrors.VerificationCodeIncorrect);
+        }
+
+        SetVerificationCode(null);
+        return Result.Success();
+
     }
 }
