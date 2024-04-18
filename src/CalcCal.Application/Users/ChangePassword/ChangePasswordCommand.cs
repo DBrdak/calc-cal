@@ -7,13 +7,12 @@ using CalcCal.Application.Abstractions.Messaging;
 using CalcCal.Application.Models;
 using CalcCal.Domain.Users;
 
-namespace CalcCal.Application.Users.ChangePassword
+namespace CalcCal.Application.Users.ChangePassword;
+
+public sealed record ChangePasswordCommand(
+    string VerificationCode,
+    string CountryCode,
+    string PhoneNumber,
+    string NewPassword) : ICommand<UserDetailedModel> 
 {
-    public sealed record ChangePasswordCommand(
-        string VerificationCode,
-        string CountryCode,
-        string PhoneNumber,
-        string NewPassword) : ICommand<UserDetailedModel> 
-    {
-    }
 }

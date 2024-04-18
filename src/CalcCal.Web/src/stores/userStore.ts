@@ -210,7 +210,7 @@ export default class UserStore {
     }
 
     private setVerificationPhoneNumber(countryCode: string | undefined, phoneNumber: string | undefined){
-        
+
         this.verificationPhoneNumber = phoneNumber
         this.verificationCountryCode = countryCode
     }

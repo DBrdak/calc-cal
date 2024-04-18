@@ -1,7 +1,6 @@
-﻿namespace CalcCal.Infrastructure.Phone.SmsGateway
+﻿namespace CalcCal.Infrastructure.Phone.SmsGateway;
+
+internal sealed class SmsGatewayOptions
 {
-    internal sealed class SmsGatewayOptions
-    {
-        public string Url { get; set; } = string.Empty;
-    }
+    public string Url { get; set; } = string.Empty;
 }

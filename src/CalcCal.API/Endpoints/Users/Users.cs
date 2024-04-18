@@ -9,6 +9,7 @@ using CalcCal.Application.Users.LogIn;
 using CalcCal.Application.Users.RegisterUser;
 using CalcCal.Application.Users.SendVerificationCode;
 using CalcCal.Application.Users.VerifyCode;
+using CalcCal.Infrastructure.Authorization.PhoneVerifiedRequirement;
 using Carter;
 using MediatR;
 using Responses.DB;

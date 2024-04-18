@@ -9,26 +9,25 @@ using CalcCal.Domain.Users.DomainEvents;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CalcCal.Application.Users.UserRegisteredEvent
+namespace CalcCal.Application.Users.UserRegisteredEvent;
+
+internal sealed class UserRegisteredEventHandler : INotificationHandler<UserRegisteredDomainEvent>
 {
-    internal sealed class UserRegisteredEventHandler : INotificationHandler<UserRegisteredDomainEvent>
+    private readonly IServiceProvider _serviceProvider;
+
+    public UserRegisteredEventHandler(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        public UserRegisteredEventHandler(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+    public async Task Handle(UserRegisteredDomainEvent notification, CancellationToken cancellationToken)
+    {
+        var sender = _serviceProvider.GetRequiredService<ISender>();
 
-        public async Task Handle(UserRegisteredDomainEvent notification, CancellationToken cancellationToken)
-        {
-            var sender = _serviceProvider.GetRequiredService<ISender>();
-
-            await sender.Send(
-                new SendVerificationCodeCommand(
-                    notification.phoneNumber.CountryCode,
-                    notification.phoneNumber.Value),
-                cancellationToken);
-        }
+        await sender.Send(
+            new SendVerificationCodeCommand(
+                notification.phoneNumber.CountryCode,
+                notification.phoneNumber.Value),
+            cancellationToken);
     }
 }

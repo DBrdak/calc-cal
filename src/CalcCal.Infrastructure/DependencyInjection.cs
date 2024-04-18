@@ -14,6 +14,9 @@ using CalcCal.Infrastructure.LLM.Gemini;
 using CalcCal.Infrastructure.Phone;
 using CalcCal.Infrastructure.Phone.SmsGateway;
 using System.Net.Http;
+using CalcCal.Infrastructure.Authorization;
+using CalcCal.Infrastructure.Authorization.PhoneVerifiedRequirement;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CalcCal.Infrastructure;
 
@@ -58,6 +61,15 @@ public static class DependencyInjection
         services.AddTransient<IPasswordService, PasswordService>();
 
         services.AddScoped<IJwtService, JwtService>();
+    }
+
+    private static void AddAuthorization(this IServiceCollection services)
+    {
+        services.AddAuthorization(AuthorizationPolicyProvider.Configure);
+
+        services.AddTransient<AuthorizationErrorWriter>();
+        services.AddTransient<IAuthorizationRequirement, PhoneVerifiedRequirement>();
+        services.AddTransient<IAuthorizationHandler, PhoneVerifiedAuthorizationHandler>();
     }
 
     private static void AddLLM(this IServiceCollection services, IConfiguration configuration)

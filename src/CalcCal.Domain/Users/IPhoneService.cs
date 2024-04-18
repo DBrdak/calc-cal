@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Responses.DB;
 
-namespace CalcCal.Domain.Users
+namespace CalcCal.Domain.Users;
+
+public interface IPhoneService
 {
-    public interface IPhoneService
-    {
-        Task<Result<string>> SendVerificationCodeAsync(PhoneNumber phoneNumber, CancellationToken cancellationToken = default);
-    }
+    Task<Result<string>> SendVerificationCodeAsync(PhoneNumber phoneNumber, CancellationToken cancellationToken = default);
 }
