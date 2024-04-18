@@ -4,6 +4,7 @@ using CalcCal.Application.Food.AddFood;
 using CalcCal.Application.Food.EatFood;
 using CalcCal.Application.Food.GetFood;
 using CalcCal.Application.Models;
+using CalcCal.Infrastructure.Authorization.PhoneVerifiedRequirement;
 using Carter;
 using MediatR;
 using Responses.DB;
@@ -23,7 +24,8 @@ public sealed class Food : ICarterModule
                 return result.IsSuccess ?
                     Results.Ok(result.Value) :
                     Results.NotFound(result.Value);
-            }).RequireRateLimiting(RateLimiterPolicies.FixedLoose);
+            })
+            .RequireRateLimiting(RateLimiterPolicies.FixedLoose);
 
         app.MapPost(
             "api/food",

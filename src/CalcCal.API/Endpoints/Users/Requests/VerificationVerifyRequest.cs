@@ -1,6 +1,5 @@
-﻿namespace CalcCal.API.Endpoints.Users.Requests
+﻿namespace CalcCal.API.Endpoints.Users.Requests;
+
+internal sealed record VerificationVerifyRequest(string Code, string CountryCode, string PhoneNumber)
 {
-    internal sealed record VerificationVerifyRequest(string Code, string CountryCode, string PhoneNumber)
-    {
-    }
 }

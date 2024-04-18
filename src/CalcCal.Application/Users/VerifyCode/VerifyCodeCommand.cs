@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using CalcCal.Application.Abstractions.Messaging;
 using CalcCal.Application.Models;
 
-namespace CalcCal.Application.Users.VerifyCode
+namespace CalcCal.Application.Users.VerifyCode;
+
+public sealed record VerifyCodeCommand(string Code, string CountryCode, string PhoneNumber, string VerificationType) : ICommand<UserDetailedModel>
 {
-    public sealed record VerifyCodeCommand(string Code, string CountryCode, string PhoneNumber, string VerificationType) : ICommand<UserDetailedModel>
-    {
-    }
 }
