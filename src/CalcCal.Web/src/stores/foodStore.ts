@@ -88,6 +88,7 @@ export default class FoodStore {
 
     async selectFood(foodName: string) {
         const food = this.food.get(foodName)
+        console.log(foodName)
 
         if(food) {
             this.setSelectedFood(food)

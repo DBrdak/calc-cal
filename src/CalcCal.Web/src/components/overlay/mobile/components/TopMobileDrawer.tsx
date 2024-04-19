@@ -1,7 +1,7 @@
 import {SwipeableDrawer, Typography} from "@mui/material";
 import theme from "../../../../app/theme";
 import {TopDrawerContent} from "./TopDrawerContent";
-import React from "react";
+import React, {useEffect} from "react";
 import {DrawerBox} from "./DrawerBox";
 import {Puller} from "./Puller";
 import {User} from "../../../../models/user";
@@ -37,6 +37,7 @@ export const TopMobileDrawer = ({isAuthenticated, user, loading}: TopMobileDrawe
             ModalProps={{
                 keepMounted: true,
             }}
+            onTouchMove={(event: React.TouchEvent<HTMLDivElement>) => event.preventDefault()}
         >
             <DrawerBox
                 sx={{
