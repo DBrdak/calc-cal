@@ -8,18 +8,11 @@ using Responses.DB;
 
 namespace CalcCal.Infrastructure.Authorization;
 
-internal sealed class AuthorizationErrorWriter
+internal sealed class AuthorizationErrorWriter(IHttpContextAccessor httpContextAccessor)
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public AuthorizationErrorWriter(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     internal async Task Write(Error error)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
+        var httpContext = httpContextAccessor.HttpContext;
 
         if (httpContext is null)
         {
