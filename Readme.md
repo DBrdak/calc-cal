@@ -15,7 +15,6 @@ calc-cal is a user-friendly calorie calculator app that helps users track their 
 - [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ---
 ## Features
