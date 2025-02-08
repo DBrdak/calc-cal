@@ -144,9 +144,3 @@ This project is a hobby project, and contributions are welcome! Feel free to cop
 ---
 ## License
 This project is open for public use. (You can add more specific licensing details if necessary.)
-
----
-## Acknowledgments
-- **Google Gemini:** For providing the AI-powered calorie estimation.
-- **Blower.io:** For SMS verification support.
-- **The Open Source Community:** For the tools and frameworks that made this project possible.
